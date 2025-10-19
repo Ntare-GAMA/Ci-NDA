@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ci-NDA | Africa's Premier Cinematography Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            line-height: 1.5;
+            color: #1a1a1a;
+            background: #000;
+            overflow-x: hidden;
+        }
+
+        /* Netflix-inspired header */
+        header {
+            background: rgba(0, 0, 0, 0.95);
+            padding: 0.8rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #e50914;
+            font-family: 'Arial', sans-serif;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: #e50914;
+        }
+
+        .cta-btn {
+            background: #e50914;
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-btn:hover {
+            background: #c4070e;
+            transform: scale(1.05);
+        }
+
+        /* Hero video section - Netflix style */
+        .hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.2));
+            z-index: 2;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            z-index: 0;
+        }
+
+        .hero-content {
+            max-width: 650px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.8rem;
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1rem;
+            color: white;
+            letter-spacing: -1.5px;
+        }
+
+        .hero h1 span {
+            color: #e50914;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: #ddd;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2.2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #e50914;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #c4070e;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Value prop section */
+        .value-section {
+            background: #0a0a0a;
+            padding: 5rem 2rem;
+            border-top: 1px solid rgba(229, 9, 20, 0.3);
+            border-bottom: 1px solid rgba(229, 9, 20, 0.3);
+        }
+
+        .value-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 1rem;
+            letter-spacing: -0.5px;
+        }
+
+        .section-subtitle {
+            font-size: 1.05rem;
+            color: #999;
+            margin-bottom: 3rem;
+            max-width: 700px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .stat-box {
+            background: rgba(229, 9, 20, 0.1);
+            border: 2px solid rgba(229, 9, 20, 0.3);
+            padding: 2.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-box:hover {
+            border-color: #e50914;
+            background: rgba(229, 9, 20, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #e50914;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* Three column value cards */
+        .value-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .value-card {
+            background: #1a1a1a;
+            border: 1px solid rgba(229, 9, 20, 0.2);
+            padding: 2.5rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .value-card:hover {
+            border-color: #e50914;
+            background: rgba(229, 9, 20, 0.08);
+        }
+
+        .value-card h3 {
+            font-size: 1.2rem;
+            color: white;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .value-card p {
+            color: #bbb;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* Two column section */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .column-text h2 {
+            font-size: 2.2rem;
+            color: white;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .column-text p {
+            font-size: 1rem;
+            color: #bbb;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .feature-list li {
+            padding: 0.8rem 0;
+            padding-left: 2rem;
+            position: relative;
+            color: #bbb;
+            line-height: 1.6;
+        }
+
+        .feature-list li::before {
+            content: '‚ñ∏';
+            position: absolute;
+            left: 0;
+            color: #e50914;
+            font-size: 1.3rem;
+        }
+
+        .column-visual {
+            height: 400px;
+            background: linear-gradient(135deg, rgba(229, 9, 20, 0.2), rgba(0, 0, 0, 0.8));
+            border: 2px solid rgba(229, 9, 20, 0.3);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+
+        /* CTA section */
+        .cta-hero {
+            background: linear-gradient(135deg, rgba(229, 9, 20, 0.15), rgba(0, 0, 0, 0.95));
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 2px solid rgba(229, 9, 20, 0.3);
+            border-bottom: 2px solid rgba(229, 9, 20, 0.3);
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-hero h2 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            font-weight: 900;
+        }
+
+        .cta-hero p {
+            font-size: 1.1rem;
+            color: #bbb;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        footer {
+            background: #000;
+            border-top: 1px solid rgba(229, 9, 20, 0.3);
+            padding: 3rem 2rem 2rem;
+            color: #666;
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-col h4 {
+            color: white;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col a {
+            color: #666;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 0.6rem;
+            display: block;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover {
+            color: #e50914;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero {
+                height: 80vh;
+                padding: 1.5rem;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 3rem 1.5rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                font-size: 0.8rem;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/" class="logo">Ci-NDA</a>
+            <ul>
+                <li><a href="/platform">Platform</a></li>
+                <li><a href="/market">Market</a></li>
+                <li><a href="/roadmap">Roadmap</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact" class="cta-btn">Get Deck</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <video class="hero-video" autoplay muted loop>
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+        </video>
+        <div class="hero-content">
+            <h1>Rwanda's <span>$500M+</span> Cinematography Revolution</h1>
+            <p>Ci-NDA is building Africa's premier filmmaking ecosystem. Connect talent, capital, and opportunity across the continent while positioning Rwanda as the production hub for global content.</p>
+            <div class="btn-group">
+                <button class="btn btn-primary">‚ñ∂ Watch Pitch</button>
+                <a href="/market" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="value-section">
+        <div class="value-container">
+            <h2 class="section-title">The Market Opportunity</h2>
+            <p class="section-subtitle">$220B global streaming market demands authentic African content. Ci-NDA captures this moment.</p>
+
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="stat-number">$220B</div>
+                    <div class="stat-label">Global Streaming Value</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">+40%</div>
+                    <div class="stat-label">YoY African Content Demand</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">60-70%</div>
+                    <div class="stat-label">Cost Advantage vs South Africa</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">$50M+</div>
+                    <div class="stat-label">Projected Annual Production 2030</div>
+                </div>
+            </div>
+
+            <h3 class="section-title" style="font-size: 1.8rem; margin-top: 3rem;">Why Ci-NDA Wins</h3>
+            <div class="value-cards">
+                <div class="value-card">
+                    <h3>Talent Pipeline</h3>
+                    <p>Direct, vetted access to African creators. Becomes the discovery platform Netflix and Amazon use before expensive talent hunts.</p>
+                </div>
+                <div class="value-card">
+                    <h3>Transaction Layer</h3>
+                    <p>5-10% of every production deal, sponsorship, and licensing agreement flows through our platform. Recurring revenue.</p>
+                </div>
+                <div class="value-card">
+                    <h3>Production Hub</h3>
+                    <p>Transform Rwanda into a regional production center. Lower costs, strategic location, government tax incentives.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="two-column">
+        <div class="column-text">
+            <h2>Why Rwanda. Why Now.</h2>
+            <p>Political stability, fastest internet speeds on the continent, 60-70% cost advantage, government support for creative industries, and strategic pan-African location create the perfect convergence.</p>
+            <ul class="feature-list">
+                <li>#1 Governance stability in sub-Saharan Africa</li>
+                <li>Strategic gateway to 140M+ East African market</li>
+                <li>Government actively recruiting in creative sector</li>
+                <li>Tax incentives for production companies</li>
+            </ul>
+            <a href="/about" class="btn btn-primary" style="margin-top: 2rem;">Learn About Rwanda</a>
+        </div>
+        <div class="column-visual">
+            Ìºç
+        </div>
+    </section>
+
+    <section class="cta-hero">
+        <div class="cta-content">
+            <h2>First-Mover Advantage</h2>
+            <p>Companies that establish early in Africa's creative economy will capture disproportionate returns as the market scales 10-20x over the next decade.</p>
+            <div class="btn-group" style="justify-content: center; margin-top: 2rem;">
+                <button class="btn btn-primary">Download Full Deck</button>
+                <a href="/contact" class="btn btn-secondary">Schedule Pitch</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Product</h4>
+                <ul>
+                    <li><a href="/platform">Platform</a></li>
+                    <li><a href="/market">Market</a></li>
+                    <li><a href="/roadmap">Roadmap</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="#">Team</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Invest</h4>
+                <ul>
+                    <li><a href="/contact">Schedule Call</a></li>
+                    <li><a href="#">investor@cindasolutions.com</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Status</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Ci-NDA: Building Africa's Creative Economy Infrastructure. ¬© 2025</p>
+        </div>
+    </footer>
+</body>
+</html>
