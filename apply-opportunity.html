@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply to Opportunity - CI-NDA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(15, 12, 41, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #e50914;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+
+        .application-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .application-header h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .application-header p {
+            font-size: 16px;
+            color: #b3b3b3;
+        }
+
+        .opportunity-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .opportunity-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .opportunity-title {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .opportunity-org {
+            font-size: 18px;
+            color: #46d369;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .opportunity-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .meta-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+
+        .required {
+            color: #ff6b6b;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .file-upload-label:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-info {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(70, 211, 105, 0.1);
+            border: 1px solid #46d369;
+            border-radius: 8px;
+        }
+
+        .file-info.show {
+            display: block;
+        }
+
+        .info-alert {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .info-alert h4 {
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+
+        .info-alert ul {
+            padding-left: 20px;
+            line-height: 1.8;
+            color: #b3b3b3;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .deadline-warning {
+            background: rgba(255, 107, 107, 0.1);
+            border-left: 4px solid #ff6b6b;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .container {
+                margin-top: 80px;
+            }
+
+            .opportunity-card, .form-card {
+                padding: 25px;
+            }
+
+            .application-header h1 {
+                font-size: 28px;
+            }
+
+            .opportunity-title {
+                font-size: 24px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'">CI-NDA</div>
+    </nav>
+
+    <div class="container">
+        <div class="application-header">
+            <h1>Apply to Opportunity</h1>
+            <p>Complete your application to be considered for this exciting opportunity</p>
+        </div>
+
+        <!-- Opportunity Details -->
+        <div class="opportunity-card">
+            <span class="opportunity-badge" id="oppType">GRANT</span>
+            <h2 class="opportunity-title" id="oppTitle">Sundance Institute Documentary Fund 2024</h2>
+            <div class="opportunity-org">
+                <span>Ìø¢</span>
+                <span id="oppOrg">Sundance Institute</span>
+            </div>
+            <p id="oppDescription" style="line-height: 1.8; color: #b3b3b3; margin-top: 15px;">
+                The Sundance Documentary Fund supports international documentary films and new media projects that examine contemporary themes, embrace artistic innovation, and demonstrate financial need. We are seeking projects in production or post-production that focus on human rights, social justice, and untold stories from underrepresented communities.
+            </p>
+            <div class="opportunity-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Funding Amount</span>
+                    <span class="meta-value" id="oppFunding">Up to $50,000</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Location</span>
+                    <span class="meta-value" id="oppLocation">Worldwide</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Deadline</span>
+                    <span class="meta-value" id="oppDeadline">December 15, 2024</span>
+                </div>
+                <div class="meta-item">
+                    <span class="meta-label">Category</span>
+                    <span class="meta-value" id="oppCategory">Documentary</span>
+                </div>
+            </div>
+            <div class="deadline-warning">
+                <span>‚è∞</span>
+                <span><strong>32 days remaining</strong> - Applications reviewed on a rolling basis</span>
+            </div>
+        </div>
+
+        <!-- Application Form -->
+        <div class="form-card">
+            <h3 class="section-title">Ì≥ù Application Details</h3>
+            
+            <div class="info-alert">
+                <h4>‚úì Application Requirements</h4>
+                <ul>
+                    <li>Project must be in production or post-production phase</li>
+                    <li>Director must have previous filmmaking experience</li>
+                    <li>Clear budget breakdown and timeline required</li>
+                    <li>Supporting materials must be in English or with English subtitles</li>
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Project Title <span class="required">*</span></label>
+                <input type="text" class="form-input" id="projectTitle" placeholder="Enter your project title" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Project Stage <span class="required">*</span></label>
+                <select class="form-select" id="projectStage" required>
+                    <option value="">Select project stage</option>
+                    <option value="development">Development</option>
+                    <option value="pre-production">Pre-Production</option>
+                    <option value="production">Production</option>
+                    <option value="post-production">Post-Production</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Project Synopsis <span class="required">*</span></label>
+                <textarea class="form-textarea" id="synopsis" placeholder="Provide a compelling synopsis of your project (500-1000 words)" maxlength="5000"></textarea>
+                <div class="char-count"><span id="synopsisCount">0</span> / 5000 characters</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Why This Story Matters <span class="required">*</span></label>
+                <textarea class="form-textarea" id="significance" placeholder="Explain the social, cultural, or artistic significance of your project" maxlength="3000"></textarea>
+                <div class="char-count"><span id="significanceCount">0</span> / 3000 characters</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Requested Funding Amount <span class="required">*</span></label>
+                <input type="text" class="form-input" id="fundingAmount" placeholder="e.g., $25,000" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">How Funds Will Be Used <span class="required">*</span></label>
+                <textarea class="form-textarea" id="fundingPlan" placeholder="Provide a detailed budget breakdown" maxlength="2000"></textarea>
+                <div class="char-count"><span id="fundingCount">0</span> / 2000 characters</div>
+            </div>
+        </div>
+
+        <!-- Director Information -->
+        <div class="form-card">
+            <h3 class="section-title">Ì±§ Director Information</h3>
+
+            <div class="form-group">
+                <label class="form-label">Director Name <span class="required">*</span></label>
+                <input type="text" class="form-input" id="directorName" placeholder="Full name" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Director Biography <span class="required">*</span></label>
+                <textarea class="form-textarea" id="directorBio" placeholder="Brief professional biography highlighting relevant experience" maxlength="1500"></textarea>
+                <div class="char-count"><span id="bioCount">0</span> / 1500 characters</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Previous Works</label>
+                <textarea class="form-textarea" id="previousWorks" placeholder="List your previous films, awards, and notable achievements" style="min-height: 100px;"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Website/Portfolio URL</label>
+                <input type="url" class="form-input" id="portfolio" placeholder="https://yourportfolio.com">
+            </div>
+        </div>
+
+        <!-- Supporting Materials -->
+        <div class="form-card">
+            <h3 class="section-title">Ì≥é Supporting Materials</h3>
+
+            <div class="info-alert">
+                <h4>Required Documents</h4>
+                <ul>
+                    <li>Treatment or script (PDF format)</li>
+                    <li>Work-in-progress footage or trailer (if available)</li>
+                    <li>Detailed budget breakdown (Excel or PDF)</li>
+                    <li>Director's statement (PDF)</li>
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Project Treatment/Script <span class="required">*</span></label>
+                <div class="file-upload">
+                    <label for="treatment" class="file-upload-label">
+                        <div style="text-align: center;">
+                            <div style="font-size: 40px; margin-bottom: 10px;">Ì≥Ñ</div>
+                            <div style="font-weight: 600;">Click to upload treatment</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 5px;">PDF format, max 10MB</div>
+                        </div>
+                    </label>
+                    <input type="file" id="treatment" accept=".pdf" onchange="handleFileSelect(this, 'treatmentInfo')">
+                </div>
+                <div class="file-info" id="treatmentInfo"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Sample Footage/Trailer</label>
+                <input type="url" class="form-input" id="videoLink" placeholder="Vimeo, YouTube, or Google Drive link">
+                <p style="font-size: 12px; color: #999; margin-top: 5px;">Provide a link to work-in-progress footage or project trailer</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Budget Document <span class="required">*</span></label>
+                <div class="file-upload">
+                    <label for="budget" class="file-upload-label">
+                        <div style="text-align: center;">
+                            <div style="font-size: 40px; margin-bottom: 10px;">Ì≤∞</div>
+                            <div style="font-weight: 600;">Click to upload budget</div>
+                            <div style="font-size: 12px; color: #999; margin-top: 5px;">Excel or PDF, max 5MB</div>
+                        </div>
+                    </label>
+                    <input type="file" id="budget" accept=".pdf,.xlsx,.xls" onchange="handleFileSelect(this, 'budgetInfo')">
+                </div>
+                <div class="file-info" id="budgetInfo"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Additional Materials</label>
+                <textarea class="form-textarea" id="additionalInfo" placeholder="Any additional information that strengthens your application" style="min-height: 100px;"></textarea>
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="btn-group">
+            <button class="btn btn-secondary" onclick="window.history.back()">
+                ‚Üê Cancel
+            </button>
+            <button class="btn btn-primary" onclick="submitApplication()">
+                Submit Application ‚Üí
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Character counters
+        const textareas = ['synopsis', 'significance', 'fundingPlan', 'directorBio'];
+        textareas.forEach(id => {
+            const textarea = document.getElementById(id);
+            const counter = document.getElementById(id + 'Count');
+            textarea.addEventListener('input', () => {
+                counter.textContent = textarea.value.length;
+            });
+        });
+
+        // File upload handler
+        function handleFileSelect(input, infoId) {
+            const file = input.files[0];
+            const info = document.getElementById(infoId);
+            
+            if (file) {
+                const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                info.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>‚úì ${file.name}</strong>
+                            <div style="font-size: 12px; color: #999; margin-top: 5px;">${fileSize} MB</div>
+                        </div>
+                        <button onclick="clearFile('${input.id}', '${infoId}')" style="background: none; border: none; color: #ff6b6b; cursor: pointer; font-size: 20px;">√ó</button>
+                    </div>
+                `;
+                info.classList.add('show');
+            }
+        }
+
+        function clearFile(inputId, infoId) {
+            document.getElementById(inputId).value = '';
+            document.getElementById(infoId).classList.remove('show');
+        }
+
+        function submitApplication() {
+            // Basic validation
+            const required = ['projectTitle', 'projectStage', 'synopsis', 'significance', 'fundingAmount', 'fundingPlan', 'directorName', 'directorBio'];
+            
+            for (let id of required) {
+                if (!document.getElementById(id).value) {
+                    alert('Please fill in all required fields marked with *');
+                    document.getElementById(id).focus();
+                    return;
+                }
+            }
+
+            // Check file uploads
+            if (!document.getElementById('treatment').files.length) {
+                alert('Please upload the project treatment/script');
+                return;
+            }
+
+            if (!document.getElementById('budget').files.length) {
+                alert('Please upload the budget document');
+                return;
+            }
+
+            // Simulate submission
+            if (confirm('Are you sure you want to submit this application? Please review all information carefully before proceeding.')) {
+                alert('Ìæâ Application submitted successfully!\n\nYou will receive a confirmation email within 24 hours. Our review team will assess your application within 2-3 weeks.\n\nThank you for applying!');
+                window.location.href = 'opportunities.html';
+            }
+        }
+    </script>
+</body>
+</html>

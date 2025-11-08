@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Mentorship - CI-NDA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #e50914;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-header h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-header p {
+            font-size: 18px;
+            color: #b3b3b3;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .mentor-profile {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .mentor-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #4facfe;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .mentor-info h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .mentor-title {
+            color: #4facfe;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .mentor-specialties {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .specialty-tag {
+            padding: 6px 15px;
+            background: rgba(79, 172, 254, 0.2);
+            border: 1px solid #4facfe;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .request-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: #4facfe;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .required {
+            color: #ff6b6b;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .goals-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .goal-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .goal-item:hover {
+            border-color: #4facfe;
+            background: rgba(79, 172, 254, 0.1);
+        }
+
+        .goal-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .goal-item label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .availability-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .time-slot {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .time-slot:hover {
+            border-color: #4facfe;
+            transform: translateY(-2px);
+        }
+
+        .time-slot.selected {
+            border-color: #4facfe;
+            background: rgba(79, 172, 254, 0.2);
+        }
+
+        .time-slot input[type="radio"] {
+            display: none;
+        }
+
+        .time-label {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .time-desc {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .info-box {
+            background: rgba(79, 172, 254, 0.1);
+            border-left: 4px solid #4facfe;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .info-box h4 {
+            color: #4facfe;
+            margin-bottom: 10px;
+        }
+
+        .info-box ul {
+            padding-left: 20px;
+            line-height: 1.8;
+            color: #b3b3b3;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .container {
+                margin-top: 80px;
+            }
+
+            .page-header h1 {
+                font-size: 32px;
+            }
+
+            .mentor-profile {
+                flex-direction: column;
+                text-align: center;
+                padding: 25px;
+            }
+
+            .request-card {
+                padding: 25px;
+            }
+
+            .form-grid, .availability-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'">CI-NDA</div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>Request Mentorship</h1>
+            <p>Connect with an experienced mentor who can guide your filmmaking journey</p>
+        </div>
+
+        <!-- Mentor Profile -->
+        <div class="mentor-profile">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80" alt="Mentor" class="mentor-avatar">
+            <div class="mentor-info">
+                <h2 id="mentorName">Sarah Mitchell</h2>
+                <div class="mentor-title" id="mentorTitle">Award-Winning Cinematographer</div>
+                <p style="color: #b3b3b3; line-height: 1.6;" id="mentorBio">
+                    15+ years of experience in feature films and documentaries. Emmy-nominated for documentary work. Passionate about nurturing emerging talent in cinematography and visual storytelling.
+                </p>
+                <div class="mentor-specialties">
+                    <span class="specialty-tag">Cinematography</span>
+                    <span class="specialty-tag">Lighting</span>
+                    <span class="specialty-tag">Documentary</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Request Form -->
+        <div class="request-card">
+            <h3 class="section-title">Ì±§ Your Information</h3>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Full Name <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="studentName" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address <span class="required">*</span></label>
+                    <input type="email" class="form-input" id="studentEmail" placeholder="your.email@example.com" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Current Level <span class="required">*</span></label>
+                <select class="form-select" id="experienceLevel" required>
+                    <option value="">Select your experience level</option>
+                    <option value="beginner">Complete Beginner</option>
+                    <option value="some-experience">Some Experience</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Brief Introduction <span class="required">*</span></label>
+                <textarea class="form-textarea" id="introduction" placeholder="Tell us about yourself, your background, and your passion for filmmaking..." maxlength="1000"></textarea>
+                <div class="char-count"><span id="introCount">0</span> / 1000 characters</div>
+            </div>
+        </div>
+
+        <div class="request-card">
+            <h3 class="section-title">ÌæØ Your Goals & Interests</h3>
+            
+            <div class="info-box">
+                <h4>What would you like to learn?</h4>
+                <p style="color: #b3b3b3; font-size: 14px;">Select all areas you're interested in exploring with your mentor</p>
+            </div>
+
+            <div class="goals-list">
+                <div class="goal-item">
+                    <input type="checkbox" id="goal1" value="camera-techniques">
+                    <label for="goal1">Camera techniques and equipment selection</label>
+                </div>
+                <div class="goal-item">
+                    <input type="checkbox" id="goal2" value="lighting">
+                    <label for="goal2">Lighting design and cinematography</label>
+                </div>
+                <div class="goal-item">
+                    <input type="checkbox" id="goal3" value="storytelling">
+                    <label for="goal3">Visual storytelling and composition</label>
+                </div>
+                <div class="goal-item">
+                    <input type="checkbox" id="goal4" value="portfolio">
+                    <label for="goal4">Building a professional portfolio</label>
+                </div>
+                <div class="goal-item">
+                    <input type="checkbox" id="goal5" value="career">
+                    <label for="goal5">Career guidance and industry connections</label>
+                </div>
+                <div class="goal-item">
+                    <input type="checkbox" id="goal6" value="post-production">
+                    <label for="goal6">Color grading and post-production</label>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 25px;">
+                <label class="form-label">Specific Questions or Topics <span class="required">*</span></label>
+                <textarea class="form-textarea" id="specificGoals" placeholder="What specific challenges are you facing? What would you like to achieve through this mentorship?" maxlength="1500"></textarea>
+                <div class="char-count"><span id="goalsCount">0</span> / 1500 characters</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Current Project (if any)</label>
+                <textarea class="form-textarea" id="currentProject" placeholder="Describe any current project you're working on that you'd like guidance with..." style="min-height: 100px;"></textarea>
+            </div>
+        </div>
+
+        <div class="request-card">
+            <h3 class="section-title">Ì≥Ö Availability & Commitment</h3>
+
+            <div class="form-group">
+                <label class="form-label">Preferred Session Frequency <span class="required">*</span></label>
+                <div class="availability-grid">
+                    <label class="time-slot selected">
+                        <input type="radio" name="frequency" value="weekly" checked>
+                        <div class="time-label">Weekly</div>
+                        <div class="time-desc">1 hour per week</div>
+                    </label>
+                    <label class="time-slot">
+                        <input type="radio" name="frequency" value="biweekly">
+                        <div class="time-label">Bi-weekly</div>
+                        <div class="time-desc">Every 2 weeks</div>
+                    </label>
+                    <label class="time-slot">
+                        <input type="radio" name="frequency" value="monthly">
+                        <div class="time-label">Monthly</div>
+                        <div class="time-desc">Once per month</div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Preferred Days <span class="required">*</span></label>
+                <select class="form-select" id="preferredDays" multiple style="min-height: 120px;">
+                    <option value="monday">Monday</option>
+                    <option value="tuesday">Tuesday</option>
+                    <option value="wednesday">Wednesday</option>
+                    <option value="thursday">Thursday</option>
+                    <option value="friday">Friday</option>
+                    <option value="saturday">Saturday</option>
+                    <option value="sunday">Sunday</option>
+                </select>
+                <p style="font-size: 12px; color: #999; margin-top: 5px;">Hold Ctrl/Cmd to select multiple days</p>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Preferred Time <span class="required">*</span></label>
+                    <select class="form-select" id="preferredTime" required>
+                        <option value="">Select preferred time</option>
+                        <option value="morning">Morning (8AM - 12PM)</option>
+                        <option value="afternoon">Afternoon (12PM - 5PM)</option>
+                        <option value="evening">Evening (5PM - 9PM)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Time Zone <span class="required">*</span></label>
+                    <select class="form-select" id="timezone" required>
+                        <option value="">Select your timezone</option>
+                        <option value="EAT">East Africa Time (EAT)</option>
+                        <option value="GMT">Greenwich Mean Time (GMT)</option>
+                        <option value="EST">Eastern Time (ET)</option>
+                        <option value="PST">Pacific Time (PT)</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Mentorship Duration <span class="required">*</span></label>
+                <select class="form-select" id="duration" required>
+                    <option value="">How long would you like the mentorship to last?</option>
+                    <option value="3months">3 Months</option>
+                    <option value="6months">6 Months</option>
+                    <option value="1year">1 Year</option>
+                    <option value="ongoing">Ongoing</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="request-card">
+            <h3 class="section-title">Ì≤¨ Additional Information</h3>
+
+            <div class="form-group">
+                <label class="form-label">Message to Mentor</label>
+                <textarea class="form-textarea" id="message" placeholder="Why are you interested in working with this specific mentor? What makes you a good mentee?" maxlength="1000"></textarea>
+                <div class="char-count"><span id="messageCount">0</span> / 1000 characters</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Portfolio/Work Samples (optional)</label>
+                <input type="url" class="form-input" id="portfolio" placeholder="Link to your portfolio, Vimeo, or YouTube channel">
+            </div>
+
+            <div class="info-box">
+                <h4>‚úì What Happens Next?</h4>
+                <ul>
+                    <li>Your request will be reviewed by the mentor within 48 hours</li>
+                    <li>You'll receive an email notification of acceptance or request for more information</li>
+                    <li>Once accepted, you can schedule your first mentorship session</li>
+                    <li>All sessions are conducted via video call through the CI-NDA platform</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn btn-secondary" onclick="window.history.back()">
+                ‚Üê Back to Mentors
+            </button>
+            <button class="btn btn-primary" onclick="submitRequest()">
+                Send Request ‚Üí
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Character counters
+        const counters = [
+            {id: 'introduction', countId: 'introCount'},
+            {id: 'specificGoals', countId: 'goalsCount'},
+            {id: 'message', countId: 'messageCount'}
+        ];
+
+        counters.forEach(item => {
+            const textarea = document.getElementById(item.id);
+            const counter = document.getElementById(item.countId);
+            textarea.addEventListener('input', () => {
+                counter.textContent = textarea.value.length;
+            });
+        });
+
+        // Time slot selection
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.addEventListener('click', function() {
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        function submitRequest() {
+            // Validation
+            const required = ['studentName', 'studentEmail', 'experienceLevel', 'introduction', 'specificGoals', 'preferredTime', 'timezone', 'duration'];
+            
+            for (let id of required) {
+                const field = document.getElementById(id);
+                if (!field.value) {
+                    alert('Please fill in all required fields marked with *');
+                    field.focus();
+                    return;
+                }
+            }
+
+            // Check at least one goal is selected
+            const goals = document.querySelectorAll('.goal-item input[type="checkbox"]:checked');
+            if (goals.length === 0) {
+                alert('Please select at least one learning goal');
+                return;
+            }
+
+            // Confirm submission
+            if (confirm('Are you ready to submit your mentorship request?\n\nThe mentor will review your request and respond within 48 hours.')) {
+                alert('Ìæâ Mentorship request sent successfully!\n\nYou will receive a confirmation email shortly. The mentor will review your request and get back to you within 48 hours.\n\nThank you for your interest!');
+                window.location.href = 'mentorship.html';
+            }
+        }
+    </script>
+</body>
+</html>

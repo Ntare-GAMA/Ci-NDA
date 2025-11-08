@@ -17,16 +17,21 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
-app.use('/uploads', express.static('uploads'));
+
+// Serve static files (HTML, CSS, JS, images)
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Serve HTML files from root directory
+app.use(express.static(__dirname));
 
 // Session Configuration
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+  secret: process.env.SESSION_SECRET || 'cinda-secret-key-2024',
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI
+    mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/cinda'
   }),
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
@@ -36,17 +41,17 @@ app.use(session({
 }));
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/cinda')
   .then(() => console.log('✅ MongoDB Connected Successfully'))
   .catch(err => console.error('❌ MongoDB Connection Error:', err));
 
 // Import Routes
-const authRoutes = require('./routes/auth.js');
-const userRoutes = require('./routes/users.js');
-const courseRoutes = require('./routes/courses.js');
-const opportunityRoutes = require('./routes/opportunities.js');
-const mentorshipRoutes = require('./routes/mentorship.js');
-const portfolioRoutes = require('./routes/portfolios.js');
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/users');
+const courseRoutes = require('./routes/courses');
+const opportunityRoutes = require('./routes/opportunities');
+const mentorshipRoutes = require('./routes/mentorship');
+const portfolioRoutes = require('./routes/portfolios');
 
 // Use Routes
 app.use('/api/auth', authRoutes);
@@ -65,6 +70,35 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Serve HTML pages
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get('/courses', (req, res) => {
+  res.sendFile(path.join(__dirname, 'courses.html'));
+});
+
+app.get('/opportunities', (req, res) => {
+  res.sendFile(path.join(__dirname, 'opportunities.html'));
+});
+
+app.get('/mentorship', (req, res) => {
+  res.sendFile(path.join(__dirname, 'mentorship.html'));
+});
+
+app.get('/portfolios', (req, res) => {
+  res.sendFile(path.join(__dirname, 'portfolios.html'));
+});
+
+app.get('/profile', (req, res) => {
+  res.sendFile(path.join(__dirname, 'profile.html'));
+});
+
+app.get('/authentication', (req, res) => {
+  res.sendFile(path.join(__dirname, 'authentication.html'));
+});
+
 // Error Handling Middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -74,8 +108,15 @@ app.use((err, req, res, next) => {
   });
 });
 
+// 404 Handler
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`��� CI-NDA Server running on port ${PORT}`);
-  console.log(`��� Environment: ${process.env.NODE_ENV}`);
+  console.log(`🚀 CI-NDA Server running on port ${PORT}`);
+  console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🌐 Frontend: http://localhost:${PORT}`);
+  console.log(`🔧 API: http://localhost:${PORT}/api`);
 });

@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become a Mentor - CI-NDA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: #0a0a0a;
+            color: white;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #e50914;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        .hero {
+            padding: 120px 50px 80px;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b4e 100%);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: #b3b3b3;
+            max-width: 700px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 50px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: #f5576c;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .benefit-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            padding: 35px;
+            border-radius: 20px;
+            border: 1px solid rgba(245, 87, 108, 0.2);
+            transition: all 0.3s;
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            border-color: #f5576c;
+            box-shadow: 0 20px 40px rgba(245, 87, 108, 0.2);
+        }
+
+        .benefit-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .benefit-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #f5576c;
+        }
+
+        .benefit-desc {
+            color: #b3b3b3;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .section-title {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .application-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 20px;
+            padding: 50px;
+            border: 1px solid rgba(245, 87, 108, 0.2);
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .form-section-title {
+            font-size: 24px;
+            margin-bottom: 25px;
+            color: #f5576c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .required {
+            color: #f5576c;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #f5576c;
+            box-shadow: 0 0 0 3px rgba(245, 87, 108, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .expertise-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .expertise-item:hover {
+            border-color: #f5576c;
+        }
+
+        .expertise-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .info-banner {
+            background: rgba(245, 87, 108, 0.1);
+            border-left: 4px solid #f5576c;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .info-banner h4 {
+            color: #f5576c;
+            margin-bottom: 10px;
+        }
+
+        .info-banner ul {
+            padding-left: 20px;
+            line-height: 1.8;
+            color: #b3b3b3;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 30px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .benefits-grid, .expertise-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .application-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'">CI-NDA</div>
+    </nav>
+
+    <section class="hero">
+        <h1>Become a Mentor</h1>
+        <p>Share your expertise, inspire the next generation of African filmmakers, and make a lasting impact on the industry</p>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Aspiring Filmmakers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Active Mentors</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1000+</div>
+                <div class="stat-label">Sessions Completed</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <h2 class="section-title">Why Become a Mentor?</h2>
+        <div class="benefits-grid">
+            <div class="benefit-card">
+                <div class="benefit-icon">Ìºü</div>
+                <h3 class="benefit-title">Give Back</h3>
+                <p class="benefit-desc">Share your knowledge and experience to help emerging filmmakers develop their skills and achieve their dreams</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">Ì¥ù</div>
+                <h3 class="benefit-title">Build Network</h3>
+                <p class="benefit-desc">Connect with passionate filmmakers and expand your professional network across Africa and beyond</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">Ì≤°</div>
+                <h3 class="benefit-title">Stay Sharp</h3>
+                <p class="benefit-desc">Teaching others reinforces your own knowledge and keeps you updated with fresh perspectives</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">Ìæ¨</div>
+                <h3 class="benefit-title">Find Talent</h3>
+                <p class="benefit-desc">Discover and nurture exceptional talent for potential collaborations on future projects</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">ÌøÜ</div>
+                <h3 class="benefit-title">Recognition</h3>
+                <p class="benefit-desc">Build your reputation as an industry leader and thought leader in your field</p>
+            </div>
+            <div class="benefit-card">
+                <div class="benefit-icon">Ì≥à</div>
+                <h3 class="benefit-title">Flexible Schedule</h3>
+                <p class="benefit-desc">Set your own availability and mentor at your own pace - no minimum commitment required</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Mentor Application</h2>
+        <div class="application-card">
+            <div class="info-banner">
+                <h4>‚úì Mentor Requirements</h4>
+                <ul>
+                    <li>Minimum 5 years of professional experience in film industry</li>
+                    <li>Proven track record with completed projects or industry recognition</li>
+                    <li>Passion for teaching and helping others succeed</li>
+                    <li>Commitment to regular mentorship sessions</li>
+                    <li>Professional conduct and respectful communication</li>
+                </ul>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Ì±§ Personal Information</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Full Name <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="fullName" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email Address <span class="required">*</span></label>
+                        <input type="email" class="form-input" id="email" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-input" id="phone" placeholder="+250 XXX XXX XXX">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Location <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="location" placeholder="City, Country" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Ìæ¨ Professional Background</h3>
+                <div class="form-group">
+                    <label class="form-label">Professional Title <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="title" placeholder="e.g., Award-Winning Cinematographer, Film Director" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Years of Experience <span class="required">*</span></label>
+                    <select class="form-select" id="experience" required>
+                        <option value="">Select years of experience</option>
+                        <option value="5-10">5-10 years</option>
+                        <option value="10-15">10-15 years</option>
+                        <option value="15-20">15-20 years</option>
+                        <option value="20+">20+ years</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Professional Biography <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="bio" placeholder="Share your professional journey, key achievements, and what makes you passionate about mentoring..." maxlength="2000"></textarea>
+                    <div class="char-count"><span id="bioCount">0</span> / 2000 characters</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Notable Projects & Achievements <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="achievements" placeholder="List your most significant projects, awards, recognitions, and industry contributions..." maxlength="1500"></textarea>
+                    <div class="char-count"><span id="achievementsCount">0</span> / 1500 characters</div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Ì≤º Areas of Expertise</h3>
+                <p style="color: #999; margin-bottom: 20px; font-size: 14px;">Select all areas where you can provide mentorship</p>
+                <div class="expertise-grid">
+                    <div class="expertise-item">
+                        <input type="checkbox" id="exp1" value="cinematography">
+                        <label for="exp1">Cinematography</label>
+                    </div>
+                    <div class="expertise-item">
+                        <input type="checkbox" id="exp2" value="directing">
+                        <label for="exp2">Directing</label>
+                    </div>
+                    <div class="expertise-item">
+                        <input type="checkbox" id="exp3" value="editing">
+                        <label for="exp3">Editing</label>
+                    </div>
+                    <div class="expertise-item">
+                        <input type="checkbox" id="exp4" value="screenwriting">
+                        <label for="exp4">Screenwriting</label>
+                    </div>
+                    <div class="expertise-item">
+                        <input type="checkbox" id="exp5" value="producing">
+                        <label for="exp5">Producing</label>
+                    </div>
+                    <div class="expertise-item">
+                        <input type="checkbox" id="exp6" value="sound-design">
+                        <label for="exp6">Sound Design</label>
+                    </div>
+                    <div class="expertise-item">
+                        <input type="checkbox" id="exp7" value="color-grading">
+                        <label for="exp7">Color Grading</label>
+                    </div>
+                    <div class="expertise-item">
+                        <input type="checkbox" id="exp8" value="vfx">
+                        <label for="exp8">VFX/Animation</label>
+                    </div>
+                    <div class="expertise-item">
+                        <input type="checkbox" id="exp9" value="documentary">
+                        <label for="exp9">Documentary</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Ì≥Ö Availability</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Mentees Capacity <span class="required">*</span></label>
+                        <select class="form-select" id="capacity" required>
+                            <option value="">How many mentees can you support?</option>
+                            <option value="1-3">1-3 mentees</option>
+                            <option value="4-6">4-6 mentees</option>
+                            <option value="7-10">7-10 mentees</option>
+                            <option value="10+">10+ mentees</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Time Commitment <span class="required">*</span></label>
+                        <select class="form-select" id="commitment" required>
+                            <option value="">Select your availability</option>
+                            <option value="1-2">1-2 hours per week</option>
+                            <option value="3-5">3-5 hours per week</option>
+                            <option value="6-10">6-10 hours per week</option>
+                            <option value="flexible">Flexible</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Preferred Communication Method <span class="required">*</span></label>
+                    <select class="form-select" id="communication" required>
+                        <option value="">Select preferred method</option>
+                        <option value="video">Video Calls (Zoom, Google Meet)</option>
+                        <option value="chat">Text Chat</option>
+                        <option value="both">Both Video and Chat</option>
+                        <option value="in-person">In-Person (if local)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Ìºê Online Presence</h3>
+                <div class="form-group">
+                    <label class="form-label">Portfolio/Website URL</label>
+                    <input type="url" class="form-input" id="portfolio" placeholder="https://yourportfolio.com">
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">LinkedIn Profile</label>
+                        <input type="url" class="form-input" id="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">IMDb Profile</label>
+                        <input type="url" class="form-input" id="imdb" placeholder="https://imdb.com/name/...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Ì≤¨ Mentorship Approach</h3>
+                <div class="form-group">
+                    <label class="form-label">Why do you want to become a mentor? <span class="required">*</span></label>
+                    <textarea class="form-textarea" id="motivation" placeholder="Share your motivation for mentoring and what you hope to contribute to emerging filmmakers..." maxlength="1000"></textarea>
+                    <div class="char-count"><span id="motivationCount">0</span> / 1000 characters</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">What makes you a good mentor?</label>
+                    <textarea class="form-textarea" id="qualities" placeholder="Describe your mentoring style, approach, and what mentees can expect from working with you..." maxlength="1000"></textarea>
+                    <div class="char-count"><span id="qualitiesCount">0</span> / 1000 characters</div>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="submitApplication()">Submit Mentor Application</button>
+        </div>
+    </div>
+
+    <script>
+        // Character counters
+        const counters = ['bio', 'achievements', 'motivation', 'qualities'];
+        counters.forEach(id => {
+            const textarea = document.getElementById(id);
+            const counter = document.getElementById(id + 'Count');
+            if (textarea && counter) {
+                textarea.addEventListener('input', () => {
+                    counter.textContent = textarea.value.length;
+                });
+            }
+        });
+
+        function submitApplication() {
+            // Validation
+            const required = ['fullName', 'email', 'location', 'title', 'experience', 'bio', 'achievements', 'capacity', 'commitment', 'communication', 'motivation'];
+            
+            for (let id of required) {
+                const field = document.getElementById(id);
+                if (!field.value) {
+                    alert('Please fill in all required fields marked with *');
+                    field.focus();
+                    return;
+                }
+            }
+
+            // Check at least one expertise is selected
+            const expertise = document.querySelectorAll('.expertise-item input[type="checkbox"]:checked');
+            if (expertise.length === 0) {
+                alert('Please select at least one area of expertise');
+                return;
+            }
+
+            // Confirm submission
+            if (confirm('Are you ready to submit your mentor application?\n\nOur team will review your application and respond within 5-7 business days.')) {
+                alert('Ìæâ Application submitted successfully!\n\nThank you for your interest in becoming a mentor at CI-NDA!\n\nWe will review your application and contact you within 5-7 business days. You will receive a confirmation email shortly.');
+                window.location.href = 'mentorship.html';
+            }
+        }
+    </script>
+</body>
+</html>

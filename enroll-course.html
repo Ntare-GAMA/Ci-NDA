@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enroll in Course - CI-NDA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #141414 0%, #1a1a2e 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(20, 20, 20, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(229, 9, 20, 0.1);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            color: #e50914;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #2a2a2a;
+            z-index: 0;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #e50914, #f40612);
+            z-index: 1;
+            transition: width 0.3s ease;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #2a2a2a;
+            border: 2px solid #3a3a3a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+
+        .step-circle.active {
+            background: #e50914;
+            border-color: #e50914;
+            box-shadow: 0 0 20px rgba(229, 9, 20, 0.5);
+        }
+
+        .step-circle.completed {
+            background: #46d369;
+            border-color: #46d369;
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+        }
+
+        .step-label.active {
+            color: #e50914;
+            font-weight: 600;
+        }
+
+        .enrollment-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(229, 9, 20, 0.1);
+        }
+
+        .course-header {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #3a3a3a;
+        }
+
+        .course-thumbnail {
+            width: 200px;
+            height: 120px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .course-info h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff 0%, #e50914 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: #999;
+            margin-top: 10px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #e50914;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #b3b3b3;
+            font-weight: 500;
+        }
+
+        .form-group label .required {
+            color: #e50914;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 15px;
+            background: #0a0a0a;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            color: white;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #e50914;
+            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .info-box {
+            background: rgba(70, 211, 105, 0.1);
+            border: 1px solid #46d369;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .info-box.warning {
+            background: rgba(255, 152, 0, 0.1);
+            border-color: #ff9800;
+        }
+
+        .info-box h3 {
+            color: #46d369;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-box.warning h3 {
+            color: #ff9800;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .info-box li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: #b3b3b3;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .info-box li::before {
+            content: '‚úì';
+            position: absolute;
+            left: 0;
+            color: #46d369;
+            font-weight: bold;
+        }
+
+        .info-box.warning li::before {
+            content: '!';
+            color: #ff9800;
+        }
+
+        .schedule-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .schedule-option {
+            padding: 20px;
+            background: #0a0a0a;
+            border: 2px solid #3a3a3a;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .schedule-option:hover {
+            border-color: #e50914;
+            transform: translateY(-5px);
+        }
+
+        .schedule-option.selected {
+            border-color: #e50914;
+            background: rgba(229, 9, 20, 0.1);
+        }
+
+        .schedule-option input[type="radio"] {
+            display: none;
+        }
+
+        .schedule-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .schedule-desc {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .payment-summary {
+            background: #0a0a0a;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            padding-top: 20px;
+            margin-top: 10px;
+            border-top: 2px solid #3a3a3a;
+        }
+
+        .summary-total {
+            font-size: 24px;
+            font-weight: 700;
+            color: #46d369;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            margin-top: 2px;
+        }
+
+        .checkbox-group label {
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .checkbox-group label a {
+            color: #e50914;
+            text-decoration: none;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #e50914 0%, #f40612 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(229, 9, 20, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid #3a3a3a;
+        }
+
+        .btn-secondary:hover {
+            border-color: #e50914;
+            background: rgba(229, 9, 20, 0.1);
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .container {
+                margin-top: 80px;
+            }
+
+            .enrollment-card {
+                padding: 30px 20px;
+            }
+
+            .course-header {
+                flex-direction: column;
+            }
+
+            .form-grid, .schedule-options {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo" onclick="window.location.href='index.html'">CI-NDA</div>
+    </nav>
+
+    <div class="container">
+        <div class="progress-bar">
+            <div class="progress-line" id="progressLine" style="width: 33.33%"></div>
+            <div class="progress-step">
+                <div class="step-circle active" id="step1Circle">1</div>
+                <div class="step-label active">Course Details</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle" id="step2Circle">2</div>
+                <div class="step-label">Personal Information</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-circle" id="step3Circle">3</div>
+                <div class="step-label">Confirmation</div>
+            </div>
+        </div>
+
+        <div class="enrollment-card">
+            <!-- Step 1: Course Details -->
+            <div class="step-content active" id="step1">
+                <div class="course-header">
+                    <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?w=400&q=80" alt="Course" class="course-thumbnail">
+                    <div class="course-info">
+                        <h1 id="courseTitle">Introduction to Cinematography</h1>
+                        <div class="course-meta">
+                            <div class="meta-item">
+                                <span>Ì≥ö</span>
+                                <span id="courseDuration">12 weeks</span>
+                            </div>
+                            <div class="meta-item">
+                                <span>Ì≥ä</span>
+                                <span id="courseLevel">Beginner</span>
+                            </div>
+                            <div class="meta-item">
+                                <span>Ì±®‚ÄçÌø´</span>
+                                <span id="courseInstructor">Roger Deakins</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <h3>‚úì What You'll Get</h3>
+                    <ul>
+                        <li>Complete access to all course materials and video lectures</li>
+                        <li>Downloadable resources and practical assignments</li>
+                        <li>Certificate of completion upon finishing the course</li>
+                        <li>Lifetime access to course updates and new content</li>
+                        <li>Direct Q&A with instructors and mentors</li>
+                        <li>Access to exclusive CI-NDA filmmaker community</li>
+                    </ul>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">Ì≥Ö Choose Your Learning Schedule</h2>
+                    <div class="schedule-options">
+                        <label class="schedule-option selected">
+                            <input type="radio" name="schedule" value="self-paced" checked>
+                            <div class="schedule-title">Self-Paced</div>
+                            <div class="schedule-desc">Learn at your own speed</div>
+                        </label>
+                        <label class="schedule-option">
+                            <input type="radio" name="schedule" value="intensive">
+                            <div class="schedule-title">Intensive</div>
+                            <div class="schedule-desc">6 weeks accelerated</div>
+                        </label>
+                        <label class="schedule-option">
+                            <input type="radio" name="schedule" value="weekend">
+                            <div class="schedule-title">Weekend</div>
+                            <div class="schedule-desc">Saturdays & Sundays</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="info-box warning">
+                    <h3>‚ö† Important Information</h3>
+                    <ul>
+                        <li>Course starts on the 1st and 15th of each month</li>
+                        <li>Minimum commitment of 5-8 hours per week recommended</li>
+                        <li>Basic computer skills and internet access required</li>
+                        <li>All courses are conducted in English</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Step 2: Personal Information -->
+            <div class="step-content" id="step2">
+                <h2 class="section-title">Ì±§ Personal Information</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>First Name <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="firstName" placeholder="Enter your first name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name <span class="required">*</span></label>
+                        <input type="text" class="form-input" id="lastName" placeholder="Enter your last name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address <span class="required">*</span></label>
+                        <input type="email" class="form-input" id="email" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" class="form-input" id="phone" placeholder="+250 XXX XXX XXX">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Country <span class="required">*</span></label>
+                        <select class="form-select" id="country" required>
+                            <option value="">Select your country</option>
+                            <option value="RW">Rwanda</option>
+                            <option value="KE">Kenya</option>
+                            <option value="UG">Uganda</option>
+                            <option value="TZ">Tanzania</option>
+                            <option value="NG">Nigeria</option>
+                            <option value="GH">Ghana</option>
+                            <option value="ZA">South Africa</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h2 class="section-title" style="margin-top: 40px;">Ìæ¨ Background & Goals</h2>
+                <div class="form-group">
+                    <label>Current Experience Level</label>
+                    <select class="form-select" id="experienceLevel">
+                        <option value="beginner">Complete Beginner</option>
+                        <option value="some">Some Experience</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>What do you hope to achieve from this course?</label>
+                    <textarea class="form-textarea" id="goals" placeholder="Share your learning goals and what you hope to accomplish..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>How did you hear about CI-NDA?</label>
+                    <select class="form-select" id="referralSource">
+                        <option value="">Select an option</option>
+                        <option value="social">Social Media</option>
+                        <option value="search">Search Engine</option>
+                        <option value="friend">Friend/Colleague</option>
+                        <option value="event">Event/Workshop</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Step 3: Confirmation -->
+            <div class="step-content" id="step3">
+                <h2 class="section-title">‚úì Review & Confirm</h2>
+                
+                <div class="info-box">
+                    <h3>Ì≥ã Enrollment Summary</h3>
+                    <div style="margin-top: 15px; color: #b3b3b3; line-height: 1.8;">
+                        <p><strong>Course:</strong> <span id="summaryCourseName">Introduction to Cinematography</span></p>
+                        <p><strong>Instructor:</strong> <span id="summaryInstructor">Roger Deakins</span></p>
+                        <p><strong>Duration:</strong> <span id="summaryDuration">12 weeks</span></p>
+                        <p><strong>Schedule:</strong> <span id="summarySchedule">Self-Paced</span></p>
+                        <p><strong>Student:</strong> <span id="summaryName">-</span></p>
+                        <p><strong>Email:</strong> <span id="summaryEmail">-</span></p>
+                    </div>
+                </div>
+
+                <div class="payment-summary">
+                    <h3 style="margin-bottom: 20px; color: #e50914;">Ì≤≥ Payment Summary</h3>
+                    <div class="summary-row">
+                        <span>Course Fee</span>
+                        <span>FREE</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Platform Access</span>
+                        <span>FREE</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Certificate</span>
+                        <span>FREE</span>
+                    </div>
+                    <div class="summary-row">
+                        <span style="font-size: 18px; font-weight: 600;">Total Amount</span>
+                        <span class="summary-total">FREE</span>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 30px;">
+                    <h3>Ìæì Next Steps After Enrollment</h3>
+                    <ul>
+                        <li>You'll receive a confirmation email within 5 minutes</li>
+                        <li>Access to course materials will be granted immediately</li>
+                        <li>Welcome email with login credentials and course schedule</li>
+                        <li>Introduction to your instructor and fellow students</li>
+                    </ul>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="agreeTerms" required>
+                    <label for="agreeTerms">
+                        I agree to the <a href="#" target="_blank">Terms & Conditions</a> and <a href="#" target="_blank">Privacy Policy</a>. I understand the course requirements and commit to completing the program.
+                    </label>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" id="backBtn" style="display: none;" onclick="previousStep()">
+                    ‚Üê Back
+                </button>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextStep()">
+                    Continue ‚Üí
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+
+        // Handle schedule option selection
+        document.querySelectorAll('.schedule-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.schedule-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        function updateProgress() {
+            const progressLine = document.getElementById('progressLine');
+            const percentage = (currentStep / 3) * 100;
+            progressLine.style.width = percentage + '%';
+
+            // Update step circles
+            for (let i = 1; i <= 3; i++) {
+                const circle = document.getElementById(`step${i}Circle`);
+                const label = circle.nextElementSibling;
+                
+                if (i < currentStep) {
+                    circle.classList.add('completed');
+                    circle.classList.remove('active');
+                    circle.innerHTML = '‚úì';
+                } else if (i === currentStep) {
+                    circle.classList.add('active');
+                    circle.classList.remove('completed');
+                    circle.innerHTML = i;
+                    label.classList.add('active');
+                } else {
+                    circle.classList.remove('active', 'completed');
+                    circle.innerHTML = i;
+                    label.classList.remove('active');
+                }
+            }
+
+            // Update button visibility
+            document.getElementById('backBtn').style.display = currentStep > 1 ? 'flex' : 'none';
+            document.getElementById('nextBtn').innerHTML = currentStep === 3 ? 'Complete Enrollment ‚úì' : 'Continue ‚Üí';
+        }
+
+        function nextStep() {
+            if (currentStep === 1) {
+                // Validate step 1 (just move forward)
+                currentStep++;
+            } else if (currentStep === 2) {
+                // Validate step 2
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('email').value;
+                const country = document.getElementById('country').value;
+
+                if (!firstName || !lastName || !email || !country) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+
+                // Update summary
+                document.getElementById('summaryName').textContent = `${firstName} ${lastName}`;
+                document.getElementById('summaryEmail').textContent = email;
+                
+                const schedule = document.querySelector('input[name="schedule"]:checked').value;
+                const scheduleText = {
+                    'self-paced': 'Self-Paced',
+                    'intensive': 'Intensive (6 weeks)',
+                    'weekend': 'Weekend Classes'
+                };
+                document.getElementById('summarySchedule').textContent = scheduleText[schedule];
+
+                currentStep++;
+            } else if (currentStep === 3) {
+                // Validate step 3
+                const agreeTerms = document.getElementById('agreeTerms').checked;
+                if (!agreeTerms) {
+                    alert('Please agree to the Terms & Conditions');
+                    return;
+                }
+
+                // Complete enrollment
+                completeEnrollment();
+                return;
+            }
+
+            showStep(currentStep);
+            updateProgress();
+        }
+
+        function previousStep() {
+            currentStep--;
+            showStep(currentStep);
+            updateProgress();
+        }
+
+        function showStep(step) {
+            document.querySelectorAll('.step-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`step${step}`).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function completeEnrollment() {
+            const btn = document.getElementById('nextBtn');
+            btn.disabled = true;
+            btn.innerHTML = 'Processing...';
+
+            // Simulate enrollment process
+            setTimeout(() => {
+                alert('Ìæâ Congratulations! You have successfully enrolled in the course.\n\nYou will receive a confirmation email shortly with access details and next steps.');
+                window.location.href = 'profile.html';
+            }, 1500);
+        }
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html>

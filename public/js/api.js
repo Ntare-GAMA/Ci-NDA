@@ -1,150 +1,249 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+// API Client for CI-NDA Platform
+const API_BASE_URL = 'http://localhost:5000/api/opportunities';
 
-class CindaAPI {
+class APIClient {
   constructor() {
     this.token = localStorage.getItem('authToken');
   }
 
-  getHeaders() {
-    const headers = { 'Content-Type': 'application/json' };
-    if (this.token) {
+  // Helper method to get headers
+  getHeaders(includeAuth = true) {
+    const headers = {
+      'Content-Type': 'application/json'
+    };
+    
+    if (includeAuth && this.token) {
       headers['Authorization'] = `Bearer ${this.token}`;
     }
+    
     return headers;
   }
 
-  async request(endpoint, options = {}) {
-    try {
-      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-        ...options,
-        headers: this.getHeaders(),
-        credentials: 'include'
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Request failed');
-      }
-
-      return data;
-    } catch (error) {
-      console.error('API Error:', error);
-      throw error;
+  // Helper method to handle responses
+  async handleResponse(response) {
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message || 'Request failed');
     }
+    
+    return data;
   }
 
-  // Auth Methods
+  // Store auth token
+  setAuth(token) {
+    this.token = token;
+    localStorage.setItem('authToken', token);
+  }
+
+  // Clear auth
+  clearAuth() {
+    this.token = null;
+    localStorage.removeItem('authToken');
+    sessionStorage.clear();
+  }
+
+  // Check if user is authenticated
+  isAuthenticated() {
+    return !!this.token;
+  }
+
+  // ========== AUTH ENDPOINTS ==========
+  
   async register(userData) {
-    const data = await this.request('/auth/register', {
+    const response = await fetch(`${API_BASE_URL}/auth/register`, {
       method: 'POST',
+      headers: this.getHeaders(false),
       body: JSON.stringify(userData)
     });
-    this.saveAuth(data);
+    
+    const data = await this.handleResponse(response);
+    this.setAuth(data.token);
     return data;
   }
 
   async login(credentials) {
-    const data = await this.request('/auth/login', {
+    const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
+      headers: this.getHeaders(false),
       body: JSON.stringify(credentials)
     });
-    this.saveAuth(data);
+    
+    const data = await this.handleResponse(response);
+    this.setAuth(data.token);
+    
+    // Store user info in sessionStorage
+    sessionStorage.setItem('userLoggedIn', 'true');
+    sessionStorage.setItem('userEmail', data.user.email);
+    sessionStorage.setItem('userType', data.user.userType);
+    sessionStorage.setItem('userName', data.user.name);
+    
     return data;
   }
 
   async socialLogin(provider, userData) {
-    const data = await this.request('/auth/social-login', {
+    const response = await fetch(`${API_BASE_URL}/auth/social-login`, {
       method: 'POST',
-      body: JSON.stringify({ ...userData, provider })
+      headers: this.getHeaders(false),
+      body: JSON.stringify(userData)
     });
-    this.saveAuth(data);
+    
+    const data = await this.handleResponse(response);
+    this.setAuth(data.token);
+    
+    // Store user info
+    sessionStorage.setItem('userLoggedIn', 'true');
+    sessionStorage.setItem('userEmail', data.user.email);
+    sessionStorage.setItem('userType', data.user.userType);
+    sessionStorage.setItem('userName', data.user.name);
+    sessionStorage.setItem('socialLogin', provider);
+    
     return data;
   }
 
   async logout() {
-    await this.request('/auth/logout', { method: 'POST' });
-    this.clearAuth();
+    try {
+      await fetch(`${API_BASE_URL}/auth/logout`, {
+        method: 'POST',
+        headers: this.getHeaders()
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      this.clearAuth();
+    }
   }
 
-  saveAuth(data) {
-    this.token = data.token;
-    localStorage.setItem('authToken', data.token);
-    localStorage.setItem('user', JSON.stringify(data.user));
-    sessionStorage.setItem('userLoggedIn', 'true');
-    sessionStorage.setItem('userType', data.user.userType);
-    sessionStorage.setItem('userEmail', data.user.email);
-    sessionStorage.setItem('userName', data.user.name);
-  }
-
-  clearAuth() {
-    this.token = null;
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('user');
-    sessionStorage.clear();
-  }
-
-  // Course Methods
-  async getCourses(filters = {}) {
-    const params = new URLSearchParams(filters);
-    return await this.request(`/courses?${params}`);
-  }
-
-  async getCourse(id) {
-    return await this.request(`/courses/${id}`);
-  }
-
-  async enrollInCourse(courseId) {
-    return await this.request(`/courses/${courseId}/enroll`, {
-      method: 'POST'
-    });
-  }
-
-  // Opportunity Methods
-  async getOpportunities(filters = {}) {
-    const params = new URLSearchParams(filters);
-    return await this.request(`/opportunities?${params}`);
-  }
-
-  async applyToOpportunity(opportunityId, coverLetter) {
-    return await this.request(`/opportunities/${opportunityId}/apply`, {
-      method: 'POST',
-      body: JSON.stringify({ coverLetter })
-    });
-  }
-
-  // User Methods
+  // ========== USER ENDPOINTS ==========
+  
   async getProfile() {
-    return await this.request('/users/profile');
+    const response = await fetch(`${API_BASE_URL}/users/profile`, {
+      headers: this.getHeaders()
+    });
+    
+    return await this.handleResponse(response);
   }
 
   async updateProfile(profileData) {
-    return await this.request('/users/profile', {
+    const response = await fetch(`${API_BASE_URL}/users/profile`, {
       method: 'PUT',
+      headers: this.getHeaders(),
       body: JSON.stringify(profileData)
     });
+    
+    return await this.handleResponse(response);
+  }
+
+  // ========== COURSES ENDPOINTS ==========
+  
+  async getCourses(filters = {}) {
+    const queryParams = new URLSearchParams(filters);
+    const response = await fetch(`${API_BASE_URL}/courses?${queryParams}`, {
+      headers: this.getHeaders(false)
+    });
+    
+    return await this.handleResponse(response);
+  }
+
+  async getCourse(courseId) {
+    const response = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
+      headers: this.getHeaders(false)
+    });
+    
+    return await this.handleResponse(response);
+  }
+
+  async enrollInCourse(courseId) {
+    const response = await fetch(`${API_BASE_URL}/courses/${courseId}/enroll`, {
+      method: 'POST',
+      headers: this.getHeaders()
+    });
+    
+    return await this.handleResponse(response);
+  }
+
+  // ========== OPPORTUNITIES ENDPOINTS ==========
+  
+  async getOpportunities(filters = {}) {
+    const queryParams = new URLSearchParams(filters);
+    const response = await fetch(`${API_BASE_URL}/opportunities?${queryParams}`, {
+      headers: this.getHeaders(false)
+    });
+    
+    return await this.handleResponse(response);
+  }
+
+  async applyToOpportunity(opportunityId, coverLetter) {
+    const response = await fetch(`${API_BASE_URL}/opportunities/${opportunityId}/apply`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ coverLetter })
+    });
+    
+    return await this.handleResponse(response);
+  }
+
+  // ========== MENTORSHIP ENDPOINTS ==========
+  
+  async getMentors(filters = {}) {
+    const queryParams = new URLSearchParams(filters);
+    const response = await fetch(`${API_BASE_URL}/mentorship?${queryParams}`, {
+      headers: this.getHeaders(false)
+    });
+    
+    return await this.handleResponse(response);
+  }
+
+  async requestMentorship(mentorId, message) {
+    const response = await fetch(`${API_BASE_URL}/mentorship/request`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ mentorId, message })
+    });
+    
+    return await this.handleResponse(response);
+  }
+
+  // ========== PORTFOLIOS ENDPOINTS ==========
+  
+  async getPortfolios(filters = {}) {
+    const queryParams = new URLSearchParams(filters);
+    const response = await fetch(`${API_BASE_URL}/portfolios?${queryParams}`, {
+      headers: this.getHeaders(false)
+    });
+    
+    return await this.handleResponse(response);
+  }
+
+  async createPortfolio(portfolioData) {
+    const response = await fetch(`${API_BASE_URL}/portfolios`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(portfolioData)
+    });
+    
+    return await this.handleResponse(response);
+  }
+
+  async likePortfolio(portfolioId) {
+    const response = await fetch(`${API_BASE_URL}/portfolios/${portfolioId}/like`, {
+      method: 'POST',
+      headers: this.getHeaders()
+    });
+    
+    return await this.handleResponse(response);
   }
 }
 
-// Global API instance
-const api = new CindaAPI();
+// Create and export a single instance
+const api = new APIClient();
 
-// Check authentication on page load
-window.addEventListener('DOMContentLoaded', () => {
-  const protectedPages = ['profile.html', 'signin.html'];
-  const currentPage = window.location.pathname.split('/').pop();
-  
-  if (protectedPages.includes(currentPage)) {
-    checkAuthentication();
-  }
-});
+// For browser usage
+if (typeof window !== 'undefined') {
+  window.api = api;
+}
 
-function checkAuthentication() {
-  const token = localStorage.getItem('authToken');
-  const currentPage = window.location.pathname.split('/').pop();
-  
-  if (!token && currentPage === 'profile.html') {
-    alert('Please sign in to access your profile');
-    window.location.href = 'authentication.html';
-  }
+// For Node.js usage
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = api;
 }
