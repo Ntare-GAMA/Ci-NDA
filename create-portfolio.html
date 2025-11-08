@@ -422,10 +422,10 @@
         </div>
 
         <div class="portfolio-card">
-            <h2 class="section-title">Ìæ¨ Project Media</h2>
+            <h2 class="section-title"> Project Media</h2>
 
             <div class="tips-box">
-                <h4>Ì≤° Tips for Great Portfolio Pieces</h4>
+                <h4> Tips for Great Portfolio Pieces</h4>
                 <ul>
                     <li>Upload your best quality work - first impressions matter</li>
                     <li>Keep videos under 10 minutes for better engagement</li>
@@ -436,7 +436,7 @@
             </div>
 
             <div class="upload-zone" onclick="document.getElementById('mediaUpload').click()">
-                <div class="upload-icon">Ìæ•</div>
+                <div class="upload-icon"></div>
                 <div class="upload-text">
                     <h3>Upload Your Project</h3>
                     <p>Click to upload video or thumbnail image</p>
@@ -459,7 +459,7 @@
         </div>
 
         <div class="portfolio-card">
-            <h2 class="section-title">Ì≥ù Project Details</h2>
+            <h2 class="section-title"> Project Details</h2>
 
             <div class="form-group">
                 <label class="form-label">Project Title <span class="required">*</span></label>
@@ -529,7 +529,7 @@
         </div>
 
         <div class="portfolio-card">
-            <h2 class="section-title">Ìºê Additional Information</h2>
+            <h2 class="section-title"> Additional Information</h2>
 
             <div class="form-group">
                 <label class="form-label">Project Website or Press Kit</label>
@@ -551,19 +551,19 @@
                 <div class="visibility-options">
                     <label class="visibility-option selected">
                         <input type="radio" name="visibility" value="public" checked>
-                        <div class="visibility-icon">Ìºç</div>
+                        <div class="visibility-icon"></div>
                         <div class="visibility-title">Public</div>
                         <div class="visibility-desc">Everyone can see</div>
                     </label>
                     <label class="visibility-option">
                         <input type="radio" name="visibility" value="unlisted">
-                        <div class="visibility-icon">Ì¥ó</div>
+                        <div class="visibility-icon"></div>
                         <div class="visibility-title">Unlisted</div>
                         <div class="visibility-desc">Only with link</div>
                     </label>
                     <label class="visibility-option">
                         <input type="radio" name="visibility" value="private">
-                        <div class="visibility-icon">Ì¥í</div>
+                        <div class="visibility-icon"></div>
                         <div class="visibility-title">Private</div>
                         <div class="visibility-desc">Only you</div>
                     </label>
@@ -573,10 +573,10 @@
 
         <div class="btn-group">
             <button class="btn btn-secondary" onclick="saveDraft()">
-                Ì≤æ Save as Draft
+                 Save as Draft
             </button>
             <button class="btn btn-primary" onclick="publishPortfolio()">
-                Ì∫Ä Publish Portfolio
+                 Publish Portfolio
             </button>
         </div>
     </div>
@@ -685,7 +685,7 @@
 
         function saveDraft() {
             if (confirm('Save this portfolio as a draft? You can continue editing it later.')) {
-                alert('Ì≤æ Portfolio saved as draft!\n\nYou can find it in your profile under "Drafts" and publish it when ready.');
+                alert(' Portfolio saved as draft!\n\nYou can find it in your profile under "Drafts" and publish it when ready.');
                 window.location.href = 'profile.html';
             }
         }
@@ -728,8 +728,8 @@
             }
 
             // Confirm publication
-            if (confirm('Ì∫Ä Ready to publish your portfolio?\n\nYour work will be visible to the CI-NDA community based on your selected visibility settings.')) {
-                alert('ÔøΩÔøΩ Portfolio published successfully!\n\nYour work is now live and visible to the community. You can view, edit, or manage it from your profile page.\n\nThank you for sharing your creativity!');
+            if (confirm(' Ready to publish your portfolio?\n\nYour work will be visible to the CI-NDA community based on your selected visibility settings.')) {
+                alert(' Portfolio published successfully!\n\nYour work is now live and visible to the community. You can view, edit, or manage it from your profile page.\n\nThank you for sharing your creativity!');
                 window.location.href = 'portfolios.html';
             }
         }
