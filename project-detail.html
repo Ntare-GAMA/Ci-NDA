@@ -1,0 +1,12 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Project Detail</title>
+<style>body{background:#141414;color:#fff;font-family:Arial;padding:30px}</style></head>
+<body>
+<h1>Project Detail</h1>
+<p id="info">Loading...</p>
+<script>
+const id=new URLSearchParams(location.search).get('id');
+if(!id) document.getElementById('info').innerText='No project id provided';
+else document.getElementById('info').innerText='Project ID: '+id+' (page stub)';
+</script>
+</body></html>

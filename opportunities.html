@@ -5,232 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opportunities - Ci-NDA</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background: #141414;
-            color: white;
-        }
-
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            background-color: #141414;
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: bold;
-            color: #e50914;
-            letter-spacing: 2px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 25px;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: #b3b3b3;
-        }
-
-        .main-content {
-            padding: 100px 50px 50px;
-        }
-
-        .page-header {
-            margin-bottom: 40px;
-        }
-
-        .page-header h1 {
-            font-size: 48px;
-            margin-bottom: 15px;
-        }
-
-        .page-header p {
-            font-size: 18px;
-            color: #b3b3b3;
-            max-width: 800px;
-        }
-
-        .filter-section {
-            margin-bottom: 30px;
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 10px 20px;
-            background: #2a2a2a;
-            border: none;
-            color: white;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-
-        .filter-btn:hover, .filter-btn.active {
-            background: #e50914;
-        }
-
-        .opportunities-list {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-        }
-
-        .opportunity-card {
-            background: #2a2a2a;
-            border-radius: 8px;
-            padding: 30px;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            border-left: 4px solid #e50914;
-        }
-
-        .opportunity-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 5px 20px rgba(229, 9, 20, 0.3);
-        }
-
-        .opportunity-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .opportunity-type {
-            display: inline-block;
-            padding: 6px 14px;
-            background: #e50914;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .opportunity-title {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .opportunity-company {
-            font-size: 16px;
-            color: #46d369;
-            margin-bottom: 15px;
-        }
-
-        .opportunity-description {
-            font-size: 15px;
-            color: #b3b3b3;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-
-        .opportunity-details {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .detail-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: #999;
-        }
-
-        .detail-icon {
-            font-size: 18px;
-        }
-
-        .opportunity-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 20px;
-            border-top: 1px solid #3a3a3a;
-        }
-
-        .deadline {
-            font-size: 14px;
-            color: #e50914;
-            font-weight: 600;
-        }
-
-        .apply-btn {
-            padding: 12px 30px;
-            background: #e50914;
-            border: none;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .apply-btn:hover {
-            background: #f40612;
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 20px;
-            }
-
-            .main-content {
-                padding: 100px 20px 50px;
-            }
-
-            .page-header h1 {
-                font-size: 32px;
-            }
-
-            .opportunity-card {
-                padding: 20px;
-            }
-
-            .opportunity-title {
-                font-size: 22px;
-            }
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Helvetica Neue',Arial,sans-serif;background:#141414;color:white}
+        .navbar{position:fixed;top:0;width:100%;padding:20px 50px;display:flex;justify-content:space-between;align-items:center;z-index:1000;background:#141414}
+        .logo{font-size:32px;font-weight:bold;color:#e50914;letter-spacing:2px;cursor:pointer}
+        .nav-links{display:flex;gap:25px;align-items:center}
+        .nav-links a{color:white;text-decoration:none;font-size:14px;transition:color .3s}
+        .nav-links a:hover{color:#b3b3b3}
+        .main-content{padding:100px 50px 50px}
+        .page-header{margin-bottom:40px}
+        .page-header h1{font-size:48px;margin-bottom:15px}
+        .page-header p{font-size:18px;color:#b3b3b3;max-width:800px}
+        .filter-section{margin-bottom:30px;display:flex;gap:15px;flex-wrap:wrap}
+        .filter-btn{padding:10px 20px;background:#2a2a2a;border:none;color:white;border-radius:4px;cursor:pointer;font-size:14px;transition:background .3s}
+        .filter-btn:hover,.filter-btn.active{background:#e50914}
+        .opportunities-list{display:flex;flex-direction:column;gap:25px}
+        .opportunity-card{background:#2a2a2a;border-radius:8px;padding:30px;cursor:pointer;transition:transform .3s,box-shadow .3s;border-left:4px solid #e50914}
+        .opportunity-card:hover{transform:translateX(10px);box-shadow:0 5px 20px rgba(229,9,20,.3)}
+        .opportunity-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:15px;flex-wrap:wrap;gap:15px}
+        .opportunity-type{display:inline-block;padding:6px 14px;background:#e50914;border-radius:4px;font-size:12px;font-weight:600;text-transform:uppercase}
+        .opportunity-title{font-size:28px;font-weight:600;margin-bottom:10px}
+        .opportunity-company{font-size:16px;color:#46d369;margin-bottom:15px}
+        .opportunity-description{font-size:15px;color:#b3b3b3;line-height:1.8;margin-bottom:20px}
+        .opportunity-details{display:flex;gap:30px;flex-wrap:wrap;margin-bottom:20px}
+        .detail-item{display:flex;align-items:center;gap:8px;font-size:14px;color:#999}
+        .detail-icon{font-size:18px}
+        .opportunity-footer{display:flex;justify-content:space-between;align-items:center;padding-top:20px;border-top:1px solid #3a3a3a}
+        .deadline{font-size:14px;color:#e50914;font-weight:600}
+        .apply-btn{padding:12px 30px;background:#e50914;border:none;color:white;font-size:16px;font-weight:600;border-radius:4px;cursor:pointer;transition:background .3s}
+        .apply-btn:hover{background:#f40612}
+        @media(max-width:768px){.navbar{padding:20px}.main-content{padding:100px 20px 50px}.page-header h1{font-size:32px}.opportunity-card{padding:20px}.opportunity-title{font-size:22px}}
     </style>
 </head>
-<body><script src="public/js/api.js"></script>
+<body>
     <nav class="navbar">
-        <div class="logo">Ci-NDA</div>
+        <div class="logo" onclick="window.location.href='index.html'">Ci-NDA</div>
         <div class="nav-links">
             <a href="index.html">Home</a>
             <a href="courses.html">Courses</a>
-            <a href="opportunities.html" style="color: #e50914;">Opportunities</a>
+            <a href="opportunities.html" style="color:#e50914;">Opportunities</a>
             <a href="mentorship.html">Mentorship</a>
             <a href="portfolios.html">Portfolios</a>
         </div>
@@ -243,265 +56,154 @@
         </div>
 
         <div class="filter-section">
-            <button class="filter-btn active">All</button>
-            <button class="filter-btn">Grants</button>
-            <button class="filter-btn">Jobs</button>
-            <button class="filter-btn">Competitions</button>
-            <button class="filter-btn">Collaborations</button>
-            <button class="filter-btn">Internships</button>
+            <button class="filter-btn active" onclick="filterType('all')">All</button>
+            <button class="filter-btn" onclick="filterType('grant')">Grants</button>
+            <button class="filter-btn" onclick="filterType('job')">Jobs</button>
+            <button class="filter-btn" onclick="filterType('competition')">Competitions</button>
+            <button class="filter-btn" onclick="filterType('festival')">Festivals</button>
         </div>
 
-        <div class="opportunities-list">
-            <div class="opportunity-card">
+        <div class="opportunities-list" id="opportunitiesList">
+            <!-- Grants -->
+            <div class="opportunity-card" data-type="grant" data-deadline="2025-11-15">
                 <span class="opportunity-type">GRANT</span>
-                <div class="opportunity-header">
-                    <div>
-                        <h3 class="opportunity-title">Independent Film Production Grant</h3>
-                        <p class="opportunity-company">Sundance Institute</p>
-                    </div>
-                </div>
-                <p class="opportunity-description">We're seeking original, compelling narratives from emerging filmmakers. This grant provides $50,000 in production funding, mentorship from industry veterans, and distribution support for your independent feature film project.</p>
+                <div class="opportunity-header"><div><h3 class="opportunity-title">$50K Short Film Production Grant</h3><p class="opportunity-company">Stowe Story Labs</p></div></div>
+                <p class="opportunity-description">Narrative shorts (~10 min). Production funding + mentorship. <strong>Deadline 15 Nov 2025</strong>.</p>
                 <div class="opportunity-details">
-                    <div class="detail-item">
-                        <span class="detail-icon">💰</span>
-                        <span>$50,000 Funding</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">📍</span>
-                        <span>Remote/Worldwide</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">🎬</span>
-                        <span>Feature Film</span>
-                    </div>
+                    <div class="detail-item"><span class="detail-icon">💰</span><span>$50 000</span></div>
+                    <div class="detail-item"><span class="detail-icon">📍</span><span>Worldwide</span></div>
+                    <div class="detail-item"><span class="detail-icon">🎬</span><span>Short Narrative</span></div>
                 </div>
-                <div class="opportunity-footer">
-                    <span class="deadline">Deadline: 60 days remaining</span>
-                    <button class="apply-btn">Apply Now</button>
+                <div class="opportunity-footer"><span class="deadline">1 day left</span><button class="apply-btn" onclick="event.stopPropagation();window.open('https://stowestorylabs.org/short-film-production-grant','_blank')">Apply Now</button></div>
+            </div>
+
+            <div class="opportunity-card" data-type="grant" data-deadline="2025-12-22">
+                <span class="opportunity-type">GRANT</span>
+                <div class="opportunity-header"><div><h3 class="opportunity-title">HBF+Europe Post-Production</h3><p class="opportunity-company">IFFR Hubert Bals Fund</p></div></div>
+                <p class="opportunity-description">Post-production & minority co-production support. <strong>Deadline 22 Dec 2025</strong>.</p>
+                <div class="opportunity-details">
+                    <div class="detail-item"><span class="detail-icon">🛠️</span><span>Post-production</span></div>
+                    <div class="detail-item"><span class="detail-icon">📍</span><span>Europe/Int’l</span></div>
+                    <div class="detail-item"><span class="detail-icon">🎞️</span><span>Features</span></div>
                 </div>
+                <div class="opportunity-footer"><span class="deadline">38 days left</span><button class="apply-btn" onclick="event.stopPropagation();window.open('https://iffr.com/en/hubert-bals-fund/funding-schemes/hbfeurope-post-production-support','_blank')">Apply Now</button></div>
+            </div>
+
+            <div class="opportunity-card" data-type="grant" data-deadline="2025-11-18">
+                <span class="opportunity-type">GRANT</span>
+                <div class="opportunity-header"><div><h3 class="opportunity-title">Early Development Fund</h3><p class="opportunity-company">BFI Network (UK)</p></div></div>
+                <p class="opportunity-description">£3–5 k for debut features/immersive works. <strong>Deadline 18 Nov 2025 (11:00 GMT)</strong>.</p>
+                <div class="opportunity-details">
+                    <div class="detail-item"><span class="detail-icon">💷</span><span>£3–5 000</span></div>
+                    <div class="detail-item"><span class="detail-icon">📍</span><span>UK only</span></div>
+                    <div class="detail-item"><span class="detail-icon">🎬</span><span>Early dev</span></div>
+                </div>
+                <div class="opportunity-footer"><span class="deadline">4 days left</span><button class="apply-btn" onclick="event.stopPropagation();window.open('https://www.bfi.org.uk/get-funding-support/bfi-network/bfi-network-funding-finder/bfi-network-england-early-development-fund','_blank')">Apply Now</button></div>
+            </div>
+
+            <div class="opportunity-card" data-type="grant" data-deadline="2025-11-14">
+                <span class="opportunity-type">GRANT</span>
+                <div class="opportunity-header"><div><h3 class="opportunity-title">Micro-Budget Film Programme</h3><p class="opportunity-company">Durban Film Office (SA)</p></div></div>
+                <p class="opportunity-description">Production funding for emerging SA filmmakers. <strong>Deadline 14 Nov 2025</strong>.</p>
+                <div class="opportunity-details">
+                    <div class="detail-item"><span class="detail-icon">💰</span><span>Micro-budget</span></div>
+                    <div class="detail-item"><span class="detail-icon">📍</span><span>South Africa</span></div>
+                    <div class="detail-item"><span class="detail-icon">🎞️</span><span>Short/Feature</span></div>
+                </div>
+                <div class="opportunity-footer"><span class="deadline">Ends today</span><button class="apply-btn" onclick="event.stopPropagation();window.open('https://www2.fundsforngos.org/media/call-for-submissions-micro-budget-film-fund-south-africa/','_blank')">Apply Now</button></div>
+            </div>
+
+            <div class="opportunity-card" data-type="grant" data-deadline="2026-01-15">
+                <span class="opportunity-type">GRANT</span>
+                <div class="opportunity-header"><div><h3 class="opportunity-title">Cannes Short Film Corner 2026</h3><p class="opportunity-company">Cannes</p></div></div>
+                <p class="opportunity-description">Official short-film market & screening. Deadline <strong>15 Jan 2026</strong>.</p>
+                <div class="opportunity-details">
+                    <div class="detail-item"><span class="detail-icon">📅</span><span>15 Jan 2026</span></div>
+                    <div class="detail-item"><span class="detail-icon">🎞️</span><span>Shorts ≤ 40 min</span></div>
+                    <div class="detail-item"><span class="detail-icon">🌍</span><span>France</span></div>
+                </div>
+                <div class="opportunity-footer"><span class="deadline">62 days left</span><button class="apply-btn" onclick="event.stopPropagation();window.open('https://filmfreeway.com/CannesShortFilmCorner','_blank')">Submit Film</button></div>
+            </div>
+
+            <!-- Jobs -->
+            <div class="opportunity-card" data-type="job">
+                <span class="opportunity-type">JOB</span>
+                <div class="opportunity-header"><div><h3 class="opportunity-title">Cinematographer – Natural History</h3><p class="opportunity-company">National Geographic</p></div></div>
+                <p class="opportunity-description">Shoot environmental docu-series across 6 continents. Field experience required.</p>
+                <div class="opportunity-details">
+                    <div class="detail-item"><span class="detail-icon">⏱️</span><span>3-month contract</span></div>
+                    <div class="detail-item"><span class="detail-icon">📍</span><span>International</span></div>
+                    <div class="detail-item"><span class="detail-icon">💼</span><span>Full-time</span></div>
+                </div>
+                <div class="opportunity-footer"><span class="deadline">Rolling</span><button class="apply-btn" onclick="event.stopPropagation();window.open('https://careers.nationalgeographic.com/','_blank')">Apply Now</button></div>
+            </div>
+
+            <!-- Festivals (FilmFreeway open calls) -->
+            <div class="opportunity-card" data-type="festival" data-deadline="2025-11-30">
+                <span class="opportunity-type">FESTIVAL</span>
+                <div class="opportunity-header"><div><h3 class="opportunity-title">Manchester Film Festival 2026</h3><p class="opportunity-company">FilmFreeway</p></div></div>
+                <p class="opportunity-description">Open for features & shorts. Early-bird deadline <strong>30 Nov 2025</strong>.</p>
+                <div class="opportunity-details">
+                    <div class="detail-item"><span class="detail-icon">📅</span><span>30 Nov 2025</span></div>
+                    <div class="detail-item"><span class="detail-icon">🎞️</span><span>Features & Shorts</span></div>
+                    <div class="detail-item"><span class="detail-icon">🌍</span><span>UK</span></div>
+                </div>
+                <div class="opportunity-footer"><span class="deadline">16 days left</span><button class="apply-btn" onclick="event.stopPropagation();window.open('https://filmfreeway.com/ManchesterFilmFestival','_blank')">Submit</button></div>
+            </div>
+
+            <div class="opportunity-card" data-type="festival" data-deadline="2025-12-15">
+                <span class="opportunity-type">FESTIVAL</span>
+                <div class="opportunity-header"><div><h3 class="opportunity-title">Amsterdam New Cinema Awards</h3><p class="opportunity-company">FilmFreeway</p></div></div>
+                <p class="opportunity-description">Quarterly screening + awards. Next deadline <strong>15 Dec 2025</strong>.</p>
+                <div class="opportunity-details">
+                    <div class="detail-item"><span class="detail-icon">📅</span><span>15 Dec 2025</span></div>
+                    <div class="detail-item"><span class="detail-icon">🎞️</span><span>All genres</span></div>
+                    <div class="detail-item"><span class="detail-icon">🌍</span><span>Netherlands</span></div>
+                </div>
+                <div class="opportunity-footer"><span class="deadline">31 days left</span><button class="apply-btn" onclick="event.stopPropagation();window.open('https://filmfreeway.com/AmsterdamNewCinema','_blank')">Submit</button></div>
             </div>
         </div>
     </div>
 
-    <script>
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-        async function loadOpportunities(type = null) {
-  try {
-    const filters = {};
-    if (type && type !== 'All') {
-      filters.type = type;
-    }
-
-    const opportunities = await api.getOpportunities(filters);
-    renderOpportunities(opportunities);
-  } catch (error) {
-    console.error('Error loading opportunities:', error);
-    alert('Failed to load opportunities.');
+   <script>
+const api={
+  getOpportunities:async()=>{
+    const res=await fetch('api/opportunities.php');
+    if(!res.ok) throw new Error('Network');
+    return res.json();
+  }
+};
+async function loadOpportunities(){
+  try{
+    const list=await api.getOpportunities();
+    renderOpportunities(list);
+  }catch(e){
+    console.error(e);
   }
 }
-
-function renderOpportunities(opportunities) {
-  const list = document.querySelector('.opportunities-list');
-  if (!list) return;
-
-  list.innerHTML = opportunities.map(opp => `
-    <div class="opportunity-card">
-      <span class="opportunity-type">${opp.type}</span>
-      <div class="opportunity-header">
-        <div>
-          <h3 class="opportunity-title">${opp.title}</h3>
-          <p class="opportunity-company">${opp.company}</p>
-        </div>
-      </div>
-      <p class="opportunity-description">${opp.description}</p>
+function renderOpportunities(list){
+  const box=document.getElementById('opportunitiesList');
+  box.innerHTML=list.map(o=>`
+    <div class="opportunity-card" data-type="${o.type}" data-deadline="${o.deadline}">
+      <span class="opportunity-type">${o.type.toUpperCase()}</span>
+      <div class="opportunity-header"><div><h3 class="opportunity-title">${o.title}</h3><p class="opportunity-company">${o.org}</p></div></div>
+      <p class="opportunity-description">${o.description}</p>
       <div class="opportunity-details">
-        ${opp.details.funding ? `<div class="detail-item"><span class="detail-icon">💰</span><span>${opp.details.funding}</span></div>` : ''}
-        ${opp.details.location ? `<div class="detail-item"><span class="detail-icon">📍</span><span>${opp.details.location}</span></div>` : ''}
-        ${opp.details.category ? `<div class="detail-item"><span class="detail-icon">🎬</span><span>${opp.details.category}</span></div>` : ''}
+        <div class="detail-item"><span class="detail-icon">💰</span><span>${o.funding}</span></div>
+        <div class="detail-item"><span class="detail-icon">📍</span><span>${o.location}</span></div>
+        <div class="detail-item"><span class="detail-icon">📅</span><span>${o.deadline}</span></div>
       </div>
       <div class="opportunity-footer">
-        <span class="deadline">Deadline: ${calculateDaysRemaining(opp.deadline)} days remaining</span>
-        <button class="apply-btn" onclick="applyToOpportunity('${opp._id}')">Apply Now</button>
+        <span class="deadline">${daysLeft(o.deadline)}</span>
+        <button class="apply-btn" onclick="event.stopPropagation();window.open('apply-opportunity.html?id=${o._id}','_blank')">Apply Now</button>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
-
-function calculateDaysRemaining(deadline) {
-  const days = Math.ceil((new Date(deadline) - new Date()) / (1000 * 60 * 60 * 24));
-  return days > 0 ? days : 0;
+function daysLeft(d){
+  const days=Math.ceil((new Date(d)-new Date())/(1000*60*60*24));
+  return days>0?`${days} day${days>1?'s':''} left`:'Ends today';
 }
-
-async function applyToOpportunity(opportunityId) {
-  if (!localStorage.getItem('authToken')) {
-    alert('Please sign in to apply to opportunities');
-    window.location.href = 'authentication.html';
-    return;
-  }
-
-  const coverLetter = prompt('Please enter a brief cover letter (optional):');
-  
-  try {
-    await api.applyToOpportunity(opportunityId, coverLetter);
-    alert('✅ Application submitted successfully!');
-  } catch (error) {
-    alert('❌ Application failed: ' + error.message);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  loadOpportunities();
-});
-    </script>
+document.addEventListener('DOMContentLoaded',loadOpportunities);
+</script>
 </body>
-</html><span>Feature Film</span>
-                    </div>
-                </div>
-                <div class="opportunity-footer">
-                    <span class="deadline">Deadline: 30 days remaining</span>
-                    <button class="apply-btn">Apply Now</button>
-                </div>
-            </div>
-
-            <div class="opportunity-card">
-                <span class="opportunity-type">JOB</span>
-                <div class="opportunity-header">
-                    <div>
-                        <h3 class="opportunity-title">Cinematographer for Documentary Series</h3>
-                        <p class="opportunity-company">National Geographic</p>
-                    </div>
-                </div>
-                <p class="opportunity-description">Join our team to shoot an environmental documentary series exploring climate change across six continents. We're looking for an experienced DP with strong natural history filmmaking skills and ability to work in challenging conditions.</p>
-                <div class="opportunity-details">
-                    <div class="detail-item">
-                        <span class="detail-icon">⏱️</span>
-                        <span>3-month contract</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">📍</span>
-                        <span>International Travel</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">💼</span>
-                        <span>Full-time</span>
-                    </div>
-                </div>
-                <div class="opportunity-footer">
-                    <span class="deadline">Deadline: 15 days remaining</span>
-                    <button class="apply-btn">Apply Now</button>
-                </div>
-            </div>
-
-            <div class="opportunity-card">
-                <span class="opportunity-type">COMPETITION</span>
-                <div class="opportunity-header">
-                    <div>
-                        <h3 class="opportunity-title">International Short Film Festival</h3>
-                        <p class="opportunity-company">Cannes Short Film Corner</p>
-                    </div>
-                </div>
-                <p class="opportunity-description">Submit your short film (under 40 minutes) for a chance to screen at Cannes. Winners receive $25,000 cash prize, distribution deal with major platform, and networking opportunities with industry professionals.</p>
-                <div class="opportunity-details">
-                    <div class="detail-item">
-                        <span class="detail-icon">🏆</span>
-                        <span>$25,000 Prize</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">📍</span>
-                        <span>Cannes, France</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">🎞️</span>
-                        <span>Short Films</span>
-                    </div>
-                </div>
-                <div class="opportunity-footer">
-                    <span class="deadline">Deadline: 45 days remaining</span>
-                    <button class="apply-btn">Submit Film</button>
-                </div>
-            </div>
-
-            <div class="opportunity-card">
-                <span class="opportunity-type">INTERNSHIP</span>
-                <div class="opportunity-header">
-                    <div>
-                        <h3 class="opportunity-title">Production Assistant Internship</h3>
-                        <p class="opportunity-company">Warner Bros. Studios</p>
-                    </div>
-                </div>
-                <p class="opportunity-description">Gain hands-on experience in major studio production. Work alongside industry professionals on set, learn about all aspects of film production, and build your network in Hollywood.</p>
-                <div class="opportunity-details">
-                    <div class="detail-item">
-                        <span class="detail-icon">⏱️</span>
-                        <span>6 months</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">📍</span>
-                        <span>Los Angeles, CA</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">💼</span>
-                        <span>Paid Internship</span>
-                    </div>
-                </div>
-                <div class="opportunity-footer">
-                    <span class="deadline">Deadline: 20 days remaining</span>
-                    <button class="apply-btn">Apply Now</button>
-                </div>
-            </div>
-
-            <div class="opportunity-card">
-                <span class="opportunity-type">COLLABORATION</span>
-                <div class="opportunity-header">
-                    <div>
-                        <h3 class="opportunity-title">Seeking Director for Music Video</h3>
-                        <p class="opportunity-company">Independent Artist</p>
-                    </div>
-                </div>
-                <p class="opportunity-description">Upcoming artist looking for creative director to collaborate on a series of music videos. This is a paid opportunity with creative freedom and potential for long-term collaboration on future projects.</p>
-                <div class="opportunity-details">
-                    <div class="detail-item">
-                        <span class="detail-icon">💰</span>
-                        <span>$15,000 Budget</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">📍</span>
-                        <span>New York, NY</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">🎵</span>
-                        <span>Music Video</span>
-                    </div>
-                </div>
-                <div class="opportunity-footer">
-                    <span class="deadline">Deadline: 10 days remaining</span>
-                    <button class="apply-btn">Express Interest</button>
-                </div>
-            </div>
-
-            <div class="opportunity-card">
-                <span class="opportunity-type">GRANT</span>
-                <div class="opportunity-header">
-                    <div>
-                        <h3 class="opportunity-title">Women in Film Diversity Grant</h3>
-                        <p class="opportunity-company">Film Independent</p>
-                    </div>
-                </div>
-                <p class="opportunity-description">Supporting underrepresented voices in cinema. This grant provides $35,000 funding, production resources, and year-long mentorship for women directors working on their first or second feature film.</p>
-                <div class="opportunity-details">
-                    <div class="detail-item">
-                        <span class="detail-icon">💰</span>
-                        <span>$35,000 Funding</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">📍</span>
-                        <span>Worldwide</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-icon">🎬</span>
+</html>

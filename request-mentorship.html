@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Request Mentorship - CI-NDA</title>
+    <title>Request Mentorship - Ci-NDA</title>
     <style>
         * {
             margin: 0;
@@ -343,7 +343,7 @@
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo" onclick="window.location.href='index.html'">CI-NDA</div>
+        <div class="logo" onclick="window.location.href='index.html'">Ci-NDA</div>
     </nav>
 
     <div class="container">
@@ -399,6 +399,11 @@
                 <label class="form-label">Brief Introduction <span class="required">*</span></label>
                 <textarea class="form-textarea" id="introduction" placeholder="Tell us about yourself, your background, and your passion for filmmaking..." maxlength="1000"></textarea>
                 <div class="char-count"><span id="introCount">0</span> / 1000 characters</div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Subject <span class="required">*</span></label>
+                <input type="text" class="form-input" id="subject" placeholder="What is the main subject or focus for this mentorship?" required>
             </div>
         </div>
 
@@ -573,6 +578,54 @@
             });
         });
 
+        // Populate mentor info and subject from query params (mentorId, mentorName, subject, specialty)
+        (async function populateFromQuery(){
+            const params = new URLSearchParams(window.location.search);
+            const mentorId = params.get('mentorId');
+            const mentorNameParam = params.get('mentorName');
+            const subjectParam = params.get('subject') || params.get('specialty');
+
+            const nameEl = document.getElementById('mentorName');
+            const titleEl = document.getElementById('mentorTitle');
+            const bioEl = document.getElementById('mentorBio');
+            const specialtiesEl = document.querySelector('.mentor-specialties');
+            const subjectInput = document.getElementById('subject');
+
+            if(mentorId){
+                try{
+                    const res = await fetch('api/mentors.php');
+                    if(res.ok){
+                        const list = await res.json();
+                        const m = list.find(x=> String(x._id) === String(mentorId) || String(x.id) === String(mentorId));
+                        if(m){
+                            if(nameEl) nameEl.textContent = m.name || nameEl.textContent;
+                            if(titleEl) titleEl.textContent = m.title || titleEl.textContent;
+                            if(bioEl) bioEl.textContent = m.bio || bioEl.textContent;
+                            if(specialtiesEl && m.specialties){
+                                specialtiesEl.innerHTML = (m.specialties||[]).map(s=>`<span class="specialty-tag">${s}</span>`).join('');
+                            }
+                            if(!subjectParam && m.specialties && m.specialties.length) subjectInput.value = m.specialties[0];
+                        }
+                    }
+                }catch(e){
+                    console.warn('Could not fetch mentor by id', e);
+                }
+            } else if(mentorNameParam){
+                const decoded = decodeURIComponent(mentorNameParam.replace(/\+/g,' '));
+                if(nameEl) nameEl.textContent = decoded;
+                // keep existing title/bio unless further info available
+            }
+
+            // If a subject/specialty was passed explicitly, use it
+            if(subjectParam){
+                const decodedSub = decodeURIComponent(subjectParam.replace(/\+/g,' '));
+                subjectInput.value = decodedSub;
+            } else if(!subjectInput.value){
+                // fallback default
+                subjectInput.value = `Mentorship with ${nameEl ? nameEl.textContent : 'mentor'}`;
+            }
+        })();
+
         // Time slot selection
         document.querySelectorAll('.time-slot').forEach(slot => {
             slot.addEventListener('click', function() {
@@ -584,7 +637,7 @@
 
         function submitRequest() {
             // Validation
-            const required = ['studentName', 'studentEmail', 'experienceLevel', 'introduction', 'specificGoals', 'preferredTime', 'timezone', 'duration'];
+            const required = ['studentName', 'studentEmail', 'experienceLevel', 'introduction', 'specificGoals', 'preferredTime', 'timezone', 'duration', 'subject'];
             
             for (let id of required) {
                 const field = document.getElementById(id);

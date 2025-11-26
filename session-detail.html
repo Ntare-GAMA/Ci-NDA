@@ -1,0 +1,12 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Session Detail</title>
+<style>body{background:#141414;color:#fff;font-family:Arial;padding:30px}</style></head>
+<body>
+<h1>Session Detail</h1>
+<p id="info">Loading...</p>
+<script>
+const id=new URLSearchParams(location.search).get('id');
+if(!id) document.getElementById('info').innerText='No session id provided';
+else document.getElementById('info').innerText='Session ID: '+id+' (page stub)';
+</script>
+</body></html>

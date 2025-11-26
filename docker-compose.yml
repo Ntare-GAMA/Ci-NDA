@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      # Set these with a .env file or environment variables before running
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-cinda_root_pass}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-cinda}
+      MYSQL_USER: ${MYSQL_USER:-cinda_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-cinda_pass}
+    ports:
+      - "3307:3306" # maps container 3306 to host 3307 to avoid conflicts with host MySQL
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -p\"${MYSQL_ROOT_PASSWORD:-cinda_root_pass}\" | grep 'mysqld' || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    depends_on:
+      - db
+
+volumes:
+  db_data:

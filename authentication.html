@@ -3,314 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In - CI-NDA</title>
+    <title>Sign In - Ci-NDA</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background: #141414;
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
-                        url('https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1600&q=80');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .navbar {
-            position: relative;
-            z-index: 1000;
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 32px;
-            font-weight: bold;
-            color: #e50914;
-            letter-spacing: 2px;
-            cursor: pointer;
-        }
-
-        .signin-container {
-            position: relative;
-            z-index: 100;
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 50px 20px;
-        }
-
-        .signin-box {
-            background: rgba(0, 0, 0, 0.85);
-            padding: 60px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
-        }
-
-        .signin-box h1 {
-            font-size: 32px;
-            margin-bottom: 30px;
-            font-weight: 600;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #b3b3b3;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 16px;
-            background: #333;
-            border: none;
-            border-radius: 4px;
-            color: white;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            background: #454545;
-        }
-
-        .form-input::placeholder {
-            color: #8c8c8c;
-        }
-
-        .error-message {
-            color: #e50914;
-            font-size: 13px;
-            margin-top: 5px;
-            display: none;
-        }
-
-        .signin-btn {
-            width: 100%;
-            padding: 16px;
-            background: #e50914;
-            border: none;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 30px;
-        }
-
-        .signin-btn:hover {
-            background: #f40612;
-        }
-
-        .signin-btn:disabled {
-            background: #666;
-            cursor: not-allowed;
-        }
-
-        .remember-me {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 15px;
-            font-size: 14px;
-            color: #b3b3b3;
-        }
-
-        .remember-me input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
-        }
-
-        .help-links {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-
-        .help-links a {
-            color: #b3b3b3;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .help-links a:hover {
-            color: white;
-        }
-
-        .signup-prompt {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 1px solid #333;
-            font-size: 16px;
-            color: #b3b3b3;
-        }
-
-        .signup-prompt a {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        .signup-prompt a:hover {
-            color: #e50914;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 30px 0;
-            color: #b3b3b3;
-            font-size: 14px;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #333;
-        }
-
-        .divider span {
-            padding: 0 15px;
-        }
-
-        .social-signin {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .social-btn {
-            width: 100%;
-            padding: 14px;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            color: white;
-            font-size: 15px;
-            font-weight: 500;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-
-        .social-btn:hover {
-            background: #3a3a3a;
-            border-color: #666;
-        }
-
-        .user-type-selector {
-            margin-bottom: 30px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .user-type-btn {
-            flex: 1;
-            padding: 12px;
-            background: #2a2a2a;
-            border: 2px solid #444;
-            color: white;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .user-type-btn.active {
-            background: #e50914;
-            border-color: #e50914;
-        }
-
-        .demo-credentials {
-            background: #2a2a2a;
-            padding: 15px;
-            border-radius: 4px;
-            margin-bottom: 20px;
-            font-size: 12px;
-            border-left: 3px solid #e50914;
-        }
-
-        .demo-credentials h4 {
-            color: #e50914;
-            margin-bottom: 8px;
-        }
-
-        .demo-credentials p {
-            color: #b3b3b3;
-            margin: 3px 0;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            margin-top: 10px;
-            color: #46d369;
-        }
-
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 20px;
-            }
-
-            .signin-box {
-                padding: 40px 30px;
-            }
-
-            .signin-box h1 {
-                font-size: 28px;
-            }
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Helvetica Neue',Arial,sans-serif;background:#141414;color:white;min-height:100vh;display:flex;flex-direction:column}
+        .background{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;background:linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)),url('https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1600&q=80');background-size:cover;background-position:center}
+        .navbar{position:relative;z-index:1000;padding:20px 50px;display:flex;justify-content:space-between;align-items:center}
+        .logo{font-size:32px;font-weight:bold;color:#e50914;letter-spacing:2px;cursor:pointer}
+        .signin-container{position:relative;z-index:100;flex:1;display:flex;align-items:center;justify-content:center;padding:50px 20px}
+        .signin-box{background:rgba(0,0,0,.85);padding:60px;border-radius:8px;width:100%;max-width:450px;box-shadow:0 10px 50px rgba(0,0,0,.5)}
+        .signin-box h1{font-size:32px;margin-bottom:30px;font-weight:600}
+        .form-group{margin-bottom:20px}
+        .form-group label{display:block;margin-bottom:8px;font-size:14px;color:#b3b3b3}
+        .form-input{width:100%;padding:16px;background:#333;border:none;border-radius:4px;color:white;font-size:16px;transition:background .3s}
+        .form-input:focus{outline:none;background:#454545}
+        .form-input::placeholder{color:#8c8c8c}
+        .error-message{color:#e50914;font-size:13px;margin-top:5px;display:none}
+        .signin-btn{width:100%;padding:16px;background:#e50914;border:none;color:white;font-size:16px;font-weight:600;border-radius:4px;cursor:pointer;transition:background .3s;margin-top:30px}
+        .signin-btn:hover{background:#f40612}
+        .signin-btn:disabled{background:#666;cursor:not-allowed}
+        .remember-me{display:flex;align-items:center;gap:8px;margin-top:15px;font-size:14px;color:#b3b3b3}
+        .remember-me input[type="checkbox"]{width:18px;height:18px;cursor:pointer}
+        .help-links{display:flex;justify-content:space-between;margin-top:15px;font-size:14px}
+        .help-links a{color:#b3b3b3;text-decoration:none;transition:color .3s}
+        .help-links a:hover{color:white}
+        .signup-prompt{margin-top:30px;padding-top:30px;border-top:1px solid #333;font-size:16px;color:#b3b3b3}
+        .signup-prompt a{color:white;text-decoration:none;font-weight:600;transition:color .3s}
+        .signup-prompt a:hover{color:#e50914}
+        .divider{display:flex;align-items:center;margin:30px 0;color:#b3b3b3;font-size:14px}
+        .divider::before,.divider::after{content:'';flex:1;height:1px;background:#333}
+        .divider span{padding:0 15px}
+        .social-signin{display:flex;flex-direction:column;gap:12px}
+        .social-btn{width:100%;padding:14px;background:#2a2a2a;border:1px solid #444;color:white;font-size:15px;font-weight:500;border-radius:4px;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;gap:12px}
+        .social-btn:hover{background:#3a3a2a;border-color:#666}
+        .user-type-selector{margin-bottom:30px;display:flex;gap:10px}
+        .user-type-btn{flex:1;padding:12px;background:#2a2a2a;border:2px solid #444;color:white;font-size:14px;font-weight:500;border-radius:4px;cursor:pointer;transition:all .3s}
+        .user-type-btn.active{background:#e50914;border-color:#e50914}
+        .demo-credentials{background:#2a2a2a;padding:15px;border-radius:4px;margin-bottom:20px;font-size:12px;border-left:3px solid #e50914}
+        .demo-credentials h4{color:#e50914;margin-bottom:8px}
+        .demo-credentials p{color:#b3b3b3;margin:3px 0}
+        .loading{display:none;text-align:center;margin-top:10px;color:#46d369}
+        @media(max-width:768px){.navbar{padding:20px}.signin-box{padding:40px 30px}.signin-box h1{font-size:28px}}
     </style>
 </head>
-<body><script src="public/js/api.js"></script>
+<body>
     <div class="background"></div>
-
     <nav class="navbar">
-        <div class="logo" onclick="window.location.href='index.html'">CI-NDA</div>
+        <div class="logo" onclick="window.location.href='index.html'">Ci-NDA</div>
     </nav>
 
     <div class="signin-container">
         <div class="signin-box">
             <h1>Sign In</h1>
-
             <div class="demo-credentials">
                 <h4>Demo Credentials:</h4>
                 <p><strong>Filmmaker:</strong> filmmaker@cinda.com / filmmaker123</p>
@@ -331,130 +75,127 @@
                     <input type="text" id="email" class="form-input" placeholder="Enter your email" required>
                     <div class="error-message" id="emailError">Please enter a valid email address</div>
                 </div>
-
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input type="password" id="password" class="form-input" placeholder="Enter your password" required>
                     <div class="error-message" id="passwordError">Password must be at least 6 characters</div>
                 </div>
-
                 <button type="submit" class="signin-btn" id="signinBtn">Sign In</button>
                 <div class="loading" id="loading">Signing you in...</div>
-
                 <div class="remember-me">
                     <input type="checkbox" id="remember">
                     <label for="remember">Remember me</label>
                 </div>
-
                 <div class="help-links">
-                    <a href="#">Need help?</a>
-                    <a href="#">Forgot password?</a>
+                    <a href="help.html">Need help?</a>
+                    <a href="forgot-password.html">Forgot password?</a>
                 </div>
             </form>
 
-            <div class="divider">
-                <span>OR</span>
-            </div>
-
+            <div class="divider"><span>OR</span></div>
             <div class="social-signin">
-                <button class="social-btn" onclick="socialLogin('Google')">
-                    <span>🔵</span>
-                    <span>Continue with Google</span>
+                <button class="social-btn" onclick="window.location.href='api/oauth_google.php'">
+                    <!-- Google SVG Icon -->
+                    <svg width="18" height="18" viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                        <path fill="#4285F4" d="M533.5 278.4c0-18.5-1.5-36.3-4.3-53.6H272v101.6h146.9c-6.3 34-25.9 62.8-55.4 82v68h89.5c52.2-48.1 82.5-118.9 82.5-198z"/>
+                        <path fill="#34A853" d="M272 544.3c74 0 136.1-24.6 181.5-66.6l-89.5-68c-24.9 16.8-56.7 26.7-92 26.7-70.6 0-130.3-47.6-151.6-111.6H28.8v69.8C74.1 486.9 168.6 544.3 272 544.3z"/>
+                        <path fill="#FBBC05" d="M120.4 324.8c-10.9-32.7-10.9-67.9 0-100.6V154.4H28.8c-42.9 83.5-42.9 182.1 0 265.6l91.6-95.2z"/>
+                        <path fill="#EA4335" d="M272 108.9c39.9 0 75.7 13.7 103.9 40.6l77.8-77.8C407.8 24 345.7 0 272 0 168.6 0 74.1 57.4 28.8 154.4l91.6 69.8C141.7 156.5 201.4 108.9 272 108.9z"/>
+                    </svg>
+                    Continue with Google
                 </button>
-                <button class="social-btn" onclick="socialLogin('Facebook')">
-                    <span>📘</span>
-                    <span>Continue with Facebook</span>
+                <button class="social-btn" onclick="window.location.href='api/oauth_facebook.php'">
+                    <!-- Facebook SVG Icon -->
+                    <svg width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                        <path fill="#1877F2" d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.093 4.388 23.097 10.125 24v-8.485H7.078v-3.442h3.047V9.356c0-3.017 1.792-4.68 4.533-4.68 1.312 0 2.686.234 2.686.234v2.953h-1.513c-1.491 0-1.953.926-1.953 1.874v2.246h3.328l-.532 3.442h-2.796V24C19.612 23.097 24 18.093 24 12.073z"/>
+                    </svg>
+                    Continue with Facebook
                 </button>
             </div>
-
             <div class="signup-prompt">
-                New to CI-NDA? <a href="#" onclick="alert('Sign up page coming soon!')">Sign up now</a>
+                New to Ci-NDA? <a href="signup.html">Sign up now</a>
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('signinForm').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  const userType = document.querySelector('.user-type-btn.active').textContent.toLowerCase();
-  const rememberMe = document.getElementById('remember').checked;
-  
-  document.getElementById('emailError').style.display = 'none';
-  document.getElementById('passwordError').style.display = 'none';
-  
-  let isValid = true;
+        /* ==========  SINGLE API OBJECT  ========== */
+        const api = {
+            login: async ({ email, password }) => {
+                const res = await fetch('api/auth.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                if (!res.ok) throw new Error('Login failed');
+                return res.json();
+            }
+        };
 
-  if (!email || !validateEmail(email)) {
-    document.getElementById('emailError').style.display = 'block';
-    isValid = false;
-  }
+        /* ==========  FORM LOGIC  ========== */
+        document.getElementById('signinForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('remember').checked;
 
-  if (!password || password.length < 6) {
-    document.getElementById('passwordError').style.display = 'block';
-    isValid = false;
-  }
+            /* simple validation */
+            let ok = true;
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                document.getElementById('emailError').style.display = 'block'; ok = false;
+            } else document.getElementById('emailError').style.display = 'none';
 
-  if (!isValid) return;
+            if (password.length < 6) {
+                document.getElementById('passwordError').style.display = 'block'; ok = false;
+            } else document.getElementById('passwordError').style.display = 'none';
 
-  const signinBtn = document.getElementById('signinBtn');
-  const loading = document.getElementById('loading');
-  signinBtn.disabled = true;
-  loading.style.display = 'block';
+            if (!ok) return;
 
-  try {
-    const response = await api.login({ email, password, userType });
-    
-    sessionStorage.setItem('rememberMe', rememberMe);
-    sessionStorage.setItem('loginTime', new Date().toISOString());
-    
-    if (rememberMe) {
-      localStorage.setItem('rememberedEmail', email);
-      localStorage.setItem('rememberedUserType', userType);
-    }
-    
-    alert('✅ Login successful!');
-    window.location.href = 'profile.html';
-  } catch (error) {
-    loading.style.display = 'none';
-    signinBtn.disabled = false;
-    alert('❌ Login failed: ' + error.message);
-  }
-});
+            const btn = document.getElementById('signinBtn');
+            const loading = document.getElementById('loading');
+            btn.disabled = true; loading.style.display = 'block';
 
-async function socialLogin(platform) {
-  const userType = document.querySelector('.user-type-btn.active').textContent.toLowerCase();
-  const loading = document.getElementById('loading');
-  loading.style.display = 'block';
-  loading.textContent = `Connecting to ${platform}...`;
+            try {
+                await api.login({ email, password });
+                sessionStorage.setItem('user', 'fake'); // mark logged-in
+                if (rememberMe) localStorage.setItem('rememberedEmail', email);
+                window.location.href = 'profile.html';
+            } catch (err) {
+                loading.style.display = 'none'; btn.disabled = false;
+                alert('❌ Login failed: ' + err.message);
+            }
+        });
 
-  try {
-    const mockUserData = {
-      email: `user@${platform.toLowerCase()}.com`,
-      name: `${platform} User`,
-      provider: platform,
-      providerId: `${platform}_${Date.now()}`,
-      userType: userType
-    };
+        // Listen for OAuth popup/callback messages. The callback endpoints will postMessage a JSON
+        // payload like: { token: '...', user: { id, name, email } }
+        window.addEventListener('message', (ev) => {
+            try {
+                // Only accept messages from same origin for security
+                if (ev.origin !== window.location.origin) return;
+                const data = ev.data;
+                if (data && data.token) {
+                    // Save token/user info and navigate to profile
+                    sessionStorage.setItem('cinda_token', data.token);
+                    sessionStorage.setItem('cinda_user', JSON.stringify(data.user || {}));
+                    window.location.href = 'profile.html';
+                }
+            } catch (e) {
+                console.error('OAuth message handling error', e);
+            }
+        });
 
-    await api.socialLogin(platform, mockUserData);
-    
-    sessionStorage.setItem('socialLogin', platform);
-    sessionStorage.setItem('loginTime', new Date().toISOString());
-    
-    alert('✅ Social login successful!');
-    window.location.href = 'profile.html';
-  } catch (error) {
-    loading.style.display = 'none';
-    alert('❌ Social login failed: ' + error.message);
-  }
-}
-
-function validateEmail(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
+        /* user-type highlight */
+        function selectUserType(el, type) {
+            document.querySelectorAll('.user-type-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+        }
     </script>
 </body>
-</html>
+</html>$env:DB_HOST='127.0.0.1'
+$env:DB_PORT='3306'
+$env:DB_USER='cinda_user'
+$env:DB_PASS='PASSWORD_HERE'
+$env:DB_NAME='cinda'
+
+# then run the PHP dev server in the same PowerShell session:
+php -S localhost:8000 -t "C:\Users\user\Downloads\Ci-NDA"

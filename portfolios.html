@@ -301,7 +301,7 @@
                 <button class="filter-btn">Commercials</button>
                 <button class="filter-btn">Experimental</button>
             </div>
-            <button class="create-portfolio-btn">+ Create Portfolio</button>
+            <button class="create-portfolio-btn" onclick="window.location.href='create-portfolio.html'">+ Create Portfolio</button>
         </div>
 
         <div class="portfolios-grid">
@@ -541,14 +541,32 @@
         </div>
     </div>
 
-    <script>
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
-    </script>
+  <script>
+const api={
+  getPortfolios:async()=>{
+    const res=await fetch('api/portfolios.php');
+    if(!res.ok) throw new Error('Network');
+    return res.json();
+  }
+};
+async function loadPortfolios(){try{renderPortfolios(await api.getPortfolios());}catch(e){console.error(e);}}
+function renderPortfolios(list){
+  document.querySelector('.portfolios-grid').innerHTML=list.map(p=>`
+    <div class="portfolio-card" onclick="location='portfolio-detail.html?id=${p._id}'">
+      <div class="portfolio-thumbnail" style="background-image:url('${p.thumbnail}')"><div class="play-icon">▶</div></div>
+      <div class="portfolio-content">
+        <div class="filmmaker-info">
+          <div class="filmmaker-avatar" style="background-image:url('${p.avatar}')"></div>
+          <div><div class="filmmaker-name">${p.owner}</div><div class="filmmaker-role">Filmmaker</div></div>
+        </div>
+        <h3 class="portfolio-title">${p.title}</h3>
+        <p class="portfolio-description">${p.description}</p>
+        <div class="portfolio-tags">${p.tags.split(',').map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+        <div class="portfolio-stats"><span class="stat">${p.views} views</span><span class="stat">${p.likes} likes</span></div>
+      </div>
+    </div>`).join('');
+}
+document.addEventListener('DOMContentLoaded',loadPortfolios);
+</script>
 </body>
 </html>

@@ -1,0 +1,42 @@
+<?php
+/* Authentication endpoint - checks users table */
+require_once __DIR__ . '/db.php';
+
+$in = json_decode(file_get_contents('php://input'), true) ?: [];
+$email = trim($in['email'] ?? '');
+$password = $in['password'] ?? '';
+
+if (!$email || !$password) {
+  json_exit(['error' => 'Email and password required'], 400);
+}
+
+// Lookup user
+$stmt = $conn->prepare('SELECT id, name, email, password_hash FROM users WHERE email = ? LIMIT 1');
+if (!$stmt) json_exit(['error' => 'Query failed'], 500);
+$stmt->bind_param('s', $email);
+$stmt->execute();
+$res = $stmt->get_result();
+if ($row = $res->fetch_assoc()) {
+  $ok = false;
+  if (!empty($row['password_hash']) && function_exists('password_verify')) {
+    if (password_verify($password, $row['password_hash'])) $ok = true;
+  } else {
+    // fallback to plain-text match (not recommended)
+    if ($password === $row['password']) $ok = true;
+  }
+
+  if ($ok) {
+    // return a simple token (for production use JWT or server sessions)
+    $token = bin2hex(random_bytes(16));
+    // persist session token (sessions table exists in SQLite fallback)
+    $created_at = date('Y-m-d H:i:s');
+    if ($ins = $conn->prepare('INSERT INTO sessions (user_id, token, created_at) VALUES (?, ?, ?)')) {
+      $ins->bind_param('iss', $row['id'], $token, $created_at);
+      $ins->execute();
+    }
+    json_exit(['token' => $token, 'user' => ['id' => $row['id'], 'name' => $row['name'], 'email' => $row['email']]]);
+  }
+}
+
+json_exit(['error' => 'Invalid credentials'], 401);
+?>

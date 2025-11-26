@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mentor Profile — Ci-NDA</title>
+  <style>
+    :root{
+      --bg-1:#0f0f0f; --bg-2:#101010; --card:#151515; --muted:#b3b3b3; --accent:#e50914; --accent-2:#46d369;
+      --maxw:1100px;
+    }
+    *{box-sizing:border-box}
+    /* Background uses an overlay + image. You provided an external image URL; hotlinking may break and the image may be copyrighted.
+       Recommended: download the image, confirm license/permission, and place it at `public/images/denzel.jpg` then update the URL.
+    */
+    body{margin:0;font-family:Inter, 'Helvetica Neue', Arial, sans-serif;color:#fff;
+      background:
+        linear-gradient(rgba(8,8,8,0.60), rgba(8,8,8,0.60)),
+        radial-gradient(600px 400px at 10% 10%, rgba(229,9,20,0.03), transparent 10%),
+        url('https://media.cnn.com/api/v1/images/stellar/prod/highest2lowest-feature-11061f-f.jpg?c=16x9&q=w_1544,c_fill/f_avif') center/cover no-repeat;
+      -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    a{color:inherit}
+    .navbar{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid rgba(255,255,255,0.03);position:sticky;top:0;background:linear-gradient(180deg, rgba(10,10,10,0.6), transparent)}
+    .logo{font-weight:800;color:var(--accent);cursor:pointer}
+    .container{max-width:var(--maxw);margin:56px auto;padding:0 20px}
+    .card{background:linear-gradient(180deg, rgba(20,20,20,0.9), rgba(16,16,16,0.8));border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.02)}
+    .hero{display:flex;gap:28px;padding:34px;align-items:center}
+    .hero-left{flex:0 0 160px}
+    .avatar{width:160px;height:160px;border-radius:14px;background-size:cover;background-position:center;border:6px solid rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+    .hero-right{flex:1}
+    .name{font-size:30px;font-weight:800;margin-bottom:6px}
+    .title{color:var(--accent-2);margin-bottom:10px}
+    .meta{display:flex;gap:18px;color:var(--muted);font-size:14px;margin-bottom:8px}
+    .specialties{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+    .chip{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-size:13px;color:var(--muted)}
+    .actions{display:flex;gap:12px;margin-top:16px}
+    .btn{padding:12px 18px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
+    .btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 18px rgba(229,9,20,0.1);transition:transform .12s ease}
+    .btn-primary:hover{transform:translateY(-2px)}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}
+    .body{padding:18px 28px;border-top:1px solid rgba(255,255,255,0.02)}
+    .section{margin-bottom:18px}
+    .section h3{margin:0 0 8px 0}
+    .muted{color:var(--muted)}
+    .stat-grid{display:flex;gap:18px;margin-top:12px}
+    .stat{background:rgba(255,255,255,0.02);padding:12px;border-radius:10px;text-align:center;min-width:120px}
+    .stat .num{color:var(--accent);font-weight:800;font-size:20px}
+    .back-link{font-size:14px;color:var(--muted);text-decoration:underline;cursor:pointer;margin-left:0}
+
+    @media (max-width:880px){.hero{flex-direction:column;align-items:flex-start}.hero-left{width:120px}.avatar{width:120px;height:120px;border-radius:10px} }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo" onclick="location.href='index.html'">Ci-NDA</div>
+    <div style="opacity:.9;font-size:14px">Mentor Profile</div>
+  </nav>
+
+  <main class="container">
+    <div class="card" id="profileCard">
+      <div class="hero">
+        <div class="hero-left">
+          <div id="avatar" class="avatar" style="background-image:url('https://images.unsplash.com/photo-1574267432644-f74f3e909713?w=400&q=80')"></div>
+        </div>
+        <div class="hero-right">
+          <div class="name" id="name">Loading mentor...</div>
+          <div class="title" id="title"></div>
+          <div class="meta"><div id="location" class="muted"></div><div id="instructor" class="muted"></div></div>
+          <div class="specialties" id="specialties"></div>
+          <div class="actions">
+              <button id="requestBtn" class="btn btn-primary">Request Mentorship</button>
+              <button id="messageBtn" class="btn btn-ghost">Message</button>
+              <a class="back-link" href="mentorship.html">Back to Mentors</a>
+          </div>
+          <div class="stat-grid" style="margin-top:12px">
+            <div class="stat"><div class="num" id="mentees">0</div><div class="muted">Mentees</div></div>
+            <div class="stat"><div class="num" id="years">0</div><div class="muted">Years</div></div>
+            <div class="stat"><div class="num" id="spots">0</div><div class="muted">Spots Left</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="section">
+          <h3>About</h3>
+          <div id="bio" class="muted">—</div>
+        </div>
+        <div class="section">
+          <h3>Expertise & Topics</h3>
+          <div id="expertise" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+        </div>
+        <div class="section">
+          <h3>Insights</h3>
+          <div id="insights" class="muted">—</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const qs = (k) => new URLSearchParams(location.search).get(k);
+    const id = qs('mentorId');
+    const mentorNameParam = qs('mentorName');
+    const apiUrl = id ? `api/mentors.php?id=${encodeURIComponent(id)}` : 'api/mentors.php';
+
+    async function load(){
+      try{
+        const res = await fetch(apiUrl);
+        if(!res.ok) throw new Error('network');
+        const data = await res.json();
+        // if api returned a list, ensure we find by id
+        let m = data;
+        if(Array.isArray(data)){
+          m = null;
+          if(id) m = data.find(x => String(x._id) === String(id) || String(x.id) === String(id));
+          else if(mentorNameParam){
+            const decoded = decodeURIComponent(mentorNameParam.replace(/\+/g,' ')).toLowerCase();
+            m = data.find(x => (x.name && x.name.toLowerCase() === decoded) || (x.name && x.name.toLowerCase().includes(decoded)) );
+          } else {
+            m = data[0];
+          }
+        }
+        if(!m){
+          // friendly fallback when mentor can't be located
+          const card = document.getElementById('profileCard');
+          card.innerHTML = `
+            <div style="padding:28px">
+              <h2>No mentor found</h2>
+              <p class="muted">We couldn't find that mentor. Try browsing all mentors or pick another profile.</p>
+              <div style="margin-top:16px">
+                <a class="btn btn-ghost" href="mentorship.html">Back to Mentors</a>
+                <a class="btn btn-primary" href="mentorship.html">Browse Mentors</a>
+              </div>
+            </div>`;
+          return;
+        }
+        render(m);
+      }catch(e){
+        console.error(e);
+        document.getElementById('name').textContent = 'Failed to load mentor';
+      }
+    }
+
+    function render(m){
+      document.getElementById('name').textContent = m.name || 'Unnamed';
+      document.getElementById('title').textContent = m.title || '';
+      document.getElementById('bio').textContent = m.bio || m.about || 'No biography available.';
+      document.getElementById('mentees').textContent = m.mentees ?? m.mentees_count ?? 0;
+      document.getElementById('years').textContent = m.years ?? m.years_mentoring ?? 0;
+      document.getElementById('spots').textContent = m.spotsLeft ?? m.spots_left ?? 0;
+      if(m.avatar) document.getElementById('avatar').style.backgroundImage = `url('${m.avatar}')`;
+      // specialties
+      const s = (m.specialties && m.specialties.length) ? m.specialties : (typeof m.specialties === 'string' ? m.specialties.split(',') : []);
+      document.getElementById('specialties').innerHTML = s.slice(0,6).map(t=>`<div class="chip">${t}</div>`).join('');
+      document.getElementById('expertise').innerHTML = s.map(t=>`<div class="chip">${t}</div>`).join('');
+      // Insights: rating, recent mentees, response time, availability (render stars)
+      const rating = Number(m.rating_avg ?? m.avg_rating ?? m.rating ?? NaN);
+      const responseTime = m.response_time ?? m.response_time_days ?? m.response_time_hours ?? '24-48 hrs';
+      let recent = m.recentMentees ?? m.recent_mentees ?? m.recent ?? [];
+      if(typeof recent === 'string') recent = recent.split(',').map(x=>x.trim()).filter(Boolean);
+      const availability = (m.spotsLeft ?? m.spots_left ?? m.openings ?? 0);
+      const insightsEl = document.getElementById('insights');
+      const renderStars = (v) => {
+        if(!isFinite(v)) return '—';
+        const rounded = Math.round(Math.max(0, Math.min(5, v)));
+        return '★'.repeat(rounded) + '☆'.repeat(5-rounded) + ` (${v.toFixed(1)})`;
+      };
+      let recentHtml = 'None yet';
+      if(Array.isArray(recent) && recent.length) recentHtml = `<ul style="margin:6px 0 0 18px">${recent.slice(0,5).map(r=>`<li>${r}</li>`).join('')}</ul>`;
+      insightsEl.innerHTML = `
+        <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:center">
+          <div><strong>Avg Rating:</strong> ${renderStars(rating)}</div>
+          <div><strong>Response:</strong> ${responseTime}</div>
+          <div><strong>Open Slots:</strong> ${availability}</div>
+        </div>
+        <div style="margin-top:8px"><strong>Recent Mentees:</strong> ${recentHtml}</div>
+      `;
+
+      // buttons: prefer numeric id, fallback to name param or name
+      const ident = m._id ?? m.id ?? (mentorNameParam ? decodeURIComponent(mentorNameParam) : (m.name ?? ''));
+      document.getElementById('requestBtn').addEventListener('click', ()=> {
+        const namePart = encodeURIComponent(m.name ?? mentorNameParam ?? '');
+        const target = `request-mentorship.html?mentorId=${encodeURIComponent(ident)}&mentorName=${namePart}`;
+        location.href = target;
+      });
+
+      document.getElementById('messageBtn').addEventListener('click', ()=> {
+        // open a small messaging popup; if popup blocked, redirect in current tab
+        const wndName = `cinda_message_${String(ident).replace(/[^a-z0-9_-]/gi,'')}`;
+        const features = 'width=420,height=640,menubar=no,toolbar=no,status=no,location=no,resizable=yes';
+        const namePart = encodeURIComponent(m.name ?? mentorNameParam ?? '');
+        const popup = window.open(`messages.html?with=${encodeURIComponent(ident)}&mentorName=${namePart}`, wndName, features);
+        if(popup){
+          try{ popup.focus(); }catch(e){}
+        } else {
+          // fallback: navigate in same tab
+          location.href = `messages.html?with=${encodeURIComponent(ident)}`;
+        }
+      });
+    }
+
+    if(!id && !mentorNameParam){ document.getElementById('name').textContent = 'No mentor selected'; }
+    else load();
+  </script>
+</body>
+</html>

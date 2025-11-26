@@ -1,0 +1,11 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Messages</title>
+<style>body{background:#141414;color:#fff;font-family:Arial;padding:30px}</style></head>
+<body>
+<h1>Messages</h1>
+<p>This is a placeholder for the messaging UI. Query param `with` can be used to open a conversation.</p>
+<script>
+const withId=new URLSearchParams(location.search).get('with');
+if(withId) document.body.insertAdjacentHTML('beforeend','<p>Conversation with: '+withId+'</p>');
+</script>
+</body></html>

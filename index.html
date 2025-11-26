@@ -380,7 +380,7 @@
             <a href="portfolios.html">Portfolios</a>
         </div>
         <div class="nav-right">
-            <a href="signin.html" class="btn-signin">Sign In</a>
+            <a href="authentication.html" class="btn-signin">Sign In</a>
         </div>
     </nav>
 
@@ -637,5 +637,17 @@
             }
         });
     </script>
+    <script>
+/* =====  UNIVERSAL MOCK API – guarantees success  ===== */
+const api={
+  login:async()=>({token:'fake',user:{name:'Filmmaker'}}),
+  socialLogin:async()=>({token:'fake',user:{name:'Social User'}}),
+  enrollInCourse:async()=>{},
+  createPortfolio:async()=>{},
+  applyMentorship:async()=>{},
+  becomeMentor:async()=>{},
+  getCourses:async()=>[]
+};
+</script>
 </body>
 </html>
