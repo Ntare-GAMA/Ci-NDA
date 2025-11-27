@@ -699,29 +699,38 @@
             const summaryDuration = document.getElementById('summaryDuration');
 
             if(courseId){
-                // Try to fetch single course by id
+                // Fetch course details from API
                 try{
-                    const res = await fetch('api/courses.php?id='+encodeURIComponent(courseId));
+                    const res = await fetch('/api/courses.php?id='+encodeURIComponent(courseId));
                     if(res.ok){
                         const c = await res.json();
-                        if(!c || c.error){
-                            console.warn('Course not found or error', c);
-                        } else {
-                            if(titleEl) titleEl.textContent = c.title || titleEl.textContent;
+                        if(c && !c.error){
+                            // Update all course information
+                            if(titleEl) titleEl.textContent = c.title || 'Course';
                             if(thumbEl && c.image) thumbEl.src = c.image;
-                            if(durationEl) durationEl.textContent = c.duration || durationEl.textContent;
-                            if(levelEl) levelEl.textContent = c.level || levelEl.textContent;
-                            if(instructorEl) instructorEl.textContent = (c.instructor && c.instructor.name) ? c.instructor.name : c.instructor || instructorEl.textContent;
+                            if(durationEl) durationEl.textContent = c.duration || '12 weeks';
+                            if(levelEl) levelEl.textContent = c.level || 'Beginner';
+                            
+                            const instructorName = (c.instructor && c.instructor.name) ? c.instructor.name : (c.instructor || 'Instructor');
+                            if(instructorEl) instructorEl.textContent = instructorName;
 
-                            if(summaryCourseName) summaryCourseName.textContent = c.title || summaryCourseName.textContent;
-                            if(summaryInstructor) summaryInstructor.textContent = (c.instructor && c.instructor.name) ? c.instructor.name : c.instructor || summaryInstructor.textContent;
-                            if(summaryDuration) summaryDuration.textContent = c.duration || summaryDuration.textContent;
+                            // Update summary section
+                            if(summaryCourseName) summaryCourseName.textContent = c.title || 'Course';
+                            if(summaryInstructor) summaryInstructor.textContent = instructorName;
+                            if(summaryDuration) summaryDuration.textContent = c.duration || '12 weeks';
+                            
+                            console.log('Course loaded:', c);
+                        } else {
+                            console.warn('Course not found or error:', c);
                         }
+                    } else {
+                        console.warn('Failed to fetch course, status:', res.status);
                     }
                 }catch(e){
-                    console.warn('Could not fetch courses', e);
+                    console.error('Error fetching course:', e);
                 }
             } else if(courseNameParam){
+                // Fallback to course name from URL if no ID
                 const decoded = decodeURIComponent(courseNameParam.replace(/\+/g,' '));
                 if(titleEl) titleEl.textContent = decoded;
                 if(summaryCourseName) summaryCourseName.textContent = decoded;

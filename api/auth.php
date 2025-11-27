@@ -17,12 +17,10 @@ $stmt->bind_param('s', $email);
 $stmt->execute();
 $res = $stmt->get_result();
 if ($row = $res->fetch_assoc()) {
+  // Verify password using password_verify for hashed passwords
   $ok = false;
   if (!empty($row['password_hash']) && function_exists('password_verify')) {
-    if (password_verify($password, $row['password_hash'])) $ok = true;
-  } else {
-    // fallback to plain-text match (not recommended)
-    if ($password === $row['password']) $ok = true;
+    $ok = password_verify($password, $row['password_hash']);
   }
 
   if ($ok) {
@@ -33,6 +31,20 @@ if ($row = $res->fetch_assoc()) {
     if ($ins = $conn->prepare('INSERT INTO sessions (user_id, token, created_at) VALUES (?, ?, ?)')) {
       $ins->bind_param('iss', $row['id'], $token, $created_at);
       $ins->execute();
+    }
+    // set HttpOnly cookie for the token so front-end can authenticate via cookie
+    if (!headers_sent()) {
+      // PHP 7.3+ supports options array for setcookie
+      if (PHP_VERSION_ID >= 70300) {
+        setcookie('cinda_token', $token, [
+          'expires' => time() + 60*60*24*7,
+          'path' => '/',
+          'httponly' => true,
+          'samesite' => 'Lax'
+        ]);
+      } else {
+        setcookie('cinda_token', $token, time() + 60*60*24*7, '/', '', false, true);
+      }
     }
     json_exit(['token' => $token, 'user' => ['id' => $row['id'], 'name' => $row['name'], 'email' => $row['email']]]);
   }

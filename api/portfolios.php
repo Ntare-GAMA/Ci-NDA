@@ -12,11 +12,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if (!$title || !$owner) json_exit(['error' => 'title and owner required'], 400);
 
-  $stmt = $conn->prepare('INSERT INTO portfolios (title, owner, description, category, tags, thumbnail_url, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())');
+  $stmt = $conn->prepare('INSERT INTO portfolios (title, owner, description, category, tags, thumbnail_url) VALUES (?, ?, ?, ?, ?, ?)');
   if (!$stmt) json_exit(['error' => 'Prepare failed'], 500);
   $stmt->bind_param('ssssss', $title, $owner, $description, $category, $tags, $thumbnail);
   if ($stmt->execute()) {
-    json_exit(['msg' => 'created', 'id' => $conn->insert_id], 201);
+    $lastId = null;
+    if (method_exists($conn, 'lastInsertId')) {
+      try { $lastId = $conn->lastInsertId(); } catch (Exception $e) { $lastId = null; }
+    }
+    if (!$lastId && property_exists($conn, 'insert_id')) {
+      $lastId = $conn->insert_id ?: null;
+    }
+    json_exit(['msg' => 'created', 'id' => $lastId], 201);
   } else json_exit(['error' => 'Insert failed'], 500);
 }
 

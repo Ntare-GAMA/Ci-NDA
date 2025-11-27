@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Sign In - Ci-NDA</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
@@ -44,6 +44,9 @@
         .demo-credentials p{color:#b3b3b3;margin:3px 0}
         .loading{display:none;text-align:center;margin-top:10px;color:#46d369}
         @media(max-width:768px){.navbar{padding:20px}.signin-box{padding:40px 30px}.signin-box h1{font-size:28px}}
+        @media(max-width:480px){.signin-box{padding:35px 25px}.signin-box h1{font-size:26px}.signin-box p{font-size:14px}input{padding:14px;font-size:15px}button{padding:14px;font-size:15px}}
+        @media(max-width:375px){.signin-box{padding:30px 20px}.signin-box h1{font-size:24px}input{padding:12px;font-size:14px}button{padding:12px}}
+        @media(max-width:320px){.signin-box{padding:25px 18px}.signin-box h1{font-size:22px}}
     </style>
 </head>
 <body>
@@ -122,13 +125,43 @@
         /* ==========  SINGLE API OBJECT  ========== */
         const api = {
             login: async ({ email, password }) => {
-                const res = await fetch('api/auth.php', {
+                // Try PHP endpoint first (works when running a PHP server that executes .php files)
+                try{
+                    const res = await fetch('/api/auth.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'include',
+                        body: JSON.stringify({ email, password })
+                    });
+                    let body = {};
+                    try{ body = await res.json(); }catch(e){}
+                    if (res.ok) return body;
+                    // If PHP responded with a 404/route message, fall through to Node handler
+                    const msg = (body && (body.error || body.message)) ? (body.error || body.message) : null;
+                    if (msg && msg.toString().toLowerCase().includes('route not found')) {
+                        // fallthrough to Node route
+                    } else if (!res.ok) {
+                        // other PHP-side error (invalid credentials etc.)
+                        throw new Error(msg || 'Login failed');
+                    }
+                }catch(e){
+                    // network or CORS error contacting PHP — we'll try Node endpoint next
+                }
+
+                // Fallback: try Node/Express auth route (mounted at /api/auth/login)
+                const res2 = await fetch('/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
                     body: JSON.stringify({ email, password })
                 });
-                if (!res.ok) throw new Error('Login failed');
-                return res.json();
+                let body2 = {};
+                try{ body2 = await res2.json(); }catch(e){}
+                if (!res2.ok) {
+                    const msg = (body2 && (body2.error || body2.message)) ? (body2.error || body2.message) : 'Login failed';
+                    throw new Error(msg);
+                }
+                return body2;
             }
         };
 
@@ -156,13 +189,22 @@
             btn.disabled = true; loading.style.display = 'block';
 
             try {
-                await api.login({ email, password });
-                sessionStorage.setItem('user', 'fake'); // mark logged-in
+                const data = await api.login({ email, password });
+                // store token and user info if returned by PHP
+                if (data && data.token) {
+                    try{ 
+                        sessionStorage.setItem('cinda_token', data.token); 
+                        localStorage.setItem('cinda_token', data.token);
+                        localStorage.setItem('cinda_user', JSON.stringify(data.user || {})); 
+                    }catch(e){}
+                }
+                sessionStorage.setItem('user', (data && data.user && data.user.name) ? data.user.name : 'user');
                 if (rememberMe) localStorage.setItem('rememberedEmail', email);
                 window.location.href = 'profile.html';
             } catch (err) {
                 loading.style.display = 'none'; btn.disabled = false;
-                alert('❌ Login failed: ' + err.message);
+                console.error('Login error:', err);
+                alert('❌ Sign in failed: ' + err.message + '\n\nIf you just signed up, make sure you\'re using the PHP server at 127.0.0.1:8000');
             }
         });
 

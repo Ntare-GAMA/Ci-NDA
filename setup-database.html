@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Setup - Ci-NDA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            color: #b3b3b3;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            text-align: left;
+            display: none;
+        }
+
+        .status.show {
+            display: block;
+        }
+
+        .status-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-item:last-child {
+            border-bottom: none;
+        }
+
+        .success {
+            color: #4ade80;
+        }
+
+        .error {
+            color: #ef4444;
+        }
+
+        .loading {
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Database Setup</h1>
+        <p>Click the button below to seed your database with courses and mentors data.</p>
+        
+        <button class="btn" onclick="setupDatabase()" id="setupBtn">
+            Setup Database
+        </button>
+        
+        <button class="btn" onclick="window.location.href='index.html'" style="background: rgba(255, 255, 255, 0.1);">
+            Go to Home
+        </button>
+
+        <div class="status" id="status">
+            <div class="status-item" id="coursesStatus">
+                <span class="loading">⏳</span> Seeding courses...
+            </div>
+            <div class="status-item" id="mentorsStatus">
+                <span class="loading">⏳</span> Seeding mentors...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function setupDatabase() {
+            const btn = document.getElementById('setupBtn');
+            const status = document.getElementById('status');
+            const coursesStatus = document.getElementById('coursesStatus');
+            const mentorsStatus = document.getElementById('mentorsStatus');
+            
+            btn.disabled = true;
+            status.classList.add('show');
+            
+            try {
+                // Seed courses
+                coursesStatus.innerHTML = '<span class="loading">⏳</span> Seeding courses...';
+                const coursesRes = await fetch('/api/seed_courses.php');
+                const coursesData = await coursesRes.json();
+                
+                if (coursesData.status === 'ok' || coursesData.status === 'skipped') {
+                    const count = coursesData.inserted || coursesData.count || 0;
+                    coursesStatus.innerHTML = `<span class="success">✓</span> Courses: ${count} records (${coursesData.status})`;
+                } else {
+                    coursesStatus.innerHTML = `<span class="error">✗</span> Courses: ${coursesData.message || 'Error'}`;
+                }
+                
+                // Seed mentors
+                mentorsStatus.innerHTML = '<span class="loading">⏳</span> Seeding mentors...';
+                const mentorsRes = await fetch('/api/seed_mentors.php');
+                const mentorsData = await mentorsRes.json();
+                
+                if (mentorsData.status === 'ok') {
+                    mentorsStatus.innerHTML = `<span class="success">✓</span> Mentors: ${mentorsData.inserted} records inserted`;
+                } else {
+                    mentorsStatus.innerHTML = `<span class="error">✗</span> Mentors: ${mentorsData.error || mentorsData.message || 'Error'}`;
+                }
+                
+                // Success message
+                setTimeout(() => {
+                    alert('✓ Database setup complete!\n\nYou can now use the application.');
+                    btn.disabled = false;
+                    btn.textContent = 'Re-run Setup';
+                }, 500);
+                
+            } catch (error) {
+                alert('Error setting up database: ' + error.message);
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

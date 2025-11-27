@@ -2,12 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Admin Dashboard - Ci-NDA</title>
     <style>
         /* =====  YOUR ORIGINAL CSS (UNCHANGED)  ===== */
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Helvetica Neue',Arial,sans-serif;background:#0f0f0f;color:white;display:flex;min-height:100vh}
+        html{-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;touch-action:manipulation}
+        body{font-family:'Helvetica Neue',Arial,sans-serif;background:#0f0f0f;color:white;display:flex;min-height:100vh;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+        button,a,.nav-item,.tab,.action-btn{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+        .mobile-menu-toggle{display:none;position:fixed;top:15px;left:15px;z-index:2000;background:#e50914;border:none;color:white;padding:10px 15px;border-radius:8px;cursor:pointer;font-size:20px;touch-action:manipulation}
+        .sidebar-backdrop{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:999;opacity:0;transition:opacity 0.3s ease}
+        .sidebar-backdrop.show{display:block;opacity:1}
         .sidebar{width:260px;background:linear-gradient(180deg,#1a1a1a 0%,#0a0a0a 100%);border-right:1px solid rgba(229,9,20,.2);position:fixed;height:100vh;overflow-y:auto;z-index:1000}
         .sidebar-header{padding:25px 20px;border-bottom:1px solid rgba(229,9,20,.2)}
         .logo{font-size:28px;font-weight:bold;color:#e50914;letter-spacing:2px}
@@ -85,13 +92,104 @@
         .detail-group{margin-bottom:20px}
         .detail-label{font-size:12px;color:#999;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
         .detail-value{font-size:15px;line-height:1.6}
-        @media(max-width:768px){.sidebar{width:100%;height:auto;position:relative}.main-content{margin-left:0}.stats-grid{grid-template-columns:1fr}.table-header{flex-direction:column;gap:15px;align-items:flex-start}}
+        @media(max-width:1200px){.stats-grid{grid-template-columns:repeat(2,1fr)}.main-content{padding:25px}}
+        @media(max-width:768px){
+            .mobile-menu-toggle{display:block}
+            .sidebar{width:280px;height:auto;position:fixed;left:-280px;transition:left 0.3s ease;border-right:1px solid rgba(229,9,20,.2);border-bottom:none;height:100vh;overflow-y:auto}
+            .sidebar.open{left:0;box-shadow:4px 0 20px rgba(0,0,0,0.5)}
+            .main-content{margin-left:0;padding:15px;padding-top:65px}
+            .stats-grid{grid-template-columns:1fr;gap:15px}
+            .stat-card{padding:20px}
+            .table-header{flex-direction:column;gap:12px;align-items:flex-start}
+            .top-bar{flex-direction:column;align-items:flex-start;gap:12px;padding-bottom:15px}
+            .search-box{width:100%;max-width:100%}
+            .page-title{font-size:22px}
+            .data-table{overflow-x:auto;-webkit-overflow-scrolling:touch}
+            table{min-width:700px;font-size:13px}
+            th,td{padding:12px 15px}
+            .modal-content{padding:20px;max-width:95%;margin:10px}
+            .action-buttons{flex-wrap:wrap;gap:6px}
+            .action-btn{font-size:12px;padding:6px 10px}
+            .user-cell{flex-direction:row;align-items:center;gap:10px}
+            .user-avatar-small{width:35px;height:35px;font-size:13px}
+            .user-info h4{font-size:13px}
+            .user-info p{font-size:11px}
+            .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;gap:8px}
+            .tab{padding:10px 20px;font-size:14px}
+        }
+        @media(max-width:480px){
+            .mobile-menu-toggle{padding:8px 12px;font-size:18px;top:12px;left:12px}
+            .main-content{padding:12px;padding-top:60px}
+            .stats-grid{gap:10px}
+            .stat-card{padding:15px}
+            .stat-value{font-size:24px}
+            .stat-label{font-size:11px}
+            .page-title{font-size:20px}
+            .nav-item{padding:10px 15px;font-size:13px}
+            .nav-icon{font-size:18px}
+            .btn{padding:8px 14px;font-size:12px}
+            .btn-primary,.btn-secondary{font-size:12px}
+            .action-btn{padding:5px 8px;font-size:11px}
+            table{min-width:600px;font-size:12px}
+            th,td{padding:10px 12px}
+            .modal-content{padding:15px}
+            .modal-title{font-size:20px}
+            .detail-label{font-size:11px}
+            .detail-value{font-size:13px}
+            .status-badge{font-size:10px;padding:4px 8px}
+        }
+        @media(max-width:375px){
+            .main-content{padding:10px;padding-top:55px}
+            .page-title{font-size:18px}
+            .stat-value{font-size:20px}
+            .stat-card{padding:12px}
+            table{font-size:11px}
+            th,td{padding:8px 10px}
+            .action-btn{padding:4px 6px;font-size:10px}
+            .btn{padding:6px 12px;font-size:11px}
+            .modal-content{padding:12px}
+            .mobile-menu-toggle{padding:6px 10px;font-size:16px}
+        }
+        @media(max-width:320px){
+            .page-title{font-size:16px}
+            .stat-value{font-size:18px}
+            .stat-label{font-size:10px}
+            .nav-item{font-size:12px;padding:8px 12px}
+            table{font-size:10px}
+            .action-btn{font-size:9px;padding:3px 5px}
+        }
     </style>
 </head>
 <body>
 
+<!-- Mobile Menu Toggle -->
+<button class="mobile-menu-toggle" onclick="toggleSidebar()">☰</button>
+
+<!-- Sidebar Backdrop -->
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+
+<!-- Authentication Check -->
+<script>
+// Check if admin is signed in
+(function checkAuth() {
+    const session = localStorage.getItem('admin_session') || sessionStorage.getItem('admin_session');
+    if (!session) {
+        window.location.href = 'admin-signin.html';
+        return;
+    }
+    try {
+        const adminData = JSON.parse(session);
+        if (!adminData.isAdmin) {
+            window.location.href = 'admin-signin.html';
+        }
+    } catch (e) {
+        window.location.href = 'admin-signin.html';
+    }
+})();
+</script>
+
 <!-- Sidebar -->
-<aside class="sidebar">
+<aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
         <div class="logo">Ci-NDA</div>
         <span class="admin-badge">ADMIN PANEL</span>
@@ -122,7 +220,7 @@
         <div class="nav-section">
             <div class="nav-section-title">Settings</div>
             <a class="nav-item" onclick="switchTab('settings')">Settings</a>
-            <a class="nav-item" onclick="logout()">Logout</a>
+            <a class="nav-item" onclick="logout()" style="color: #ff6b6b;">Logout</a>
         </div>
     </nav>
 </aside>
@@ -194,19 +292,8 @@
             <div class="table-header"><h3 class="table-title">Mentor Applications Pending Review</h3></div>
             <table>
                 <thead><tr><th>Applicant</th><th>Specialization</th><th>Experience</th><th>Applied</th><th>Status</th><th>Actions</th></tr></thead>
-                <tbody>
-                    <tr>
-                        <td><div class="user-cell"><div class="user-avatar-small">SM</div><div class="user-info"><h4>Sarah Mitchell</h4><p>sarah.mitchell@email.com</p></div></div></td>
-                        <td>Cinematography, Lighting</td><td>15+ years</td><td>Nov 8, 2025</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td><div class="action-buttons"><button class="action-btn view">View</button><button class="action-btn approve">Approve</button><button class="action-btn reject">Reject</button></div></td>
-                    </tr>
-                    <tr>
-                        <td><div class="user-cell"><div class="user-avatar-small">JC</div><div class="user-info"><h4>James Chen</h4><p>james.chen@email.com</p></div></div></td>
-                        <td>Editing, Post-Production</td><td>12+ years</td><td>Nov 7, 2025</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td><div class="action-buttons"><button class="action-btn view">View</button><button class="action-btn approve">Approve</button><button class="action-btn reject">Reject</button></div></td>
-                    </tr>
+                <tbody id="mentorAppsTbody">
+                    <tr><td colspan="6" style="text-align:center;padding:30px;color:#999;">Loading applications...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -217,14 +304,9 @@
         <div class="data-table">
             <div class="table-header"><h3 class="table-title">Opportunity Applications</h3></div>
             <table>
-                <thead><tr><th>Applicant</th><th>Opportunity</th><th>Project Title</th><th>Applied</th><th>Status</th><th>Actions</th></tr></thead>
-                <tbody>
-                    <tr>
-                        <td><div class="user-cell"><div class="user-avatar-small">JF</div><div class="user-info"><h4>John Filmmaker</h4><p>john.f@email.com</p></div></div></td>
-                        <td>Sundance Documentary Fund</td><td>Voices of Change</td><td>Nov 8, 2025</td>
-                        <td><span class="status-badge status-pending">Pending</span></td>
-                        <td><div class="action-buttons"><button class="action-btn view">View</button><button class="action-btn approve">Forward</button></div></td>
-                    </tr>
+                <thead><tr><th>Applicant</th><th>Opportunity</th><th>Experience</th><th>Applied</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="oppAppsTbody">
+                    <tr><td colspan="6" style="text-align:center;padding:30px;color:#999;">Loading applications...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -236,13 +318,8 @@
             <div class="table-header"><h3 class="table-title">Mentorship Requests</h3></div>
             <table>
                 <thead><tr><th>Mentee</th><th>Mentor</th><th>Focus Area</th><th>Requested</th><th>Status</th><th>Actions</th></tr></thead>
-                <tbody>
-                    <tr>
-                        <td><div class="user-cell"><div class="user-avatar-small">MP</div><div class="user-info"><h4>Maya Patel</h4><p>maya.p@email.com</p></div></div></td>
-                        <td>Sarah Mitchell</td><td>Cinematography</td><td>Nov 7, 2025</td>
-                        <td><span class="status-badge status-active">Active</span></td>
-                        <td><div class="action-buttons"><button class="action-btn view">View</button></div></td>
-                    </tr>
+                <tbody id="mentorshipReqsTbody">
+                    <tr><td colspan="6" style="text-align:center;padding:30px;color:#999;">Loading requests...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -331,80 +408,6 @@
             </table>
         </div>
     </div>
-    <!-- =====  LOGOUT FIXED  ===== -->
-<script>
-function logout(){
-  localStorage.clear();
-  sessionStorage.clear();
-  window.location.href='index.html';   // real landing page
-}
-</script>
-
-<!-- =====  ADD-NEW BUTTONS  ===== -->
-<div style="position:fixed;bottom:30px;right:30px;z-index:999;display:flex;gap:15px;">
-  <button class="btn btn-primary"
-          onclick="alert('Add-New Course modal – wire when API ready')">
-    + New Course
-  </button>
-  <button class="btn btn-primary"
-          onclick="alert('Add-New Opportunity modal – wire when API ready')">
-    + New Opportunity
-  </button>
-</div>
-
-<!-- =====  ACTION BUTTONS ON TABLES  ===== -->
-<script>
-/* approve / reject / view  –  stopPropagation so row-click does not fire */
-document.addEventListener('DOMContentLoaded',()=>{
-  document.body.addEventListener('click',e=>{
-    const btn=e.target.closest('.action-btn');
-    if(!btn)return;
-    e.stopPropagation();
-    const row=btn.closest('tr');
-    const user=row.dataset.user||'User';
-    if(btn.classList.contains('approve')) alert(`Approved ${user}`);
-    if(btn.classList.contains('reject'))  alert(`Rejected ${user}`);
-    if(btn.classList.contains('view'))    alert(`View detail – open modal`);
-  });
-});
-</script>
-<!-- =====  LOGOUT FIXED  ===== -->
-<script>
-function logout(){
-  localStorage.clear();
-  sessionStorage.clear();
-  window.location.href='index.html';   // real landing page
-}
-</script>
-
-<!-- =====  ADD-NEW BUTTONS  ===== -->
-<div style="position:fixed;bottom:30px;right:30px;z-index:999;display:flex;gap:15px;">
-  <button class="btn btn-primary"
-          onclick="alert('Add-New Course modal – wire when API ready')">
-    + New Course
-  </button>
-  <button class="btn btn-primary"
-          onclick="alert('Add-New Opportunity modal – wire when API ready')">
-    + New Opportunity
-  </button>
-</div>
-
-<!-- =====  ACTION BUTTONS ON TABLES  ===== -->
-<script>
-/* approve / reject / view  –  stopPropagation so row-click does not fire */
-document.addEventListener('DOMContentLoaded',()=>{
-  document.body.addEventListener('click',e=>{
-    const btn=e.target.closest('.action-btn');
-    if(!btn)return;
-    e.stopPropagation();
-    const row=btn.closest('tr');
-    const user=row.dataset.user||'User';
-    if(btn.classList.contains('approve')) alert(`Approved ${user}`);
-    if(btn.classList.contains('reject'))  alert(`Rejected ${user}`);
-    if(btn.classList.contains('view'))    alert(`View detail – open modal`);
-  });
-});
-</script>
 </main>
 
 <!-- Modal -->
@@ -418,7 +421,23 @@ document.addEventListener('DOMContentLoaded',()=>{
     </div>
 </div>
 
+<!-- Fixed Action Buttons -->
+<div style="position:fixed;bottom:30px;right:30px;z-index:999;display:flex;gap:15px;">
+    <button class="btn btn-primary" onclick="alert('Add-New Course modal – wire when API ready')">+ New Course</button>
+    <button class="btn btn-primary" onclick="alert('Add-New Opportunity modal – wire when API ready')">+ New Opportunity</button>
+</div>
+
 <script>
+/* =====  LOGOUT FUNCTION  ===== */
+function logout(){
+    if (confirm('Are you sure you want to sign out?')) {
+        localStorage.removeItem('admin_session');
+        sessionStorage.removeItem('admin_session');
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = 'admin-signin.html';
+    }
+}
 /* =====  TAB SWITCHING  ===== */
 function switchTab(tab){
     document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
@@ -475,6 +494,302 @@ document.addEventListener('DOMContentLoaded',()=>{
 function closeModal(){
     document.getElementById('applicationModal').classList.remove('show');
 }
+
+/* =====  DATA LOADING AND ACTION HANDLERS  ===== */
+// Load mentor applications
+async function loadMentorApplications() {
+    try {
+        const res = await fetch('/api/mentor-applications.php');
+        const apps = await res.json();
+        const tbody = document.getElementById('mentorAppsTbody');
+        
+        if (apps.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:#999;">No applications found</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = apps.map(app => {
+            const initials = app.name.split(' ').map(n => n[0]).join('');
+            const statusClass = app.status === 'approved' ? 'status-approved' : app.status === 'rejected' ? 'status-rejected' : 'status-pending';
+            const date = new Date(app.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            
+            return `<tr data-id="${app.id}">
+                <td><div class="user-cell"><div class="user-avatar-small">${initials}</div><div class="user-info"><h4>${app.name}</h4><p>${app.email}</p></div></div></td>
+                <td>${app.specialties || 'N/A'}</td>
+                <td>${app.years_experience}+ years</td>
+                <td>${date}</td>
+                <td><span class="status-badge ${statusClass}">${app.status}</span></td>
+                <td><div class="action-buttons">
+                    <button class="action-btn view" onclick="viewMentorApp('${app.id}')">View</button>
+                    ${app.status === 'pending' ? `<button class="action-btn approve" onclick="approveMentorApp('${app.id}')">Approve</button>
+                    <button class="action-btn reject" onclick="rejectMentorApp('${app.id}')">Reject</button>` : ''}
+                </div></td>
+            </tr>`;
+        }).join('');
+    } catch (err) {
+        console.error('Error loading mentor applications:', err);
+    }
+}
+
+// Load opportunity applications
+async function loadOpportunityApplications() {
+    try {
+        const res = await fetch('/api/opportunity-applications.php');
+        const apps = await res.json();
+        const tbody = document.getElementById('oppAppsTbody');
+        
+        if (apps.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:#999;">No applications found</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = apps.map(app => {
+            const initials = app.applicant_name.split(' ').map(n => n[0]).join('');
+            const statusClass = app.status === 'approved' ? 'status-approved' : app.status === 'rejected' ? 'status-rejected' : app.status === 'forwarded' ? 'status-active' : 'status-pending';
+            const date = new Date(app.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            
+            return `<tr data-id="${app.id}">
+                <td><div class="user-cell"><div class="user-avatar-small">${initials}</div><div class="user-info"><h4>${app.applicant_name}</h4><p>${app.applicant_email}</p></div></div></td>
+                <td>${app.opportunity_title || 'N/A'}</td>
+                <td>${app.experience || 'N/A'}</td>
+                <td>${date}</td>
+                <td><span class="status-badge ${statusClass}">${app.status}</span></td>
+                <td><div class="action-buttons">
+                    <button class="action-btn view" onclick="viewOppApp('${app.id}')">View</button>
+                    ${app.status === 'pending' ? `<button class="action-btn approve" onclick="forwardOppApp('${app.id}')">Forward</button>
+                    <button class="action-btn reject" onclick="rejectOppApp('${app.id}')">Reject</button>` : ''}
+                </div></td>
+            </tr>`;
+        }).join('');
+    } catch (err) {
+        console.error('Error loading opportunity applications:', err);
+    }
+}
+
+// Load mentorship requests
+async function loadMentorshipRequests() {
+    try {
+        const res = await fetch('/api/mentorship-requests.php');
+        const reqs = await res.json();
+        const tbody = document.getElementById('mentorshipReqsTbody');
+        
+        if (reqs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:#999;">No requests found</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = reqs.map(req => {
+            const initials = req.student_name.split(' ').map(n => n[0]).join('');
+            const statusClass = req.status === 'approved' ? 'status-approved' : req.status === 'active' ? 'status-active' : req.status === 'rejected' ? 'status-rejected' : 'status-pending';
+            const date = new Date(req.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            
+            return `<tr data-id="${req.id}">
+                <td><div class="user-cell"><div class="user-avatar-small">${initials}</div><div class="user-info"><h4>${req.student_name}</h4><p>${req.student_email}</p></div></div></td>
+                <td>${req.mentor_name || 'N/A'}</td>
+                <td>${req.goals || 'N/A'}</td>
+                <td>${date}</td>
+                <td><span class="status-badge ${statusClass}">${req.status}</span></td>
+                <td><div class="action-buttons">
+                    <button class="action-btn view" onclick="viewMentorshipReq('${req.id}')">View</button>
+                    ${req.status === 'pending' ? `<button class="action-btn approve" onclick="approveMentorshipReq('${req.id}')">Approve</button>
+                    <button class="action-btn reject" onclick="rejectMentorshipReq('${req.id}')">Reject</button>` : ''}
+                </div></td>
+            </tr>`;
+        }).join('');
+    } catch (err) {
+        console.error('Error loading mentorship requests:', err);
+    }
+}
+
+// View functions
+async function viewMentorApp(id) {
+    const res = await fetch(`/api/mentor-applications.php?id=${id}`);
+    const app = await res.json();
+    const mb = document.getElementById('modalBody');
+    mb.innerHTML = `
+        <div class="detail-group"><div class="detail-label">Name</div><div class="detail-value">${app.name}</div></div>
+        <div class="detail-group"><div class="detail-label">Email</div><div class="detail-value">${app.email}</div></div>
+        <div class="detail-group"><div class="detail-label">Title</div><div class="detail-value">${app.title || 'N/A'}</div></div>
+        <div class="detail-group"><div class="detail-label">Specialties</div><div class="detail-value">${app.specialties || 'N/A'}</div></div>
+        <div class="detail-group"><div class="detail-label">Experience</div><div class="detail-value">${app.years_experience} years</div></div>
+        <div class="detail-group"><div class="detail-label">Bio</div><div class="detail-value">${app.bio || 'N/A'}</div></div>
+        <div class="detail-group"><div class="detail-label">Portfolio</div><div class="detail-value"><a href="${app.portfolio_url}" target="_blank" style="color:#e50914">${app.portfolio_url || 'N/A'}</a></div></div>
+        <div class="detail-group"><div class="detail-label">Status</div><div class="detail-value">${app.status}</div></div>
+    `;
+    document.getElementById('applicationModal').classList.add('show');
+}
+
+async function viewOppApp(id) {
+    const res = await fetch(`/api/opportunity-applications.php?id=${id}`);
+    const app = await res.json();
+    const mb = document.getElementById('modalBody');
+    mb.innerHTML = `
+        <div class="detail-group"><div class="detail-label">Applicant</div><div class="detail-value">${app.applicant_name}</div></div>
+        <div class="detail-group"><div class="detail-label">Email</div><div class="detail-value">${app.applicant_email}</div></div>
+        <div class="detail-group"><div class="detail-label">Opportunity</div><div class="detail-value">${app.opportunity_title || 'N/A'}</div></div>
+        <div class="detail-group"><div class="detail-label">Cover Letter</div><div class="detail-value">${app.cover_letter || 'N/A'}</div></div>
+        <div class="detail-group"><div class="detail-label">Experience</div><div class="detail-value">${app.experience || 'N/A'}</div></div>
+        <div class="detail-group"><div class="detail-label">Portfolio</div><div class="detail-value"><a href="${app.portfolio_url}" target="_blank" style="color:#e50914">${app.portfolio_url || 'N/A'}</a></div></div>
+        <div class="detail-group"><div class="detail-label">Status</div><div class="detail-value">${app.status}</div></div>
+    `;
+    document.getElementById('applicationModal').classList.add('show');
+}
+
+async function viewMentorshipReq(id) {
+    const res = await fetch(`/api/mentorship-requests.php?id=${id}`);
+    const req = await res.json();
+    const mb = document.getElementById('modalBody');
+    mb.innerHTML = `
+        <div class="detail-group"><div class="detail-label">Student</div><div class="detail-value">${req.student_name}</div></div>
+        <div class="detail-group"><div class="detail-label">Email</div><div class="detail-value">${req.student_email}</div></div>
+        <div class="detail-group"><div class="detail-label">Mentor</div><div class="detail-value">${req.mentor_name || 'N/A'}</div></div>
+        <div class="detail-group"><div class="detail-label">Goals</div><div class="detail-value">${req.goals || 'N/A'}</div></div>
+        <div class="detail-group"><div class="detail-label">Experience Level</div><div class="detail-value">${req.experience_level || 'N/A'}</div></div>
+        <div class="detail-group"><div class="detail-label">Availability</div><div class="detail-value">${req.availability || 'N/A'}</div></div>
+        <div class="detail-group"><div class="detail-label">Status</div><div class="detail-value">${req.status}</div></div>
+    `;
+    document.getElementById('applicationModal').classList.add('show');
+}
+
+// Approve/Reject functions
+async function approveMentorApp(id) {
+    if (!confirm('Approve this mentor application? This will create a new mentor account.')) return;
+    const res = await fetch('/api/mentor-applications.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: 'approved' })
+    });
+    const result = await res.json();
+    if (result.success) {
+        alert('Application approved! Mentor account created.');
+        loadMentorApplications();
+    } else {
+        alert('Error: ' + (result.error || 'Failed to approve'));
+    }
+}
+
+async function rejectMentorApp(id) {
+    if (!confirm('Reject this mentor application?')) return;
+    const res = await fetch('/api/mentor-applications.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: 'rejected' })
+    });
+    const result = await res.json();
+    if (result.success) {
+        alert('Application rejected.');
+        loadMentorApplications();
+    } else {
+        alert('Error: ' + (result.error || 'Failed to reject'));
+    }
+}
+
+async function forwardOppApp(id) {
+    if (!confirm('Forward this application to the sponsor?')) return;
+    const res = await fetch('/api/opportunity-applications.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: 'forwarded' })
+    });
+    const result = await res.json();
+    if (result.success) {
+        alert('Application forwarded to sponsor.');
+        loadOpportunityApplications();
+    } else {
+        alert('Error: ' + (result.error || 'Failed to forward'));
+    }
+}
+
+async function rejectOppApp(id) {
+    if (!confirm('Reject this opportunity application?')) return;
+    const res = await fetch('/api/opportunity-applications.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: 'rejected' })
+    });
+    const result = await res.json();
+    if (result.success) {
+        alert('Application rejected.');
+        loadOpportunityApplications();
+    } else {
+        alert('Error: ' + (result.error || 'Failed to reject'));
+    }
+}
+
+async function approveMentorshipReq(id) {
+    if (!confirm('Approve this mentorship request?')) return;
+    const res = await fetch('/api/mentorship-requests.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: 'approved' })
+    });
+    const result = await res.json();
+    if (result.success) {
+        alert('Mentorship request approved.');
+        loadMentorshipRequests();
+    } else {
+        alert('Error: ' + (result.error || 'Failed to approve'));
+    }
+}
+
+async function rejectMentorshipReq(id) {
+    if (!confirm('Reject this mentorship request?')) return;
+    const res = await fetch('/api/mentorship-requests.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: 'rejected' })
+    });
+    const result = await res.json();
+    if (result.success) {
+        alert('Mentorship request rejected.');
+        loadMentorshipRequests();
+    } else {
+        alert('Error: ' + (result.error || 'Failed to reject'));
+    }
+}
+
+// Load data on page load
+document.addEventListener('DOMContentLoaded', () => {
+    loadMentorApplications();
+    loadOpportunityApplications();
+    loadMentorshipRequests();
+    
+    // Close sidebar when nav item is clicked on mobile
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                closeSidebar();
+            }
+        });
+    });
+});
+
+/* =====  MOBILE MENU TOGGLE  ===== */
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebarBackdrop');
+    sidebar.classList.toggle('open');
+    backdrop.classList.toggle('show');
+}
+
+function closeSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebarBackdrop');
+    sidebar.classList.remove('open');
+    backdrop.classList.remove('show');
+}
+
+// Close sidebar when clicking outside on mobile
+document.addEventListener('click', (e) => {
+    const sidebar = document.getElementById('sidebar');
+    const toggle = document.querySelector('.mobile-menu-toggle');
+    
+    if (window.innerWidth <= 768 && sidebar.classList.contains('open')) {
+        if (!sidebar.contains(e.target) && !toggle.contains(e.target)) {
+            closeSidebar();
+        }
+    }
+});
 
 function logout(){
     /* 1.  Clear any client-side auth data (example) */

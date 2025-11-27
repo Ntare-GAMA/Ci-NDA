@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Sign Up – Ci-NDA</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Helvetica Neue',Arial,sans-serif;background:#141414;color:#fff;display:flex;flex-direction:column;min-height:100vh}
@@ -21,6 +21,9 @@
     .login{text-align:center;margin-top:20px;font-size:14px}
     .login a{color:#e50914;text-decoration:none}
     @media(max-width:768px){.navbar{padding:20px}h1{font-size:24px}.card{padding:30px}}
+    @media(max-width:480px){h1{font-size:22px}.card{padding:25px}input,select{padding:13px;font-size:15px}button{padding:14px;font-size:15px}}
+    @media(max-width:375px){h1{font-size:20px}.card{padding:20px}input,select{padding:11px;font-size:14px}button{padding:12px;font-size:14px}}
+    @media(max-width:320px){h1{font-size:18px}.card{padding:18px}label{font-size:13px}}
   </style>
 </head>
 <body>
@@ -56,10 +59,46 @@
 </div>
 
 <script>
-document.getElementById('signupForm').addEventListener('submit', e => {
+document.getElementById('signupForm').addEventListener('submit', async e => {
   e.preventDefault();
-  alert(' Account created (mock). Welcome to Ci-NDA!');
-  location = 'authentication.html';
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const userType = document.getElementById('userType').value;
+
+  if(!name || !email || !password){
+    alert('Please fill all required fields');
+    return;
+  }
+
+  try{
+    const res = await fetch('/api/register.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ name, email, password, userType })
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if(!res.ok){
+      // show server validation or error message when available
+      const msg = data && (data.error || data.db_error || data.message || (data.errors && data.errors.map(e=>e.msg).join('\n'))) || 'Signup failed';
+      alert('Signup error: ' + msg);
+      return;
+    }
+
+    // If server returns token, store it and redirect to profile or home
+    if(data && data.token){
+      try{ localStorage.setItem('cinda_token', data.token); }catch(e){}
+    }
+
+    alert('Account created — welcome to Ci-NDA!');
+    // prefer to send users to their profile or home
+    window.location.href = 'profile.html';
+  }catch(err){
+    console.error('Signup request failed', err);
+    alert('Signup failed — please try again or check your network.');
+  }
 });
 </script>
 </body>

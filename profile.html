@@ -105,8 +105,8 @@
 <!-- ----------  MAIN CONTENT  ---------- -->
 <div class="main-content">
     <div class="welcome-banner">
-        <h2>Welcome back, <span id="welcomeName">Filmmaker</span>!</h2>
-        <p>Continue building your filmmaking career with Ci-NDA</p>
+        <h2>Welcome back, <span id="welcomeName">—</span>!</h2>
+        <p id="welcomeSubtitle">Continue building your filmmaking career with Ci-NDA</p>
     </div>
 
     <div class="profile-header">
@@ -115,9 +115,9 @@
             <button class="change-photo-btn" onclick="openPhotoModal()">Change Photo</button>
         </div>
         <div class="profile-info">
-            <h1 class="profile-name" id="userName">John Filmmaker</h1>
-            <p class="profile-role" id="userRole">Filmmaker & Content Creator</p>
-            <p class="profile-bio" id="userBio">Passionate filmmaker dedicated to telling authentic Rwandan stories through compelling visuals and meaningful narratives.</p>
+            <h1 class="profile-name" id="userName">Loading...</h1>
+            <p class="profile-role" id="userRole">&nbsp;</p>
+            <p class="profile-bio" id="userBio">Loading profile information…</p>
             <div class="profile-stats">
                 <div class="stat-item"><span class="stat-value">12</span><span class="stat-label">Projects</span></div>
                 <div class="stat-item"><span class="stat-value">2.5K</span><span class="stat-label">Followers</span></div>
@@ -143,14 +143,14 @@
     <div class="tab-content active" id="portfolioTab">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:30px">
             <h2 class="section-title">My Projects</h2>
-            <button class="btn-primary" onclick="window.location.href='upload-project.html'">+ Upload New Project</button>
+            <button class="btn-primary" onclick="openUploadModal()">+ Upload New Project</button>
         </div>
-        <div class="upload-area" onclick="window.location.href='upload-project.html'">
+        <div class="upload-area" onclick="openUploadModal()">
             <div class="upload-icon">📤</div>
             <h3>Upload Your First Project</h3>
-            <p style="color:#999;margin-top:10px">Drag and drop files here or click to browse</p>
+            <p style="color:#999;margin-top:10px">Click to upload your portfolio</p>
         </div>
-        <div class="portfolio-grid">
+                <div class="portfolio-grid">
             <div class="portfolio-item" onclick="window.location.href='project-detail.html?id=1'">
                 <div class="portfolio-thumbnail" style="background-image:url('https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=600&q=80')"><div class="play-overlay">▶</div></div>
                 <div class="portfolio-info"><div class="portfolio-title">Urban Dreams</div><div class="portfolio-meta">Short Film • 2024 • 1.2K views</div></div>
@@ -227,8 +227,61 @@
     </div>
 </div>
 
+<div id="uploadModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:2000;overflow-y:auto;padding:20px">
+    <div style="background:#1a1a1a;border:1px solid #e50914;border-radius:12px;padding:40px;max-width:700px;width:100%;margin:20px auto">
+        <h3 style="margin-bottom:25px;font-size:28px">Upload New Project</h3>
+        <form id="uploadForm">
+            <div style="margin-bottom:20px">
+                <label style="display:block;margin-bottom:8px;font-size:14px;color:#b3b3b3">Project Title *</label>
+                <input type="text" id="uploadTitle" required style="width:100%;padding:12px;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:6px;color:white;font-size:14px">
+            </div>
+            <div style="margin-bottom:20px">
+                <label style="display:block;margin-bottom:8px;font-size:14px;color:#b3b3b3">Description *</label>
+                <textarea id="uploadDescription" required rows="4" style="width:100%;padding:12px;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:6px;color:white;font-size:14px;font-family:inherit;resize:vertical"></textarea>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:20px">
+                <div>
+                    <label style="display:block;margin-bottom:8px;font-size:14px;color:#b3b3b3">Category *</label>
+                    <select id="uploadCategory" required style="width:100%;padding:12px;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:6px;color:white;font-size:14px">
+                        <option value="">Select category</option>
+                        <option value="Short Films">Short Films</option>
+                        <option value="Documentary">Documentary</option>
+                        <option value="Music Videos">Music Videos</option>
+                        <option value="Commercials">Commercials</option>
+                        <option value="Animation">Animation</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="display:block;margin-bottom:8px;font-size:14px;color:#b3b3b3">Tags (comma-separated)</label>
+                    <input type="text" id="uploadTags" placeholder="drama, 4k, award-winning" style="width:100%;padding:12px;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:6px;color:white;font-size:14px">
+                </div>
+            </div>
+            <div style="margin-bottom:20px">
+                <label style="display:block;margin-bottom:8px;font-size:14px;color:#b3b3b3">Upload Files (Video/Images)</label>
+                <input type="file" id="uploadFiles" accept="video/*,image/*" multiple style="width:100%;padding:12px;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:6px;color:white;font-size:14px" onchange="previewFiles()">
+                <div id="filePreview" style="margin-top:10px;display:none;padding:12px;background:#1a1a1a;border:1px solid #3a3a3a;border-radius:6px;color:#b3b3b3;font-size:13px"></div>
+            </div>
+            <div style="margin-bottom:20px">
+                <label style="display:block;margin-bottom:8px;font-size:14px;color:#b3b3b3">Thumbnail URL (optional)</label>
+                <input type="url" id="uploadThumbnail" placeholder="https://example.com/image.jpg or auto-generated from upload" style="width:100%;padding:12px;background:#2a2a2a;border:1px solid #3a3a3a;border-radius:6px;color:white;font-size:14px">
+            </div>
+            <div style="display:flex;gap:10px;margin-top:30px">
+                <button type="submit" class="btn-primary" style="flex:1;padding:14px">Upload Project</button>
+                <button type="button" class="btn-secondary" onclick="closeUploadModal()" style="flex:1;padding:14px">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <!-- ----------  JS  ---------- -->
 <script>
+/* ----------  GET USER INITIALS  ---------- */
+function getUserInitials(name){
+    if(!name) return 'U';
+    const parts = name.trim().split(/\s+/);
+    if(parts.length >= 2) return (parts[0][0] + parts[parts.length-1][0]).toUpperCase();
+    return name.substring(0,2).toUpperCase();
+}
 /* ----------  TAB SWITCH  ---------- */
 function switchTab(tab){
     document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
@@ -258,6 +311,118 @@ function copyShareLink(){
     navigator.clipboard.writeText(shareLink.value);
     alert('Link copied!');
 }
+/* ----------  UPLOAD MODAL  ---------- */
+function openUploadModal(){document.getElementById('uploadModal').style.display='block';}
+function closeUploadModal(){document.getElementById('uploadModal').style.display='none';document.getElementById('uploadForm').reset();document.getElementById('filePreview').style.display='none';}
+
+/* ----------  FILE PREVIEW  ---------- */
+function previewFiles(){
+    const input = document.getElementById('uploadFiles');
+    const preview = document.getElementById('filePreview');
+    if(!input.files || input.files.length === 0){
+        preview.style.display = 'none';
+        return;
+    }
+    let html = '<strong>Selected files:</strong><ul style="margin:8px 0 0 0;padding-left:20px">';
+    Array.from(input.files).forEach(file=>{
+        const sizeMB = (file.size / (1024*1024)).toFixed(2);
+        html += `<li>${file.name} (${sizeMB} MB)</li>`;
+    });
+    html += '</ul>';
+    preview.innerHTML = html;
+    preview.style.display = 'block';
+}
+
+// Handle upload form submission
+document.addEventListener('DOMContentLoaded', ()=>{
+    const form = document.getElementById('uploadForm');
+    if(form){
+        form.addEventListener('submit', async (e)=>{
+            e.preventDefault();
+            const token = sessionStorage.getItem('cinda_token') || localStorage.getItem('cinda_token');
+            let owner = 'Unknown';
+            try{
+                const user = JSON.parse(localStorage.getItem('cinda_user') || '{}');
+                owner = user.name || user.email || owner;
+            }catch(e){}
+            
+            // Get file input
+            const filesInput = document.getElementById('uploadFiles');
+            const hasFiles = filesInput && filesInput.files && filesInput.files.length > 0;
+            
+            // If user uploaded files, first upload them to get URLs
+            let uploadedFileUrl = '';
+            if(hasFiles){
+                const formData = new FormData();
+                Array.from(filesInput.files).forEach(file => {
+                    formData.append('files[]', file);
+                });
+                
+                try{
+                    const uploadRes = await fetch('/api/upload.php', {
+                        method: 'POST',
+                        headers: { 'Authorization': token ? 'Bearer ' + token : '' },
+                        credentials: 'include',
+                        body: formData
+                    });
+                    
+                    if(!uploadRes.ok){
+                        const err = await uploadRes.json().catch(()=>({}));
+                        throw new Error(err.error || 'File upload failed');
+                    }
+                    
+                    const uploadData = await uploadRes.json();
+                    if(uploadData.urls && uploadData.urls.length > 0){
+                        uploadedFileUrl = uploadData.urls[0]; // Use first uploaded file as thumbnail
+                    }
+                }catch(err){
+                    console.error('File upload error:', err);
+                    alert('❌ File upload failed: ' + err.message);
+                    return;
+                }
+            }
+            
+            // Use uploaded file URL or manually entered thumbnail URL
+            const thumbnailUrl = uploadedFileUrl || document.getElementById('uploadThumbnail').value;
+            
+            const data = {
+                title: document.getElementById('uploadTitle').value,
+                description: document.getElementById('uploadDescription').value,
+                category: document.getElementById('uploadCategory').value,
+                tags: document.getElementById('uploadTags').value,
+                thumbnail: thumbnailUrl,
+                owner: owner,
+                views: 0,
+                likes: 0
+            };
+            
+            try{
+                const res = await fetch('/api/portfolios.php', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Authorization': token ? 'Bearer ' + token : ''
+                    },
+                    credentials: 'include',
+                    body: JSON.stringify(data)
+                });
+                
+                if(!res.ok){
+                    const err = await res.json().catch(()=>({}));
+                    throw new Error(err.error || 'Upload failed');
+                }
+                
+                alert('✅ Project uploaded successfully!');
+                closeUploadModal();
+                // Reload portfolios
+                setTimeout(()=>location.reload(), 500);
+            }catch(err){
+                console.error('Upload error:', err);
+                alert('❌ Upload failed: ' + err.message);
+            }
+        });
+    }
+});
 function uploadPhoto(){
     const file=document.getElementById('photoInput').files[0];
     if(!file){alert('Choose a file first');return;}
@@ -280,11 +445,150 @@ function saveSettings(){
 }
 /* ----------  LOGOUT  ---------- */
 function logout(){
-    if(confirm('Are you sure you want to sign out?')){
-        sessionStorage.clear();
-        window.location.href='authentication.html';
+    if(!confirm('Are you sure you want to sign out?')) return;
+    // Try server-side logout first (clears session cookie), then clear client state and redirect to home
+    (async ()=>{
+        try{
+            await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+        }catch(e){
+            // ignore errors — proceed to clear client state anyway
+            console.warn('Server logout failed or unavailable:', e && e.message);
+        }
+        // clear client-side storage
+        try{ sessionStorage.clear(); localStorage.removeItem('cinda_token'); }catch(e){}
+        // redirect to homepage
+        window.location.href = 'index.html';
+    })();
+}
+</script>
+<script>
+// Load current logged-in user via API (PHP or Node) using token from storage
+async function loadCurrentUser(){
+    const token = sessionStorage.getItem('cinda_token') || localStorage.getItem('cinda_token');
+    
+    // Try to get cached user from localStorage as fallback
+    let cachedUser = null;
+    try{ cachedUser = JSON.parse(localStorage.getItem('cinda_user') || '{}'); }catch(e){}
+    
+    // Populate with cached data first if available
+    if(cachedUser && cachedUser.name){
+        document.getElementById('userName').textContent = cachedUser.name;
+        document.getElementById('welcomeName').textContent = cachedUser.name;
+        document.getElementById('userRole').textContent = cachedUser.title || cachedUser.userType || '';
+        document.getElementById('userBio').textContent = cachedUser.bio || 'Welcome to your CI-NDA profile!';
+        const initials = getUserInitials(cachedUser.name);
+        document.querySelector('.user-avatar').textContent = initials;
+        document.getElementById('profileImage').textContent = initials;
+        if(cachedUser.avatar) document.getElementById('profileImage').style.backgroundImage = `url(${cachedUser.avatar})`;
+    }
+    
+    if(!token) return; // no token to fetch fresh data
+    
+    try{
+        const res = await fetch('/api/me.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            credentials: 'include',
+            body: JSON.stringify({ token })
+        });
+        if(!res.ok) return;
+        const u = await res.json();
+        
+        // Update localStorage with fresh data
+        try{ localStorage.setItem('cinda_user', JSON.stringify(u)); }catch(e){}
+        
+        // populate fields with fresh data
+        if(u.name){
+            document.getElementById('userName').textContent = u.name;
+            document.getElementById('welcomeName').textContent = u.name;
+            const initials = getUserInitials(u.name);
+            document.querySelector('.user-avatar').textContent = initials;
+            document.getElementById('profileImage').textContent = initials;
+        }
+        if(u.title) document.getElementById('userRole').textContent = u.title;
+        if(u.bio) document.getElementById('userBio').textContent = u.bio;
+        else document.getElementById('userBio').textContent = 'Welcome to your CI-NDA profile! Edit your bio in settings.';
+        if(u.avatar) document.getElementById('profileImage').style.backgroundImage = `url(${u.avatar})`;
+        if(u.location) try{ document.getElementById('settingsLocation').value = u.location; }catch(e){}
+        
+        // update navbar avatar
+        try{
+            const shareBtn = document.querySelector(".profile-actions button[onclick*='public-profile']");
+            if(shareBtn){
+                const idOrName = u.id || encodeURIComponent(u.name || '');
+                shareBtn.onclick = () => window.open('public-profile.html?mentorId=' + idOrName + '&mentorName=' + encodeURIComponent(u.name||''), '_blank');
+            }
+        }catch(e){}
+    }catch(e){
+        console.warn('Could not load current user from API', e);
     }
 }
+
+// run on load
+loadCurrentUser();
+</script>
+<script>
+async function loadUserPortfolios(u){
+    try{
+        const res = await fetch('/api/portfolios.php', { credentials: 'include' });
+        if(!res.ok) return;
+        const list = await res.json();
+        const ownerKeys = [String(u.id||''), (u.email||'').toLowerCase(), (u.name||'').toLowerCase()];
+        const matches = list.filter(p => {
+            const owner = String(p.owner||'').toLowerCase();
+            return ownerKeys.includes(owner) || owner.includes(ownerKeys[1]) || owner.includes(ownerKeys[2]);
+        }).slice(0,12);
+        const grid = document.querySelector('.portfolio-grid');
+        if(!grid) return;
+        if(matches.length === 0){
+            grid.innerHTML = '<div style="color:#b3b3b3">No projects yet. Upload your first project.</div>';
+            return;
+        }
+        grid.innerHTML = matches.map(p=>`
+            <div class="portfolio-item" onclick="window.location.href='project-detail.html?id=${p._id || p.id}'">
+                <div class="portfolio-thumbnail" style="background-image:url('${p.thumbnail || p.thumbnail_url || 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=600&q=80'}')"><div class="play-overlay">▶</div></div>
+                <div class="portfolio-info"><div class="portfolio-title">${(p.title||'Untitled')}</div><div class="portfolio-meta">${(p.category||'Project')}</div></div>
+            </div>
+        `).join('');
+    }catch(e){console.warn('Could not load portfolios', e);}
+}
+
+async function loadUserMentorships(u){
+    try{
+        const res = await fetch('/api/mentorship/my-mentorships', { credentials: 'include' });
+        if(!res.ok) return;
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : (data.mentorships || []);
+        const container = document.querySelector('#mentorshipTab .activity-list');
+        if(!container) return;
+        if(!list.length){
+            container.innerHTML = '<div style="color:#b3b3b3">No mentorships yet. Request or join a mentor to get started.</div>';
+            return;
+        }
+        container.innerHTML = list.slice(0,8).map(m=>{
+            const other = (m.mentor && m.mentor.name) ? m.mentor.name : (m.mentor || 'Mentor');
+            const when = (m.createdAt || m.created_at || m.updatedAt || '');
+            return `<div class="activity-item" onclick="window.location.href='mentorship-detail.html?id=${m._id || m.id}'"><div class="activity-title">📅 ${m.status ? m.status+' • ' : ''}${other}</div><div class="activity-time">${when}</div></div>`;
+        }).join('');
+    }catch(e){console.warn('Could not load mentorships', e);}
+}
+
+// After current user loads, populate portfolios and mentorships
+document.addEventListener('DOMContentLoaded', ()=>{
+    // run after a short delay to allow loadCurrentUser to set user
+    setTimeout(async ()=>{
+        const token = sessionStorage.getItem('cinda_token') || localStorage.getItem('cinda_token');
+        if(!token) return;
+        try{
+            // request current user from API to get id/email
+            const r = await fetch('/api/me.php', { method: 'POST', headers: {'Content-Type':'application/json','Authorization':'Bearer '+token}, credentials:'include', body: JSON.stringify({token}) });
+            if(!r.ok) return;
+            const u = await r.json();
+            await loadUserPortfolios(u);
+            await loadUserMentorships(u);
+        }catch(e){console.warn('Error populating user content', e)}
+    }, 300);
+});
 </script>
 </body>
 </html>

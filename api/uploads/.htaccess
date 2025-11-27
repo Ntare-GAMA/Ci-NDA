@@ -1,0 +1,16 @@
+# Allow direct access to uploaded files
+<Files *>
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+# Set proper MIME types
+AddType video/mp4 .mp4
+AddType video/quicktime .mov
+AddType video/x-msvideo .avi
+AddType video/x-matroska .mkv
+AddType video/webm .webm
+AddType image/jpeg .jpg .jpeg
+AddType image/png .png
+AddType image/webp .webp
+AddType image/gif .gif

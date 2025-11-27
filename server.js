@@ -52,8 +52,12 @@ const courseRoutes = require('./routes/courses');
 const opportunityRoutes = require('./routes/opportunities');
 const mentorshipRoutes = require('./routes/mentorship');
 const portfolioRoutes = require('./routes/portfolios');
+const mentorsSqlRoutes = require('./routes/mentors-sql');
 
 // Use Routes
+// Mount a lightweight SQL-backed mentors endpoint that reads from the PHP MySQL DB
+app.use('/api/mentors', mentorsSqlRoutes);
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/courses', courseRoutes);

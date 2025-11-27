@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #fff; }
+        pre { background: #2a2a2a; padding: 15px; border-radius: 5px; overflow: auto; }
+        .error { color: #ff4444; }
+        .success { color: #44ff44; }
+    </style>
+</head>
+<body>
+    <h1>Database & API Test</h1>
+    
+    <h2>Testing Courses API...</h2>
+    <div id="courses-result"></div>
+    
+    <h2>Testing Mentors API...</h2>
+    <div id="mentors-result"></div>
+    
+    <script>
+        async function testAPI(url, elementId) {
+            const el = document.getElementById(elementId);
+            try {
+                const response = await fetch(url);
+                const text = await response.text();
+                
+                if (!response.ok) {
+                    el.innerHTML = `<div class="error">HTTP ${response.status}: ${response.statusText}</div><pre>${text}</pre>`;
+                    return;
+                }
+                
+                try {
+                    const data = JSON.parse(text);
+                    if (Array.isArray(data)) {
+                        el.innerHTML = `<div class="success">✓ Found ${data.length} items</div><pre>${JSON.stringify(data.slice(0, 2), null, 2)}</pre>`;
+                    } else {
+                        el.innerHTML = `<div class="success">✓ Got response</div><pre>${JSON.stringify(data, null, 2)}</pre>`;
+                    }
+                } catch (e) {
+                    el.innerHTML = `<div class="error">JSON Parse Error: ${e.message}</div><pre>${text}</pre>`;
+                }
+            } catch (error) {
+                el.innerHTML = `<div class="error">Fetch Error: ${error.message}</div>`;
+            }
+        }
+        
+        testAPI('api/courses.php', 'courses-result');
+        testAPI('api/mentors.php', 'mentors-result');
+    </script>
+</body>
+</html>

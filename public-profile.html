@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no" />
   <title>Mentor Profile — Ci-NDA</title>
   <style>
     :root{
@@ -10,44 +10,54 @@
       --maxw:1100px;
     }
     *{box-sizing:border-box}
-    /* Background uses an overlay + image. You provided an external image URL; hotlinking may break and the image may be copyrighted.
-       Recommended: download the image, confirm license/permission, and place it at `public/images/denzel.jpg` then update the URL.
-    */
     body{margin:0;font-family:Inter, 'Helvetica Neue', Arial, sans-serif;color:#fff;
       background:
-        linear-gradient(rgba(8,8,8,0.60), rgba(8,8,8,0.60)),
-        radial-gradient(600px 400px at 10% 10%, rgba(229,9,20,0.03), transparent 10%),
-        url('https://media.cnn.com/api/v1/images/stellar/prod/highest2lowest-feature-11061f-f.jpg?c=16x9&q=w_1544,c_fill/f_avif') center/cover no-repeat;
+        linear-gradient(rgba(8,8,8,0.65), rgba(8,8,8,0.65)),
+        radial-gradient(800px 600px at 50% 20%, rgba(229,9,20,0.06), transparent 60%),
+        url('https://media.cnn.com/api/v1/images/stellar/prod/highest2lowest-feature-11061f-f.jpg?c=16x9&q=w_1544,c_fill/f_avif') center/cover no-repeat fixed;
+      min-height:100vh;
       -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
     a{color:inherit}
-    .navbar{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid rgba(255,255,255,0.03);position:sticky;top:0;background:linear-gradient(180deg, rgba(10,10,10,0.6), transparent)}
-    .logo{font-weight:800;color:var(--accent);cursor:pointer}
-    .container{max-width:var(--maxw);margin:56px auto;padding:0 20px}
-    .card{background:linear-gradient(180deg, rgba(20,20,20,0.9), rgba(16,16,16,0.8));border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.02)}
-    .hero{display:flex;gap:28px;padding:34px;align-items:center}
-    .hero-left{flex:0 0 160px}
-    .avatar{width:160px;height:160px;border-radius:14px;background-size:cover;background-position:center;border:6px solid rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+    .navbar{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid rgba(255,255,255,0.05);position:sticky;top:0;background:rgba(10,10,10,0.95);backdrop-filter:blur(10px);z-index:100}
+    .logo{font-weight:800;font-size:28px;color:var(--accent);cursor:pointer;letter-spacing:1px}
+    .container{max-width:var(--maxw);margin:40px auto;padding:0 20px}
+    .card{background:linear-gradient(180deg, rgba(21,21,21,0.95), rgba(18,18,18,0.9));border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.7);border:1px solid rgba(255,255,255,0.05)}
+    .hero{display:flex;gap:40px;padding:40px;align-items:flex-start;background:linear-gradient(135deg, rgba(229,9,20,0.03), transparent 50%)}
+    .hero-left{flex:0 0 180px}
+    .avatar{width:180px;height:180px;border-radius:16px;background-size:cover;background-position:center;border:4px solid rgba(255,255,255,0.08);box-shadow:0 12px 40px rgba(0,0,0,0.7)}
     .hero-right{flex:1}
-    .name{font-size:30px;font-weight:800;margin-bottom:6px}
-    .title{color:var(--accent-2);margin-bottom:10px}
-    .meta{display:flex;gap:18px;color:var(--muted);font-size:14px;margin-bottom:8px}
-    .specialties{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
-    .chip{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:6px 10px;border-radius:999px;font-size:13px;color:var(--muted)}
-    .actions{display:flex;gap:12px;margin-top:16px}
-    .btn{padding:12px 18px;border-radius:10px;border:none;cursor:pointer;font-weight:700}
-    .btn-primary{background:var(--accent);color:#fff;box-shadow:0 6px 18px rgba(229,9,20,0.1);transition:transform .12s ease}
-    .btn-primary:hover{transform:translateY(-2px)}
-    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#fff}
-    .body{padding:18px 28px;border-top:1px solid rgba(255,255,255,0.02)}
-    .section{margin-bottom:18px}
-    .section h3{margin:0 0 8px 0}
-    .muted{color:var(--muted)}
-    .stat-grid{display:flex;gap:18px;margin-top:12px}
-    .stat{background:rgba(255,255,255,0.02);padding:12px;border-radius:10px;text-align:center;min-width:120px}
-    .stat .num{color:var(--accent);font-weight:800;font-size:20px}
-    .back-link{font-size:14px;color:var(--muted);text-decoration:underline;cursor:pointer;margin-left:0}
+    .name{font-size:36px;font-weight:800;margin-bottom:8px;letter-spacing:-0.5px}
+    .title{color:var(--accent-2);margin-bottom:12px;font-size:18px;font-weight:500}
+    .meta{display:flex;gap:20px;color:var(--muted);font-size:14px;margin-bottom:12px;align-items:center}
+    .meta-item{display:flex;align-items:center;gap:6px}
+    .specialties{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap}
+    .chip{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);padding:8px 14px;border-radius:20px;font-size:13px;color:#e0e0e0;transition:all 0.2s}
+    .chip:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.12)}
+    .actions{display:flex;gap:14px;margin-top:20px;flex-wrap:wrap}
+    .btn{padding:14px 24px;border-radius:10px;border:none;cursor:pointer;font-weight:600;font-size:15px;transition:all 0.2s}
+    .btn-primary{background:var(--accent);color:#fff;box-shadow:0 8px 24px rgba(229,9,20,0.25)}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(229,9,20,0.35)}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.1);color:#fff}
+    .btn-ghost:hover{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.15)}
+    .body{padding:30px 40px;border-top:1px solid rgba(255,255,255,0.05)}
+    .section{margin-bottom:32px}
+    .section h3{margin:0 0 14px 0;font-size:20px;font-weight:700;color:#fff}
+    .muted{color:var(--muted);line-height:1.7}
+    .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-top:20px}
+    .stat{background:rgba(255,255,255,0.03);padding:18px;border-radius:12px;text-align:center;border:1px solid rgba(255,255,255,0.05);transition:all 0.2s}
+    .stat:hover{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1)}
+    .stat .num{color:var(--accent);font-weight:800;font-size:28px;margin-bottom:4px}
+    .stat .label{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:0.5px}
+    .back-link{font-size:14px;color:var(--muted);text-decoration:none;cursor:pointer;padding:14px 24px;border:1px solid rgba(255,255,255,0.08);border-radius:10px;transition:all 0.2s;display:inline-block}
+    .back-link:hover{background:rgba(255,255,255,0.03);color:#fff}
+    .stars{color:#fbbf24;letter-spacing:2px;font-size:18px}
+    .insight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:12px}
+    .insight-card{background:rgba(255,255,255,0.02);padding:16px;border-radius:10px;border:1px solid rgba(255,255,255,0.05)}
+    .insight-card strong{color:#fff;display:block;margin-bottom:6px;font-size:14px}
+    .insight-card .value{color:var(--accent-2);font-size:16px;font-weight:600}
 
-    @media (max-width:880px){.hero{flex-direction:column;align-items:flex-start}.hero-left{width:120px}.avatar{width:120px;height:120px;border-radius:10px} }
+    @media (max-width:880px){.hero{flex-direction:column;align-items:flex-start;gap:24px}.hero-left{width:140px}.avatar{width:140px;height:140px}.stat-grid{grid-template-columns:repeat(3,1fr)}}
+    @media (max-width:480px){.navbar{padding:16px 20px}.logo{font-size:24px}.container{padding:0 16px}.hero{padding:24px}.body{padding:20px 24px}.name{font-size:28px}.title{font-size:16px}.stat .num{font-size:24px}.stat-grid{grid-template-columns:repeat(3,1fr);gap:12px}.insight-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -69,13 +79,13 @@
           <div class="specialties" id="specialties"></div>
           <div class="actions">
               <button id="requestBtn" class="btn btn-primary">Request Mentorship</button>
-              <button id="messageBtn" class="btn btn-ghost">Message</button>
-              <a class="back-link" href="mentorship.html">Back to Mentors</a>
+              <button id="messageBtn" class="btn btn-ghost">Send Message</button>
+              <a class="back-link" href="mentorship.html">← Back to Mentors</a>
           </div>
-          <div class="stat-grid" style="margin-top:12px">
-            <div class="stat"><div class="num" id="mentees">0</div><div class="muted">Mentees</div></div>
-            <div class="stat"><div class="num" id="years">0</div><div class="muted">Years</div></div>
-            <div class="stat"><div class="num" id="spots">0</div><div class="muted">Spots Left</div></div>
+          <div class="stat-grid">
+            <div class="stat"><div class="num" id="mentees">0</div><div class="label">Mentees</div></div>
+            <div class="stat"><div class="num" id="years">0+</div><div class="label">Years Exp</div></div>
+            <div class="stat"><div class="num" id="spots">0</div><div class="label">Open Spots</div></div>
           </div>
         </div>
       </div>
@@ -100,13 +110,42 @@
     const qs = (k) => new URLSearchParams(location.search).get(k);
     const id = qs('mentorId');
     const mentorNameParam = qs('mentorName');
-    const apiUrl = id ? `api/mentors.php?id=${encodeURIComponent(id)}` : 'api/mentors.php';
+    // Try a few API endpoint variants so the page works with PHP or Node backends.
+    const apiCandidates = id ? [
+      `api/mentors.php?id=${encodeURIComponent(id)}`,
+      `/api/mentors?id=${encodeURIComponent(id)}`,
+      `api/mentors?id=${encodeURIComponent(id)}`
+    ] : [
+      'api/mentors.php',
+      '/api/mentors',
+      'api/mentors'
+    ];
 
     async function load(){
       try{
-        const res = await fetch(apiUrl);
-        if(!res.ok) throw new Error('network');
-        const data = await res.json();
+        let res = null;
+        let data = null;
+        // try endpoints in order until one returns valid JSON
+        for(const u of apiCandidates){
+          try{
+            console.log('Trying API endpoint:', u);
+            res = await fetch(u, {cache: 'no-store'});
+            console.log('Response status:', res.status);
+            if(!res.ok) continue;
+            data = await res.json();
+            console.log('Data received:', data);
+            // basic validation: expect object or array
+            if(data && (Array.isArray(data) || typeof data === 'object')) break;
+          }catch(err){
+            console.error('Error fetching from', u, err);
+            // try next candidate
+            continue;
+          }
+        }
+        if(!data || (data.error)) {
+          console.error('No valid data or error in response:', data);
+          throw new Error('network');
+        }
         // if api returned a list, ensure we find by id
         let m = data;
         if(Array.isArray(data)){
@@ -142,14 +181,20 @@
 
     function render(m){
       document.getElementById('name').textContent = m.name || 'Unnamed';
-      document.getElementById('title').textContent = m.title || '';
-      document.getElementById('bio').textContent = m.bio || m.about || 'No biography available.';
+      document.getElementById('title').textContent = m.title || 'Film Professional';
+      document.getElementById('bio').textContent = m.bio || m.about || 'Experienced mentor passionate about nurturing the next generation of filmmakers.';
       document.getElementById('mentees').textContent = m.mentees ?? m.mentees_count ?? 0;
-      document.getElementById('years').textContent = m.years ?? m.years_mentoring ?? 0;
+      document.getElementById('years').textContent = (m.years ?? m.years_mentoring ?? 0) + '+';
       document.getElementById('spots').textContent = m.spotsLeft ?? m.spots_left ?? 0;
       if(m.avatar) document.getElementById('avatar').style.backgroundImage = `url('${m.avatar}')`;
-      // specialties
-      const s = (m.specialties && m.specialties.length) ? m.specialties : (typeof m.specialties === 'string' ? m.specialties.split(',') : []);
+      // specialties: accept array or comma/semicolon-separated string
+      let s = [];
+      if(Array.isArray(m.specialties) && m.specialties.length) s = m.specialties;
+      else if(typeof m.specialties === 'string' && m.specialties.trim()){
+        s = m.specialties.split(/[,;]+/).map(x=>x.trim()).filter(Boolean);
+      } else if(m.tags && Array.isArray(m.tags)){
+        s = m.tags.slice();
+      }
       document.getElementById('specialties').innerHTML = s.slice(0,6).map(t=>`<div class="chip">${t}</div>`).join('');
       document.getElementById('expertise').innerHTML = s.map(t=>`<div class="chip">${t}</div>`).join('');
       // Insights: rating, recent mentees, response time, availability (render stars)
@@ -160,19 +205,28 @@
       const availability = (m.spotsLeft ?? m.spots_left ?? m.openings ?? 0);
       const insightsEl = document.getElementById('insights');
       const renderStars = (v) => {
-        if(!isFinite(v)) return '—';
+        if(!isFinite(v)) return '<span class="muted">Not rated yet</span>';
         const rounded = Math.round(Math.max(0, Math.min(5, v)));
-        return '★'.repeat(rounded) + '☆'.repeat(5-rounded) + ` (${v.toFixed(1)})`;
+        return `<span class="stars">${'★'.repeat(rounded)}${'☆'.repeat(5-rounded)}</span> <span style="color:#fff;font-weight:600">${v.toFixed(1)}</span>`;
       };
-      let recentHtml = 'None yet';
-      if(Array.isArray(recent) && recent.length) recentHtml = `<ul style="margin:6px 0 0 18px">${recent.slice(0,5).map(r=>`<li>${r}</li>`).join('')}</ul>`;
+      let recentHtml = '<span class="muted">Building mentee network</span>';
+      if(Array.isArray(recent) && recent.length) recentHtml = `<ul style="margin:8px 0 0 20px;line-height:1.8">${recent.slice(0,5).map(r=>`<li>${r}</li>`).join('')}</ul>`;
       insightsEl.innerHTML = `
-        <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:center">
-          <div><strong>Avg Rating:</strong> ${renderStars(rating)}</div>
-          <div><strong>Response:</strong> ${responseTime}</div>
-          <div><strong>Open Slots:</strong> ${availability}</div>
+        <div class="insight-grid">
+          <div class="insight-card">
+            <strong>Rating</strong>
+            <div class="value">${renderStars(rating)}</div>
+          </div>
+          <div class="insight-card">
+            <strong>Response Time</strong>
+            <div class="value">${responseTime}</div>
+          </div>
+          <div class="insight-card">
+            <strong>Availability</strong>
+            <div class="value">${availability > 0 ? `${availability} spot${availability !== 1 ? 's' : ''} available` : 'Currently full'}</div>
+          </div>
         </div>
-        <div style="margin-top:8px"><strong>Recent Mentees:</strong> ${recentHtml}</div>
+        <div style="margin-top:20px"><strong style="color:#fff;font-size:16px">Recent Mentees:</strong><br>${recentHtml}</div>
       `;
 
       // buttons: prefer numeric id, fallback to name param or name

@@ -354,17 +354,15 @@
 
         <!-- Mentor Profile -->
         <div class="mentor-profile">
-            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80" alt="Mentor" class="mentor-avatar">
+            <img id="mentorAvatar" src="https://images.unsplash.com/photo-1574267432644-f74f3e909713?w=200&q=80" alt="Mentor" class="mentor-avatar">
             <div class="mentor-info">
-                <h2 id="mentorName">Sarah Mitchell</h2>
-                <div class="mentor-title" id="mentorTitle">Award-Winning Cinematographer</div>
+                <h2 id="mentorName">Loading mentor...</h2>
+                <div class="mentor-title" id="mentorTitle">Film Professional</div>
                 <p style="color: #b3b3b3; line-height: 1.6;" id="mentorBio">
-                    15+ years of experience in feature films and documentaries. Emmy-nominated for documentary work. Passionate about nurturing emerging talent in cinematography and visual storytelling.
+                    Loading mentor information...
                 </p>
-                <div class="mentor-specialties">
-                    <span class="specialty-tag">Cinematography</span>
-                    <span class="specialty-tag">Lighting</span>
-                    <span class="specialty-tag">Documentary</span>
+                <div class="mentor-specialties" id="mentorSpecialties">
+                    <span class="specialty-tag">Loading...</span>
                 </div>
             </div>
         </div>
@@ -588,27 +586,33 @@
             const nameEl = document.getElementById('mentorName');
             const titleEl = document.getElementById('mentorTitle');
             const bioEl = document.getElementById('mentorBio');
-            const specialtiesEl = document.querySelector('.mentor-specialties');
+            const avatarEl = document.getElementById('mentorAvatar');
+            const specialtiesEl = document.getElementById('mentorSpecialties');
             const subjectInput = document.getElementById('subject');
 
             if(mentorId){
                 try{
-                    const res = await fetch('api/mentors.php');
+                    const res = await fetch('/api/mentors.php?id=' + encodeURIComponent(mentorId));
                     if(res.ok){
-                        const list = await res.json();
-                        const m = list.find(x=> String(x._id) === String(mentorId) || String(x.id) === String(mentorId));
-                        if(m){
-                            if(nameEl) nameEl.textContent = m.name || nameEl.textContent;
-                            if(titleEl) titleEl.textContent = m.title || titleEl.textContent;
-                            if(bioEl) bioEl.textContent = m.bio || bioEl.textContent;
+                        const m = await res.json();
+                        if(m && !m.error){
+                            if(nameEl) nameEl.textContent = m.name || 'Mentor';
+                            if(titleEl) titleEl.textContent = m.title || 'Film Professional';
+                            if(bioEl) bioEl.textContent = m.bio || 'Experienced mentor in the film industry';
+                            if(avatarEl && m.avatar) avatarEl.src = m.avatar;
                             if(specialtiesEl && m.specialties){
                                 specialtiesEl.innerHTML = (m.specialties||[]).map(s=>`<span class="specialty-tag">${s}</span>`).join('');
                             }
-                            if(!subjectParam && m.specialties && m.specialties.length) subjectInput.value = m.specialties[0];
+                            // Set subject to first specialty
+                            if(m.specialties && m.specialties.length && !subjectParam) {
+                                subjectInput.value = `${m.specialties[0]} mentorship with ${m.name}`;
+                            } else if(!subjectParam) {
+                                subjectInput.value = `Mentorship with ${m.name}`;
+                            }
                         }
                     }
                 }catch(e){
-                    console.warn('Could not fetch mentor by id', e);
+                    console.error('Could not fetch mentor by id', e);
                 }
             } else if(mentorNameParam){
                 const decoded = decodeURIComponent(mentorNameParam.replace(/\+/g,' '));
@@ -620,9 +624,9 @@
             if(subjectParam){
                 const decodedSub = decodeURIComponent(subjectParam.replace(/\+/g,' '));
                 subjectInput.value = decodedSub;
-            } else if(!subjectInput.value){
+            } else if(!subjectInput.value && nameEl){
                 // fallback default
-                subjectInput.value = `Mentorship with ${nameEl ? nameEl.textContent : 'mentor'}`;
+                subjectInput.value = `Mentorship with ${nameEl.textContent}`;
             }
         })();
 
