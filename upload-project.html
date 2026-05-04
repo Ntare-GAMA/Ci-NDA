@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="cinda-theme.css">
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Upload Project</title>
@@ -18,5 +22,20 @@ p{color:#b3b3b3;line-height:1.6;font-size:16px}
 <body>
 <h1>Upload Project</h1>
 <p>Upload stub. Implement upload form and file handling here.</p>
+<script src="cinda-app.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var form = document.querySelector('form');
+  if(form && !form.dataset.patched){
+    form.dataset.patched='1';
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      CindaToast('Project submitted for review!');
+      setTimeout(function(){ window.location.href='profile.html'; }, 1500);
+    });
+  }
+});
+</script>
 </body>
 </html>

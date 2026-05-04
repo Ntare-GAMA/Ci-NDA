@@ -1,0 +1,749 @@
+/* ================================================================
+   Ci-NDA — CINEMATIC ENHANCED THEME
+   Shared across all pages. Enhances existing palette without
+   breaking any JavaScript or PHP logic.
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&family=JetBrains+Mono:wght@300;400&display=swap');
+
+/* ── CSS VARIABLES ── */
+:root {
+  --black:       #0a0a10;
+  --black-2:     #111118;
+  --black-3:     #18181f;
+  --black-4:     #1e1e28;
+  --card-bg:     #15151d;
+  --card-bg-2:   #1c1c26;
+  --red:         #e50914;
+  --red-bright:  #ff1a24;
+  --red-dim:     rgba(229,9,20,0.15);
+  --red-glow:    rgba(229,9,20,0.35);
+  --gold:        #c9a84c;
+  --gold-light:  #e8c96a;
+  --gold-dim:    rgba(201,168,76,0.15);
+  --green:       #46d369;
+  --green-dim:   rgba(70,211,105,0.15);
+  --text:        #f0f0f5;
+  --text-muted:  #9e9eb0;
+  --text-dim:    #666680;
+  --border:      rgba(255,255,255,0.07);
+  --border-red:  rgba(229,9,20,0.25);
+  --border-gold: rgba(201,168,76,0.25);
+  --radius:      8px;
+  --radius-lg:   16px;
+  --font-display:'Bebas Neue', 'Arial Black', sans-serif;
+  --font-body:   'DM Sans', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:   'JetBrains Mono', 'Courier New', monospace;
+}
+
+/* ── GLOBAL RESET ENHANCEMENTS ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body) !important;
+  background: var(--black) !important;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* subtle film grain on entire site */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ── LOGO ── */
+.logo {
+  font-family: var(--font-display) !important;
+  font-size: 36px !important;
+  letter-spacing: 4px !important;
+  color: var(--red) !important;
+  text-shadow: 0 0 20px rgba(229,9,20,0.4);
+  transition: text-shadow 0.3s;
+}
+.logo:hover {
+  text-shadow: 0 0 32px rgba(229,9,20,0.7);
+}
+
+/* ── NAVBAR ── */
+.navbar {
+  background: rgba(10,10,16,0.94) !important;
+  backdrop-filter: blur(14px) !important;
+  border-bottom: 1px solid var(--border-red) !important;
+  transition: all 0.35s ease !important;
+}
+.navbar.scrolled {
+  background: rgba(10,10,16,0.98) !important;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.6) !important;
+}
+
+.nav-links a {
+  font-size: 13px !important;
+  letter-spacing: 0.5px;
+  color: rgba(240,240,245,0.75) !important;
+  transition: color 0.2s, text-shadow 0.2s !important;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--red);
+  transition: width 0.25s ease;
+}
+.nav-links a:hover::after { width: 100%; }
+.nav-links a:hover {
+  color: #fff !important;
+  text-shadow: 0 0 10px rgba(229,9,20,0.4);
+}
+
+/* ── BUTTONS — universal enhancements ── */
+.btn-signin,
+.btn-primary,
+button.btn-primary,
+.apply-btn,
+.enroll-btn,
+.signin-btn,
+button[type="submit"],
+.btn[class*="primary"] {
+  background: var(--red) !important;
+  border: none !important;
+  border-radius: 4px !important;
+  font-family: var(--font-body) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.25s, transform 0.2s, box-shadow 0.25s !important;
+}
+.btn-signin:hover,
+.btn-primary:hover,
+button.btn-primary:hover,
+.apply-btn:hover,
+.enroll-btn:hover,
+.signin-btn:hover {
+  background: var(--red-bright) !important;
+  box-shadow: 0 6px 24px var(--red-glow) !important;
+  transform: translateY(-1px) !important;
+}
+
+.btn-secondary,
+button.btn-secondary,
+.filter-btn {
+  background: var(--card-bg-2) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text-muted) !important;
+  transition: all 0.25s !important;
+}
+.btn-secondary:hover,
+button.btn-secondary:hover,
+.filter-btn:hover,
+.filter-btn.active {
+  background: var(--red) !important;
+  border-color: var(--red) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 16px var(--red-glow) !important;
+}
+
+/* ── HERO SECTION ── */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.04) 2px,
+    rgba(0,0,0,0.04) 4px
+  ) !important;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10,10,16,0.45) 0%,
+    rgba(10,10,16,0.15) 40%,
+    rgba(10,10,16,0.6) 80%,
+    rgba(10,10,16,0.95) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+.hero h1 {
+  font-family: var(--font-display) !important;
+  letter-spacing: 2px !important;
+  text-shadow: 0 4px 40px rgba(0,0,0,0.8), 0 0 60px rgba(229,9,20,0.15) !important;
+  line-height: 1.05 !important;
+}
+.hero p {
+  font-size: 22px !important;
+  font-weight: 300 !important;
+  color: rgba(240,240,245,0.82) !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6) !important;
+}
+
+/* ── SECTION TITLES ── */
+.section-title,
+.page-header h1,
+h1, h2 {
+  font-family: var(--font-display) !important;
+  letter-spacing: 1px;
+}
+.section-title {
+  font-size: 30px !important;
+  letter-spacing: 2px !important;
+  color: var(--text) !important;
+  position: relative;
+  display: inline-block;
+}
+.section-title::after {
+  content: '';
+  display: block;
+  width: 48px;
+  height: 2px;
+  background: linear-gradient(to right, var(--red), transparent);
+  margin-top: 8px;
+  border-radius: 2px;
+}
+
+/* ── CONTENT CARDS ── */
+.content-card,
+.course-card,
+.mentor-card,
+.portfolio-card,
+.portfolio-item {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  transition: transform 0.3s cubic-bezier(0.22,1,0.36,1),
+              box-shadow 0.3s ease,
+              border-color 0.3s ease !important;
+}
+.content-card:hover,
+.course-card:hover,
+.mentor-card:hover,
+.portfolio-item:hover {
+  transform: translateY(-8px) scale(1.01) !important;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.7),
+              0 0 0 1px var(--border-red),
+              0 0 32px var(--red-dim) !important;
+  border-color: rgba(229,9,20,0.4) !important;
+}
+
+/* card images — subtle zoom on hover */
+.card-image img,
+.course-image img,
+.mentor-image,
+.portfolio-thumbnail {
+  transition: transform 0.5s ease !important;
+}
+.content-card:hover .card-image img,
+.course-card:hover .course-image img {
+  transform: scale(1.06) !important;
+}
+
+/* card title */
+.card-title,
+.course-title,
+.mentor-name {
+  font-family: var(--font-display) !important;
+  letter-spacing: 0.5px;
+  color: var(--text) !important;
+}
+
+/* card meta — green accent */
+.card-meta,
+.course-duration,
+.opportunity-company {
+  color: var(--green) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+  letter-spacing: 0.5px;
+}
+
+/* card description */
+.card-description,
+.course-description,
+.opportunity-description {
+  color: var(--text-muted) !important;
+  font-weight: 300 !important;
+  line-height: 1.65 !important;
+}
+
+/* ── CONTENT ROW SCROLLBAR ── */
+.content-row::-webkit-scrollbar {
+  height: 4px !important;
+}
+.content-row::-webkit-scrollbar-track {
+  background: var(--black-3) !important;
+  border-radius: 4px;
+}
+.content-row::-webkit-scrollbar-thumb {
+  background: var(--red) !important;
+  border-radius: 4px !important;
+}
+
+/* ── OPPORTUNITY CARDS ── */
+.opportunity-card {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-left: 3px solid var(--red) !important;
+  border-radius: var(--radius) !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+.opportunity-card:hover {
+  transform: translateX(8px) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5),
+              -4px 0 24px var(--red-dim) !important;
+  border-color: rgba(229,9,20,0.4) !important;
+}
+.opportunity-type {
+  font-family: var(--font-mono) !important;
+  font-size: 10px !important;
+  letter-spacing: 2px;
+  background: var(--red) !important;
+  border-radius: 3px !important;
+}
+.opportunity-title {
+  font-family: var(--font-display) !important;
+  letter-spacing: 1px;
+}
+.deadline { color: var(--gold) !important; }
+
+/* ── COURSE CATEGORY BADGE ── */
+.course-category {
+  font-family: var(--font-mono) !important;
+  font-size: 10px !important;
+  letter-spacing: 2px !important;
+  background: var(--red) !important;
+  border-radius: 3px !important;
+}
+
+/* ── COURSE LEVEL BADGE ── */
+.course-level {
+  background: var(--card-bg-2) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 3px !important;
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+  color: var(--text-muted) !important;
+}
+
+/* ── FORMS ── */
+.form-input,
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  background: var(--card-bg-2) !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: 4px !important;
+  color: var(--text) !important;
+  font-family: var(--font-body) !important;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s !important;
+}
+.form-input:focus,
+input:not([type="checkbox"]):not([type="radio"]):focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: var(--red) !important;
+  background: var(--black-3) !important;
+  box-shadow: 0 0 0 3px var(--red-dim) !important;
+}
+.form-input::placeholder,
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-dim) !important;
+}
+
+/* ── SIGN IN / SIGN UP BOX ── */
+.signin-box,
+.card,
+div.card {
+  background: rgba(17,17,24,0.92) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  backdrop-filter: blur(16px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6) !important;
+}
+.signin-box h1,
+.card h1 {
+  font-family: var(--font-display) !important;
+  letter-spacing: 2px !important;
+}
+
+/* divider line in auth */
+.divider::before,
+.divider::after { background: var(--border) !important; }
+
+/* social buttons */
+.social-btn {
+  background: var(--card-bg-2) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+  border-radius: 4px !important;
+  transition: all 0.25s !important;
+}
+.social-btn:hover {
+  background: var(--black-3) !important;
+  border-color: rgba(255,255,255,0.2) !important;
+}
+
+/* user type selector */
+.user-type-btn {
+  background: var(--card-bg-2) !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: 4px !important;
+  color: var(--text-muted) !important;
+  transition: all 0.2s !important;
+}
+.user-type-btn.active {
+  background: var(--red) !important;
+  border-color: var(--red) !important;
+  color: #fff !important;
+  box-shadow: 0 4px 16px var(--red-glow) !important;
+}
+
+/* demo credentials */
+.demo-credentials {
+  background: var(--card-bg-2) !important;
+  border-left: 3px solid var(--red) !important;
+  border-radius: 4px !important;
+}
+.demo-credentials h4 { color: var(--red) !important; }
+
+/* ── FEATURE SECTIONS (index.html) ── */
+.feature-section {
+  background: var(--black-2) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.feature-text h2 {
+  font-family: var(--font-display) !important;
+  letter-spacing: 1.5px !important;
+}
+.feature-text p {
+  font-size: 20px !important;
+  color: var(--text-muted) !important;
+  font-weight: 300 !important;
+  line-height: 1.7 !important;
+}
+.feature-visual {
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--border-red) !important;
+  box-shadow: 0 0 40px var(--red-dim) !important;
+}
+.feature-visual::before {
+  background: linear-gradient(135deg,
+    rgba(229,9,20,0.12) 0%,
+    rgba(201,168,76,0.06) 100%) !important;
+}
+
+/* ── PROFILE PAGE ── */
+.profile-header {
+  background: var(--black-3) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+}
+.profile-name {
+  font-family: var(--font-display) !important;
+  letter-spacing: 1px !important;
+}
+.profile-role {
+  color: var(--green) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 14px !important;
+  letter-spacing: 0.5px;
+}
+.stat-value {
+  font-family: var(--font-display) !important;
+  color: var(--red) !important;
+  letter-spacing: 1px;
+}
+.welcome-banner {
+  background: linear-gradient(135deg, var(--red) 0%, #8b0000 100%) !important;
+  border: 1px solid var(--border-red) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: 0 8px 32px var(--red-dim) !important;
+}
+.welcome-banner h2 {
+  font-family: var(--font-display) !important;
+  letter-spacing: 1px !important;
+}
+
+/* tabs */
+.tabs { border-bottom: 1px solid var(--border) !important; }
+.tab {
+  color: var(--text-dim) !important;
+  font-family: var(--font-body) !important;
+  transition: all 0.2s !important;
+}
+.tab:hover { color: var(--text) !important; }
+.tab.active {
+  color: #fff !important;
+  border-bottom-color: var(--red) !important;
+}
+
+/* activity items */
+.activity-item {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-left: 3px solid var(--red) !important;
+  border-radius: 4px !important;
+  transition: background 0.2s !important;
+}
+.activity-item:hover { background: var(--card-bg-2) !important; }
+
+/* ── ADMIN DASHBOARD ── */
+.sidebar {
+  background: linear-gradient(180deg, var(--black-3) 0%, var(--black) 100%) !important;
+  border-right: 1px solid var(--border-red) !important;
+}
+.sidebar-header { border-bottom: 1px solid var(--border-red) !important; }
+.nav-item { color: var(--text-muted) !important; }
+.nav-item:hover {
+  background: var(--red-dim) !important;
+  color: var(--text) !important;
+}
+.nav-item.active {
+  background: rgba(229,9,20,0.18) !important;
+  color: var(--red) !important;
+  border-left: 3px solid var(--red) !important;
+}
+.stat-card {
+  background: linear-gradient(135deg, var(--black-3) 0%, var(--card-bg-2) 100%) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+}
+.stat-card:hover {
+  border-color: var(--border-red) !important;
+  box-shadow: 0 8px 24px var(--red-dim) !important;
+}
+.stat-value {
+  color: var(--red) !important;
+  font-family: var(--font-display) !important;
+}
+.data-table {
+  background: var(--black-3) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+}
+thead { background: rgba(0,0,0,0.4) !important; }
+tbody tr:hover { background: var(--red-dim) !important; }
+th { color: var(--text-dim) !important; font-family: var(--font-mono) !important; font-size: 11px !important; }
+
+/* admin status badges */
+.status-approved { background: var(--green-dim) !important; color: var(--green) !important; }
+.status-pending { background: rgba(255,152,0,0.15) !important; color: #ff9800 !important; }
+.status-rejected { background: rgba(255,100,100,0.15) !important; color: #ff6b6b !important; }
+
+/* ── MESSAGES ── */
+.header {
+  background: rgba(10,10,16,0.97) !important;
+  border-bottom: 1px solid var(--border-red) !important;
+}
+.message.sent {
+  background: var(--red) !important;
+  border-radius: 12px 12px 4px 12px !important;
+  box-shadow: 0 4px 12px var(--red-dim) !important;
+}
+.message.received {
+  background: var(--card-bg-2) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px 12px 12px 4px !important;
+}
+
+/* ── PAGE HEADERS (inner pages) ── */
+.page-header h1 {
+  font-size: 52px !important;
+  letter-spacing: 2px !important;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.6);
+}
+.page-header p {
+  color: var(--text-muted) !important;
+  font-weight: 300 !important;
+  line-height: 1.7 !important;
+}
+
+/* inner-page hero banners */
+.hero-content h1 {
+  font-family: var(--font-display) !important;
+  letter-spacing: 2px !important;
+}
+.hero-content p {
+  font-weight: 300 !important;
+  color: rgba(240,240,245,0.82) !important;
+}
+
+/* ── PORTFOLIO / CREATE PORTFOLIO ── */
+.portfolio-card,
+.portfolio-card[class] {
+  background: rgba(255,255,255,0.025) !important;
+  backdrop-filter: blur(16px) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+}
+
+/* upload area */
+.upload-area {
+  border: 2px dashed var(--border) !important;
+  border-radius: var(--radius) !important;
+  transition: all 0.3s !important;
+}
+.upload-area:hover {
+  border-color: var(--red) !important;
+  background: var(--red-dim) !important;
+}
+
+/* ── BECOME MENTOR / HERO variants ── */
+.hero[style*="gradient"],
+.hero[style*="1a1a1a"] {
+  border-bottom: 1px solid var(--border-red) !important;
+}
+
+/* ── FOOTER ── */
+.footer {
+  background: #000 !important;
+  border-top: 1px solid var(--border) !important;
+}
+.footer-links a {
+  color: var(--text-dim) !important;
+  font-size: 12px !important;
+  transition: color 0.2s !important;
+}
+.footer-links a:hover {
+  color: var(--text-muted) !important;
+  text-decoration: underline;
+}
+.footer p {
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+  color: var(--text-dim) !important;
+  letter-spacing: 0.5px;
+}
+
+/* ── SCROLLBAR (global) ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--black-2); }
+::-webkit-scrollbar-thumb {
+  background: #3a3a4a;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--red); }
+
+/* ── SELECTION ── */
+::selection {
+  background: var(--red-dim);
+  color: #fff;
+}
+
+/* ── MENTORSHIP CARDS ── */
+.mentor-card {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+}
+.mentor-card:hover {
+  border-color: var(--border-red) !important;
+  box-shadow: 0 12px 40px var(--red-dim) !important;
+}
+.mentor-specialty,
+.availability-tag,
+.mentor-badge {
+  font-family: var(--font-mono) !important;
+  font-size: 10px !important;
+  letter-spacing: 1px;
+}
+
+/* ── REQUEST MENTORSHIP / APPLY OPPORTUNITY forms ── */
+.form-section {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+}
+
+/* ── ENROLL COURSE ── */
+.enrollment-card,
+.course-detail-card {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+}
+
+/* ── HELP PAGE ── */
+.faq-item,
+.help-card {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+}
+.faq-item:hover {
+  border-color: var(--border-red) !important;
+}
+
+/* ── FORGOT PASSWORD ── */
+.reset-card { background: var(--black-3) !important; }
+
+/* ── SMOOTH LINK TRANSITIONS ── */
+a { transition: color 0.2s !important; }
+
+/* ── NOTIFICATIONS & ALERTS ── */
+.notification,
+.alert {
+  border-radius: var(--radius) !important;
+  font-family: var(--font-body) !important;
+}
+
+/* ── CINEMATIC SHIMMER on section titles ── */
+@keyframes cin-shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.section-title:hover {
+  background: linear-gradient(90deg,
+    #fff 30%,
+    var(--red) 50%,
+    #fff 70%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: cin-shimmer 1.2s ease forwards;
+}
+
+/* ── PROJECT DETAIL ── */
+.project-hero {
+  border-bottom: 1px solid var(--border-red) !important;
+}
+
+/* ── RESPONSIVE POLISH ── */
+@media (max-width: 768px) {
+  .logo { font-size: 28px !important; }
+  .page-header h1 { font-size: 36px !important; }
+  .section-title { font-size: 24px !important; }
+  .hero h1 { font-size: 44px !important; }
+}
+@media (max-width: 480px) {
+  .logo { font-size: 24px !important; }
+  .hero h1 { font-size: 34px !important; }
+  .page-header h1 { font-size: 28px !important; }
+}

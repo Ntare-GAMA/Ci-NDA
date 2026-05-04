@@ -1,27 +1,237 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Session Detail</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;touch-action:manipulation}
-body{background:#141414;color:#fff;font-family:'Helvetica Neue',Arial,sans-serif;padding:30px;-webkit-font-smoothing:antialiased;min-height:100vh}
-h1{font-size:32px;margin-bottom:15px;color:#e50914}
-p{color:#b3b3b3;line-height:1.6;font-size:16px}
-@media(max-width:768px){body{padding:20px}h1{font-size:28px}p{font-size:15px}}
-@media(max-width:480px){body{padding:15px}h1{font-size:24px}p{font-size:14px}}
-@media(max-width:375px){body{padding:12px}h1{font-size:22px}}
-</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="cinda-theme.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Session Detail — Ci-NDA</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#0a0a10;color:#f0f0f5;font-family:'DM Sans','Helvetica Neue',sans-serif;min-height:100vh}
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(10,10,16,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(229,9,20,.2)}
+    .logo{font-size:32px;font-weight:900;color:#e50914;text-decoration:none;letter-spacing:3px;font-family:'Bebas Neue','Arial Black',sans-serif}
+    .nav-links{display:flex;gap:32px;list-style:none}
+    .nav-links a{color:rgba(255,255,255,.75);text-decoration:none;font-size:13px;transition:color .2s}
+    .nav-links a:hover{color:#e50914}
+    .nav-right{display:flex;align-items:center;gap:20px}
+    .btn-signin{background:#e50914;color:#fff;padding:9px 22px;border-radius:4px;font-size:13px;font-weight:600;text-decoration:none}
+    .page-top{margin-top:65px;background:linear-gradient(135deg,#0f0f1a 0%,#1a0a0a 100%);padding:64px 48px 48px;border-bottom:1px solid rgba(229,9,20,.15);position:relative;overflow:hidden}
+    .page-top::before{content:'';position:absolute;top:-80px;right:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(229,9,20,.08),transparent 70%);pointer-events:none}
+    .breadcrumb{font-size:12px;color:#666680;margin-bottom:20px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px}
+    .breadcrumb a{color:#666680;text-decoration:none}
+    .breadcrumb a:hover{color:#e50914}
+    .session-status{display:inline-flex;align-items:center;gap:8px;background:rgba(70,211,105,.12);border:1px solid rgba(70,211,105,.25);color:#46d369;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border-radius:3px;margin-bottom:16px;font-family:'JetBrains Mono',monospace}
+    .session-status .dot{width:7px;height:7px;border-radius:50%;background:#46d369;animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .session-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,6vw,4.5rem);letter-spacing:2px;color:#fff;margin-bottom:16px;line-height:1}
+    .session-meta{display:flex;gap:28px;flex-wrap:wrap}
+    .meta-chip{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(240,240,245,.7)}
+    .meta-icon{font-size:16px}
+    .main{max-width:1100px;margin:0 auto;padding:48px;display:grid;grid-template-columns:1fr 340px;gap:48px}
+    .card{background:#15151d;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:28px;margin-bottom:20px}
+    .card h3{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1.5px;color:#fff;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .mentor-row{display:flex;align-items:center;gap:18px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+    .mentor-row:last-child{border-bottom:none}
+    .mentor-avatar{width:56px;height:56px;border-radius:50%;background-size:cover;background-position:center;flex-shrink:0;border:2px solid rgba(229,9,20,.4)}
+    .mentor-info h4{font-size:16px;font-weight:600;color:#fff;margin-bottom:3px}
+    .mentor-info p{font-size:12px;color:#666680}
+    .mentor-info .rating{color:#c9a84c;font-size:12px;margin-top:4px}
+    .agenda-list{list-style:none;padding:0}
+    .agenda-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+    .agenda-item:last-child{border-bottom:none}
+    .agenda-num{width:28px;height:28px;border-radius:50%;background:rgba(229,9,20,.15);border:1px solid rgba(229,9,20,.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#e50914;flex-shrink:0;font-family:'JetBrains Mono',monospace}
+    .agenda-text{font-size:14px;color:rgba(240,240,245,.78);line-height:1.6;padding-top:4px}
+    .notes-area{width:100%;background:#1a1a24;border:1.5px solid rgba(255,255,255,.1);border-radius:6px;color:#f0f0f5;font-size:14px;padding:14px;min-height:140px;resize:vertical;font-family:'DM Sans',sans-serif;line-height:1.6;transition:border-color .2s}
+    .notes-area:focus{outline:none;border-color:#e50914;box-shadow:0 0 0 3px rgba(229,9,20,.1)}
+    .resource-item{display:flex;align-items:center;gap:14px;padding:12px;background:#1a1a24;border-radius:6px;border:1px solid rgba(255,255,255,.06);margin-bottom:8px;cursor:pointer;transition:all .25s;text-decoration:none}
+    .resource-item:hover{border-color:rgba(229,9,20,.3);background:rgba(229,9,20,.06);transform:translateX(4px)}
+    .resource-icon{width:36px;height:36px;border-radius:6px;background:rgba(229,9,20,.15);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+    .resource-info .resource-name{font-size:13px;color:#f0f0f5;font-weight:500}
+    .resource-info .resource-type{font-size:11px;color:#666680;font-family:'JetBrains Mono',monospace;letter-spacing:.5px}
+    .timeline{position:relative;padding-left:28px}
+    .timeline::before{content:'';position:absolute;left:8px;top:4px;bottom:4px;width:1px;background:linear-gradient(to bottom,#e50914,rgba(229,9,20,.1))}
+    .tl-item{position:relative;margin-bottom:20px}
+    .tl-dot{position:absolute;left:-24px;top:4px;width:10px;height:10px;border-radius:50%;background:#e50914;border:2px solid #0a0a10;box-shadow:0 0 8px rgba(229,9,20,.5)}
+    .tl-time{font-size:10px;color:#e50914;font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:3px}
+    .tl-event{font-size:13px;color:rgba(240,240,245,.78)}
+    .sidebar-card{background:#15151d;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:22px;margin-bottom:18px}
+    .sidebar-card h4{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;color:#fff;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .info-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    .info-row:last-child{border-bottom:none}
+    .info-k{font-size:11px;color:#666680}
+    .info-v{font-size:13px;color:#f0f0f5;font-weight:500}
+    .action-btn{width:100%;padding:13px;border-radius:5px;border:none;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px;transition:all .25s;letter-spacing:.3px}
+    .btn-red{background:#e50914;color:#fff}
+    .btn-red:hover{background:#ff1a24;box-shadow:0 5px 18px rgba(229,9,20,.4);transform:translateY(-1px)}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.12);color:rgba(240,240,245,.75)}
+    .btn-ghost:hover{border-color:rgba(255,255,255,.3);color:#fff}
+    .countdown{text-align:center;padding:18px;background:linear-gradient(135deg,rgba(229,9,20,.08),rgba(229,9,20,.03));border-radius:8px;border:1px solid rgba(229,9,20,.2);margin-bottom:8px}
+    .countdown-num{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:3px;color:#e50914;line-height:1}
+    .countdown-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#666680;font-family:'JetBrains Mono',monospace;margin-top:4px}
+    @media(max-width:1024px){.main{grid-template-columns:1fr}}
+    @media(max-width:768px){.navbar{padding:14px 20px}.nav-links{display:none}.page-top{padding:40px 20px 36px}.main{padding:28px 20px}.session-meta{gap:16px}}
+  </style>
 </head>
 <body>
-<h1>Session Detail</h1>
-<p id="info">Loading...</p>
+<nav class="navbar">
+  <a href="index.html" class="logo">Ci-NDA</a>
+  <ul class="nav-links">
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="mentorship.html">Mentorship</a></li>
+    <li><a href="portfolios.html">Portfolios</a></li>
+  </ul>
+  <div class="nav-right"><a href="profile.html" class="btn-signin">My Profile</a></div>
+</nav>
+
+<div class="page-top">
+  <div class="breadcrumb"><a href="index.html">Home</a> / <a href="mentorship.html">Mentorship</a> / Session Detail</div>
+  <div class="session-status"><span class="dot"></span> Confirmed</div>
+  <h1 class="session-title" id="sessionTitle">Cinematography Review Session</h1>
+  <div class="session-meta">
+    <div class="meta-chip"><span class="meta-icon">📅</span><span id="sessionDate">Saturday, 15 November 2025</span></div>
+    <div class="meta-chip"><span class="meta-icon">⏰</span><span id="sessionTime">14:00 – 15:30 EAT</span></div>
+    <div class="meta-chip"><span class="meta-icon">🎥</span><span>Zoom Video Call</span></div>
+    <div class="meta-chip"><span class="meta-icon">⏱</span><span>90 minutes</span></div>
+  </div>
+</div>
+
+<div class="main">
+  <div>
+    <!-- Mentor -->
+    <div class="card">
+      <h3>Your Mentor</h3>
+      <div class="mentor-row">
+        <div class="mentor-avatar" id="mentorAvatar" style="background-image:url(https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80)"></div>
+        <div class="mentor-info">
+          <h4 id="mentorName">Sarah Mitchell</h4>
+          <p id="mentorTitle">Award-winning Cinematographer · 15 years experience</p>
+          <div class="rating">★★★★★ 4.9 · 48 sessions</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agenda -->
+    <div class="card">
+      <h3>Session Agenda</h3>
+      <ul class="agenda-list">
+        <li class="agenda-item"><div class="agenda-num">1</div><div class="agenda-text"><strong>Portfolio Review (20 min)</strong> — Sarah reviews your submitted cinematography reel, focusing on lighting decisions, camera movement, and visual consistency.</div></li>
+        <li class="agenda-item"><div class="agenda-num">2</div><div class="agenda-text"><strong>Color Language Discussion (25 min)</strong> — Deep dive into your color palette approach: warm vs. cool temperature contrast, saturation choices, and how colour supports narrative.</div></li>
+        <li class="agenda-item"><div class="agenda-num">3</div><div class="agenda-text"><strong>Live Technique Demonstration (20 min)</strong> — Sarah demonstrates advanced lighting setups using a practical example from her own past work.</div></li>
+        <li class="agenda-item"><div class="agenda-num">4</div><div class="agenda-text"><strong>Q&amp;A + Action Plan (25 min)</strong> — Open discussion, personalized feedback, and defining your concrete next steps and practice assignments.</div></li>
+      </ul>
+    </div>
+
+    <!-- Notes -->
+    <div class="card">
+      <h3>Your Session Notes</h3>
+      <p style="font-size:13px;color:#666680;margin-bottom:14px">Notes are auto-saved locally and visible only to you.</p>
+      <textarea class="notes-area" id="sessionNotes" placeholder="Take notes during your session...&#10;&#10;e.g. Key feedback points, techniques to practice, questions to ask..."></textarea>
+      <button onclick="saveNotes()" style="margin-top:12px;padding:10px 24px;background:#e50914;color:#fff;border:none;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;transition:all .25s" onmouseover="this.style.background='#ff1a24'" onmouseout="this.style.background='#e50914'">Save Notes</button>
+    </div>
+
+    <!-- Resources -->
+    <div class="card">
+      <h3>Resources &amp; Pre-Reading</h3>
+      <a href="courses.html" class="resource-item"><div class="resource-icon">🎬</div><div class="resource-info"><div class="resource-name">Introduction to Cinematography — Course</div><div class="resource-type">Ci-NDA Course · Review before session</div></div></a>
+      <a href="#" class="resource-item"><div class="resource-icon">📄</div><div class="resource-info"><div class="resource-name">Lighting Reference Sheet (PDF)</div><div class="resource-type">Shared by Sarah Mitchell</div></div></a>
+      <a href="#" class="resource-item"><div class="resource-icon">🎞</div><div class="resource-info"><div class="resource-name">Roger Deakins — Masterclass Excerpt</div><div class="resource-type">Video Reference · 12 min</div></div></a>
+    </div>
+
+    <!-- Session History -->
+    <div class="card">
+      <h3>Mentorship Timeline</h3>
+      <div class="timeline">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">1 week ago</div><div class="tl-event">Mentorship accepted — Sarah Mitchell confirmed your request.</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">5 days ago</div><div class="tl-event">Portfolio submitted for pre-session review.</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-time">3 days ago</div><div class="tl-event">Session confirmed — Zoom link sent to your email.</div></div>
+        <div class="tl-item"><div class="tl-dot" style="background:#c9a84c;box-shadow:0 0 8px rgba(201,168,76,.5)"></div><div class="tl-time" style="color:#c9a84c">Today — Upcoming</div><div class="tl-event" style="color:#fff;font-weight:500">Session: Cinematography Review · 14:00 EAT</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="sidebar-card">
+      <h4>Session Countdown</h4>
+      <div class="countdown">
+        <div class="countdown-num" id="countdownNum">—</div>
+        <div class="countdown-label" id="countdownLabel">Until Session</div>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <h4>Details</h4>
+      <div class="info-row"><span class="info-k">Status</span><span class="info-v" style="color:#46d369">✓ Confirmed</span></div>
+      <div class="info-row"><span class="info-k">Duration</span><span class="info-v">90 minutes</span></div>
+      <div class="info-row"><span class="info-k">Platform</span><span class="info-v">Zoom</span></div>
+      <div class="info-row"><span class="info-k">Language</span><span class="info-v">English</span></div>
+      <div class="info-row"><span class="info-k">Cost</span><span class="info-v" style="color:#46d369">Free</span></div>
+    </div>
+
+    <div class="sidebar-card">
+      <h4>Actions</h4>
+      <button class="action-btn btn-red" onclick="joinSession()">🎥 Join Session</button>
+      <button class="action-btn btn-ghost" onclick="location.href='messages.html?with=m1&mentorName=Sarah%20Mitchell'">💬 Message Mentor</button>
+      <button class="action-btn btn-ghost" onclick="reschedule()">📅 Reschedule</button>
+      <button class="action-btn btn-ghost" onclick="cancelSession()" style="color:#e50914;border-color:rgba(229,9,20,.2)">✕ Cancel Session</button>
+    </div>
+
+    <div class="sidebar-card">
+      <h4>Next Steps</h4>
+      <ul style="list-style:none;padding:0">
+        <li style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;color:rgba(240,240,245,.75)"><span style="color:#46d369;flex-shrink:0">✓</span>Submit portfolio reel</li>
+        <li style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;color:rgba(240,240,245,.75)"><span style="color:#c9a84c;flex-shrink:0">○</span>Review pre-reading materials</li>
+        <li style="display:flex;gap:10px;align-items:flex-start;padding:8px 0;font-size:13px;color:rgba(240,240,245,.75)"><span style="color:#c9a84c;flex-shrink:0">○</span>Prepare 3 specific questions for Sarah</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<script src="cinda-app.js"></script>
 <script>
-const id=new URLSearchParams(location.search).get('id');
-if(!id) document.getElementById('info').innerText='No session id provided';
-else document.getElementById('info').innerText='Session ID: '+id+' (page stub)';
+document.addEventListener('DOMContentLoaded', function() {
+  var id = new URLSearchParams(location.search).get('id');
+  var mentorId = new URLSearchParams(location.search).get('mentorId') || 'm1';
+  var mentors = (window.CindaData||{}).mentors || [];
+  var mentor = mentors.find(function(m){return m._id===mentorId;}) || mentors[0];
+  if (mentor) {
+    document.getElementById('mentorName').textContent = mentor.name;
+    document.getElementById('mentorTitle').textContent = mentor.title;
+    document.getElementById('mentorAvatar').style.backgroundImage = 'url('+mentor.image+')';
+    document.getElementById('sessionTitle').textContent = mentor.specialties[0]+' Review Session';
+  }
+
+  // Countdown to next Saturday 14:00
+  var now = new Date();
+  var target = new Date();
+  target.setDate(now.getDate() + ((6-now.getDay()+7)%7||7));
+  target.setHours(14,0,0,0);
+  function updateCountdown() {
+    var diff = target - new Date();
+    if (diff <= 0) { document.getElementById('countdownNum').textContent='NOW'; document.getElementById('countdownLabel').textContent='Session is Live'; return; }
+    var h = Math.floor(diff/3600000), m2 = Math.floor((diff%3600000)/60000);
+    document.getElementById('countdownNum').textContent = h+'h '+m2+'m';
+    document.getElementById('countdownLabel').textContent = 'Until Session';
+  }
+  updateCountdown(); setInterval(updateCountdown, 60000);
+
+  // Restore notes
+  var saved = localStorage.getItem('session_notes_'+mentorId);
+  if (saved) document.getElementById('sessionNotes').value = saved;
+});
+
+function saveNotes() {
+  var mid = new URLSearchParams(location.search).get('mentorId')||'m1';
+  localStorage.setItem('session_notes_'+mid, document.getElementById('sessionNotes').value);
+  CindaToast('Notes saved!');
+}
+function joinSession() { CindaToast('Opening Zoom — check your email for the meeting link','info'); }
+function reschedule() { CindaToast('Reschedule request sent to your mentor','info'); }
+function cancelSession() {
+  if (confirm('Cancel this session with your mentor?')) { CindaToast('Session cancelled. You can book a new one anytime.','error'); setTimeout(function(){ location.href='mentorship.html'; },1500); }
+}
 </script>
 </body>
 </html>

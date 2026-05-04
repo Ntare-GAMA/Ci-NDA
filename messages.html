@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="cinda-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -257,8 +261,8 @@
         const mentorName = urlParams.get('mentorName') || 'Mentor';
         
         // For demo, we'll use localStorage to simulate current user
-        const currentUserId = localStorage.getItem('current_user_id') || 'user_' + Date.now();
-        localStorage.setItem('current_user_id', currentUserId);
+        const _authUser = (function(){ try{ return JSON.parse(localStorage.getItem('cinda_user')||'null'); }catch(e){return null;} })();
+        const currentUserId = _authUser ? _authUser._id : 'u1';
 
         document.getElementById('mentorName').textContent = decodeURIComponent(mentorName);
         
@@ -351,5 +355,26 @@
         loadMessages();
         setInterval(loadMessages, 3000);
     </script>
+<script src="cinda-app.js"></script>
+
+<script id="msg-sidebar-inject">
+document.addEventListener('DOMContentLoaded', function(){
+  var sidebar = document.querySelector('.conversations-list,.conversation-list,.contacts-list,.sidebar-contacts');
+  if(!sidebar) return;
+  var mentors = (window.CindaData||{}).mentors||[];
+  var currentWith = new URLSearchParams(location.search).get('with') || 'm1';
+  sidebar.innerHTML = mentors.slice(0,6).map(function(m){
+    var isActive = m._id === currentWith;
+    return '<div onclick="location.href='messages.html?with='+m._id+'&mentorName='+encodeURIComponent(m.name)+''" '+
+      'style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);transition:background .2s;'+(isActive?'background:rgba(229,9,20,.1);border-left:3px solid #e50914':'')+'" '+
+      'onmouseover="if(!this.style.borderLeft)this.style.background='rgba(255,255,255,.04)'" onmouseout="if(!''+isActive+'')this.style.background=''">'+
+      '<div style="width:42px;height:42px;border-radius:50%;background:url('+m.image+') center/cover;flex-shrink:0;border:2px solid '+(isActive?'#e50914':'rgba(255,255,255,.1)')+'"></div>'+
+      '<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;color:#f0f0f5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+m.name+'</div>'+
+      '<div style="font-size:11px;color:#666680;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+m.specialties[0]+'</div></div>'+
+      (isActive?'<div style="width:8px;height:8px;border-radius:50%;background:#e50914;flex-shrink:0"></div>':'')+
+      '</div>';
+  }).join('');
+});
+</script>
 </body>
 </html>

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="cinda-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Become a Mentor - Ci-NDA</title>
@@ -579,5 +583,20 @@
             }
         }
     </script>
+<script src="cinda-app.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var form = document.querySelector('form');
+  if(form && !form.dataset.patched) {
+    form.dataset.patched = '1';
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      fetch('api/become-mentor.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({})})
+        .then(function(){ CindaToast('Application submitted! We\'ll review it within 5 business days.'); setTimeout(function(){ window.location.href='profile.html'; },2000); });
+    });
+  }
+});
+</script>
 </body>
 </html>

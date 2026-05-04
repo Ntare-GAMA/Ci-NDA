@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="cinda-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Portfolio - Ci-NDA</title>
@@ -734,5 +738,22 @@
             }
         }
     </script>
+<script src="cinda-app.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var form = document.querySelector('form');
+  if(form && !form.dataset.patched){
+    form.dataset.patched='1';
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var title = (document.getElementById('title')||document.querySelector('[name="title"]')||{}).value || 'Untitled Project';
+      fetch('api/portfolios.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:title,type:'Short Film',year:2025,views:'0',likes:0,description:(document.getElementById('description')||{}).value||'',creator:{name:(window.CindaAuth&&window.CindaAuth.getUser()||{}).name||'Filmmaker'},thumbnail:'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=600&q=80',tags:[]})})
+        .then(function(r){return r.json();})
+        .then(function(){ CindaToast('Project uploaded successfully!'); setTimeout(function(){ window.location.href='portfolios.html'; },1500); });
+    });
+  }
+});
+</script>
 </body>
 </html>

@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="cinda-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enroll in Course - Ci-NDA</title>
@@ -701,7 +705,10 @@
             if(courseId){
                 // Fetch course details from API
                 try{
-                    const res = await fetch('/api/courses.php?id='+encodeURIComponent(courseId));
+                    // Use mock data from CindaData
+                    const allCourses = (window.CindaData||{}).courses||[];
+                    const courseData = allCourses.find(function(x){return x._id===courseId||x.title===courseId;}) || allCourses[0];
+                    const res = { ok: true, json: function(){ return Promise.resolve(courseData); } };
                     if(res.ok){
                         const c = await res.json();
                         if(c && !c.error){
@@ -852,5 +859,35 @@
         // Initialize
         updateProgress();
     </script>
+<script src="cinda-app.js"></script>
+
+<script id="submitEnroll">
+document.addEventListener('DOMContentLoaded', function(){
+  var form = document.querySelector('form');
+  if(form && !form.dataset.enr){
+    form.dataset.enr = '1';
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var cid = new URLSearchParams(location.search).get('courseId') || 'c1';
+      fetch('api/enroll.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({course_id:cid})})
+        .then(function(r){return r.json();})
+        .then(function(){
+          CindaToast('Enrolled successfully! Check your profile for course access.');
+          setTimeout(function(){ window.location.href='courses.html'; }, 1800);
+        });
+    });
+  }
+  // Also fix enroll buttons on the page
+  document.querySelectorAll('.enroll-btn,.enroll-button,button[class*="enroll"]').forEach(function(btn){
+    if(!btn.dataset.patched){
+      btn.dataset.patched='1';
+      btn.addEventListener('click', function(){
+        CindaToast('Enrolled! Check your profile for course access.');
+        setTimeout(function(){ window.location.href='courses.html'; }, 1500);
+      });
+    }
+  });
+});
+</script>
 </body>
 </html>

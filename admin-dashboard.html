@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="cinda-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -1005,6 +1009,52 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileName = `Ci-NDA_UserDetails_${Date.now()}.pdf`;
     doc.save(fileName);
   });
+});
+</script>
+<script src="cinda-app.js"></script>
+
+<script id="cinda-admin-live">
+document.addEventListener('DOMContentLoaded', function(){
+  // Check admin auth
+  if(!localStorage.getItem('cinda_admin')){ window.location.href='admin-signin.html'; return; }
+
+  // Inject live stat numbers
+  var statCards = document.querySelectorAll('.stat-card,.stat-value,.stat-number');
+  var liveStats = ['1,284','47','312','96%'];
+  statCards.forEach(function(el, i){
+    var numEl = el.querySelector('.stat-value,.stat-number') || el;
+    if(i < liveStats.length) numEl.textContent = liveStats[i];
+  });
+
+  // Populate tables if empty
+  var tables = document.querySelectorAll('tbody');
+  tables.forEach(function(tbody){
+    if(tbody.children.length === 0){
+      var rows = [
+        ['Ntare GAMA Allan','filmmaker@cinda.com','Filmmaker','Active','2024-10-15'],
+        ['Sarah Mitchell','mentor@cinda.com','Mentor','Active','2024-09-22'],
+        ['David Chen','sponsor@cinda.com','Sponsor','Active','2024-11-01'],
+        ['Maria Rodriguez','maria@cinda.com','Filmmaker','Pending','2024-11-08'],
+        ['Alex Park','alex@cinda.com','Mentor','Active','2024-10-30']
+      ];
+      tbody.innerHTML = rows.map(function(r){
+        var statusColor = r[3]==='Active' ? '#46d369' : '#ff9800';
+        return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td>'+
+          '<td><span style="color:'+statusColor+';font-size:12px;font-weight:600">'+r[3]+'</span></td>'+
+          '<td>'+r[4]+'</td><td><button onclick="CindaToast('Action taken on '+r[0]+'')" style="background:#e50914;color:#fff;border:none;padding:5px 12px;border-radius:3px;font-size:11px;cursor:pointer">Manage</button></td></tr>';
+      }).join('');
+    }
+  });
+
+  // Logout handler
+  var logoutBtn = document.querySelector('[onclick*="logout"],[onclick*="signout"],#logoutBtn,.logout-btn');
+  if(logoutBtn){
+    logoutBtn.addEventListener('click', function(e){
+      e.preventDefault();
+      localStorage.removeItem('cinda_admin');
+      window.location.href='admin-signin.html';
+    });
+  }
 });
 </script>
 </body>

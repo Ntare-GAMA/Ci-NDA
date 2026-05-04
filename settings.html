@@ -1,22 +1,294 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Settings</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;touch-action:manipulation}
-body{background:#141414;color:#fff;font-family:'Helvetica Neue',Arial,sans-serif;padding:30px;-webkit-font-smoothing:antialiased;min-height:100vh}
-h1{font-size:32px;margin-bottom:15px;color:#e50914}
-p{color:#b3b3b3;line-height:1.6;font-size:16px}
-@media(max-width:768px){body{padding:20px}h1{font-size:28px}p{font-size:15px}}
-@media(max-width:480px){body{padding:15px}h1{font-size:24px}p{font-size:14px}}
-@media(max-width:375px){body{padding:12px}h1{font-size:22px}}
-</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="cinda-theme.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — Ci-NDA</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#0a0a10;color:#f0f0f5;font-family:'DM Sans','Helvetica Neue',sans-serif;min-height:100vh}
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(10,10,16,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(229,9,20,.2)}
+    .logo{font-size:32px;font-weight:900;color:#e50914;text-decoration:none;letter-spacing:3px;font-family:'Bebas Neue','Arial Black',sans-serif}
+    .nav-right{display:flex;align-items:center;gap:14px}
+    .btn-sm{background:transparent;border:1px solid rgba(255,255,255,.13);color:rgba(240,240,245,.75);padding:8px 18px;border-radius:4px;font-size:12px;cursor:pointer;text-decoration:none;transition:all .2s}
+    .btn-sm:hover{border-color:rgba(255,255,255,.3);color:#fff}
+    .layout{max-width:1080px;margin:0 auto;padding:96px 48px 60px;display:grid;grid-template-columns:220px 1fr;gap:36px}
+    .sidebar{position:sticky;top:90px;height:fit-content}
+    .sidebar-nav{background:#15151d;border:1px solid rgba(255,255,255,.07);border-radius:10px;overflow:hidden}
+    .sidebar-nav-item{display:flex;align-items:center;gap:12px;padding:14px 18px;font-size:13px;color:rgba(240,240,245,.7);cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05);transition:all .2s;text-decoration:none}
+    .sidebar-nav-item:last-child{border-bottom:none}
+    .sidebar-nav-item:hover{background:rgba(229,9,20,.06);color:#fff}
+    .sidebar-nav-item.active{background:rgba(229,9,20,.1);color:#fff;border-left:3px solid #e50914}
+    .sidebar-nav-item .nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0}
+    .settings-card{background:#15151d;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:28px;margin-bottom:20px;display:none}
+    .settings-card.active{display:block}
+    .settings-card h3{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1.5px;color:#fff;margin-bottom:6px}
+    .settings-card .card-desc{font-size:13px;color:#666680;margin-bottom:24px;line-height:1.5;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.06)}
+    .setting-row{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding:18px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+    .setting-row:last-of-type{border-bottom:none}
+    .setting-info h4{font-size:14px;font-weight:500;color:#f0f0f5;margin-bottom:4px}
+    .setting-info p{font-size:12px;color:#666680;line-height:1.5;max-width:420px}
+    .toggle{position:relative;width:44px;height:24px;flex-shrink:0;margin-top:2px}
+    .toggle input{opacity:0;width:0;height:0;position:absolute}
+    .toggle-track{position:absolute;inset:0;background:#2a2a3a;border-radius:24px;cursor:pointer;transition:background .3s}
+    .toggle input:checked+.toggle-track{background:#e50914}
+    .toggle-thumb{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .3s;pointer-events:none}
+    .toggle input:checked~.toggle-thumb{transform:translateX(20px)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+    .form-group{display:flex;flex-direction:column;gap:6px}
+    .form-group.full{grid-column:span 2}
+    .form-label{font-size:11px;font-weight:500;color:rgba(240,240,245,.55);letter-spacing:.5px;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+    .form-input{padding:12px 14px;background:#1a1a24;border:1.5px solid rgba(255,255,255,.09);border-radius:6px;color:#f0f0f5;font-size:14px;font-family:'DM Sans',sans-serif;transition:all .2s}
+    .form-input:focus{outline:none;border-color:#e50914;background:#1e1e2a;box-shadow:0 0 0 3px rgba(229,9,20,.08)}
+    .btn-save{background:#e50914;color:#fff;border:none;padding:12px 28px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;transition:all .25s;letter-spacing:.3px}
+    .btn-save:hover{background:#ff1a24;box-shadow:0 4px 16px rgba(229,9,20,.4)}
+    .danger-zone{background:rgba(229,9,20,.04);border:1px solid rgba(229,9,20,.2);border-radius:8px;padding:20px;margin-top:8px}
+    .danger-zone h4{color:#e50914;font-size:14px;font-weight:600;margin-bottom:6px}
+    .danger-zone p{font-size:12px;color:#666680;margin-bottom:14px;line-height:1.5}
+    .btn-danger{background:transparent;border:1px solid rgba(229,9,20,.4);color:#e50914;padding:10px 20px;border-radius:4px;font-size:13px;font-weight:500;cursor:pointer;transition:all .25s}
+    .btn-danger:hover{background:#e50914;color:#fff}
+    .plan-card{display:flex;justify-content:space-between;align-items:center;background:#1a1a24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:18px 20px;margin-bottom:12px}
+    .plan-name{font-size:15px;font-weight:600;color:#fff}
+    .plan-badge{background:rgba(70,211,105,.12);border:1px solid rgba(70,211,105,.25);color:#46d369;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:4px 10px;border-radius:3px;font-family:'JetBrains Mono',monospace}
+    .plan-price{font-size:22px;font-weight:700;color:#fff;font-family:'Bebas Neue',sans-serif;letter-spacing:1px}
+    .plan-price span{font-size:13px;font-weight:400;color:#666680;font-family:'DM Sans',sans-serif}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.sidebar{position:static}.sidebar-nav{display:flex;overflow-x:auto}.sidebar-nav-item{flex-direction:column;gap:4px;text-align:center;padding:12px 14px;font-size:11px;border-bottom:none;border-right:1px solid rgba(255,255,255,.05);white-space:nowrap}.sidebar-nav-item.active{border-left:none;border-bottom:3px solid #e50914}}
+    @media(max-width:768px){.navbar{padding:14px 20px}.layout{padding:80px 20px 48px}.form-row{grid-template-columns:1fr}.form-group.full{grid-column:1}.settings-card{padding:20px}}
+  </style>
 </head>
 <body>
-<h1>Account Settings</h1>
-<p>Settings page stub. Implement profile and account options here.</p>
+<nav class="navbar">
+  <a href="index.html" class="logo">Ci-NDA</a>
+  <div class="nav-right">
+    <a href="profile.html" class="btn-sm">← Profile</a>
+    <a href="edit-profile.html" class="btn-sm">Edit Profile</a>
+  </div>
+</nav>
+
+<div class="layout">
+  <!-- Sidebar nav -->
+  <aside class="sidebar">
+    <div class="sidebar-nav">
+      <div class="sidebar-nav-item active" onclick="showSection('account',this)"><span class="nav-icon">👤</span> Account</div>
+      <div class="sidebar-nav-item" onclick="showSection('security',this)"><span class="nav-icon">🔒</span> Security</div>
+      <div class="sidebar-nav-item" onclick="showSection('notifications',this)"><span class="nav-icon">🔔</span> Notifications</div>
+      <div class="sidebar-nav-item" onclick="showSection('privacy',this)"><span class="nav-icon">🛡</span> Privacy</div>
+      <div class="sidebar-nav-item" onclick="showSection('billing',this)"><span class="nav-icon">💳</span> Billing</div>
+      <div class="sidebar-nav-item" onclick="showSection('appearance',this)"><span class="nav-icon">🎨</span> Appearance</div>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main>
+
+    <!-- ACCOUNT -->
+    <div class="settings-card active" id="section-account">
+      <h3>Account Settings</h3>
+      <p class="card-desc">Manage your account information and professional details.</p>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Display Name</label><input class="form-input" id="accName" type="text"></div>
+        <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" id="accEmail" type="email"></div>
+        <div class="form-group"><label class="form-label">Username / Handle</label><input class="form-input" id="accHandle" type="text" placeholder="@yourhandle"></div>
+        <div class="form-group">
+          <label class="form-label">Account Type</label>
+          <select class="form-input" id="accType">
+            <option value="filmmaker">Filmmaker</option>
+            <option value="mentor">Mentor</option>
+            <option value="sponsor">Sponsor / Investor</option>
+          </select>
+        </div>
+        <div class="form-group full"><label class="form-label">Bio Summary</label><textarea class="form-input" id="accBio" style="min-height:90px"></textarea></div>
+      </div>
+      <button class="btn-save" onclick="saveAccount()">Save Changes</button>
+      <div class="danger-zone" style="margin-top:28px">
+        <h4>Danger Zone</h4>
+        <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
+        <button class="btn-danger" onclick="deleteAccount()">Delete My Account</button>
+      </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="settings-card" id="section-security">
+      <h3>Security</h3>
+      <p class="card-desc">Manage your password and account access settings.</p>
+      <div class="form-row">
+        <div class="form-group full"><label class="form-label">Current Password</label><input class="form-input" type="password" placeholder="Enter current password"></div>
+        <div class="form-group"><label class="form-label">New Password</label><input class="form-input" id="newPass" type="password" placeholder="Min 8 characters"></div>
+        <div class="form-group"><label class="form-label">Confirm New Password</label><input class="form-input" id="confPass" type="password" placeholder="Repeat new password"></div>
+      </div>
+      <button class="btn-save" onclick="savePassword()" style="margin-bottom:28px">Update Password</button>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Two-Factor Authentication</h4><p>Add an extra layer of security to your account with SMS or authenticator app verification.</p></div>
+        <label class="toggle"><input type="checkbox" id="tog2fa"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Login Alerts</h4><p>Receive an email notification whenever a new device logs into your account.</p></div>
+        <label class="toggle"><input type="checkbox" checked id="togAlerts"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Active Sessions</h4><p>You are currently signed in on 1 device. <a href="#" style="color:#e50914;text-decoration:none" onclick="CindaToast('All other sessions signed out','info');return false">Sign out all other sessions</a></p></div>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="settings-card" id="section-notifications">
+      <h3>Notifications</h3>
+      <p class="card-desc">Choose what you hear about and how you hear about it.</p>
+      <div class="setting-row">
+        <div class="setting-info"><h4>New Mentorship Requests</h4><p>When a filmmaker requests a mentorship session with you.</p></div>
+        <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Session Reminders</h4><p>Email and in-app reminders 24h and 1h before scheduled sessions.</p></div>
+        <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>New Messages</h4><p>Notifications when you receive a new direct message.</p></div>
+        <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Opportunity Deadlines</h4><p>Reminders 7 days and 24h before opportunities you've saved close.</p></div>
+        <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Course Updates</h4><p>Notifications about new lessons in courses you're enrolled in.</p></div>
+        <label class="toggle"><input type="checkbox"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Platform News &amp; Updates</h4><p>Occasional emails about new features, content, and events on Ci-NDA.</p></div>
+        <label class="toggle"><input type="checkbox"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div style="margin-top:20px"><button class="btn-save" onclick="CindaToast('Notification preferences saved!')">Save Preferences</button></div>
+    </div>
+
+    <!-- PRIVACY -->
+    <div class="settings-card" id="section-privacy">
+      <h3>Privacy</h3>
+      <p class="card-desc">Control who can see your profile, work, and activity.</p>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Public Profile</h4><p>Allow anyone to view your profile, portfolio, and credits on Ci-NDA.</p></div>
+        <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Show in Mentor / Filmmaker Directory</h4><p>Appear in public search results when sponsors or other filmmakers browse the platform.</p></div>
+        <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Portfolio Visibility</h4><p>Make your uploaded projects visible to non-logged-in visitors.</p></div>
+        <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Activity Status</h4><p>Show other users when you were last active on the platform.</p></div>
+        <label class="toggle"><input type="checkbox"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Allow Direct Messages from Strangers</h4><p>Let anyone send you a message, not just connected mentors and filmmakers.</p></div>
+        <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div style="margin-top:20px"><button class="btn-save" onclick="CindaToast('Privacy settings saved!')">Save Privacy Settings</button></div>
+    </div>
+
+    <!-- BILLING -->
+    <div class="settings-card" id="section-billing">
+      <h3>Plan &amp; Billing</h3>
+      <p class="card-desc">Ci-NDA is currently free for all users during our launch phase. All courses, mentorship connections, and opportunity applications are included at no cost.</p>
+      <div class="plan-card">
+        <div>
+          <div class="plan-name">Ci-NDA Free</div>
+          <div style="font-size:12px;color:#666680;margin-top:3px">All core features included</div>
+        </div>
+        <div style="text-align:right">
+          <div class="plan-badge">Current Plan</div>
+          <div class="plan-price" style="margin-top:8px">$0 <span>/ month</span></div>
+        </div>
+      </div>
+      <div class="plan-card" style="border-color:rgba(201,168,76,.25);background:rgba(201,168,76,.03)">
+        <div>
+          <div class="plan-name" style="color:#c9a84c">Ci-NDA Pro <span style="font-size:11px;color:#666680;font-family:'JetBrains Mono',monospace;margin-left:6px">Coming Soon</span></div>
+          <div style="font-size:12px;color:#666680;margin-top:3px">Priority mentorship matching, exclusive opportunities, advanced analytics</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#c9a84c;font-family:'JetBrains Mono',monospace;margin-bottom:6px">Launching 2025</div>
+          <div class="plan-price" style="color:#c9a84c">$9 <span>/ month</span></div>
+        </div>
+      </div>
+      <p style="font-size:13px;color:#666680;margin-top:16px;line-height:1.6">Want early access to Pro features? <a href="#" onclick="CindaToast('You\'ve been added to the Pro waitlist!');return false" style="color:#e50914;text-decoration:none">Join the waitlist →</a></p>
+    </div>
+
+    <!-- APPEARANCE -->
+    <div class="settings-card" id="section-appearance">
+      <h3>Appearance</h3>
+      <p class="card-desc">Customise how Ci-NDA looks and feels for you.</p>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Dark Mode</h4><p>Ci-NDA uses dark mode by default — optimised for the cinema aesthetic.</p></div>
+        <label class="toggle"><input type="checkbox" checked disabled><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Reduce Motion</h4><p>Minimise animations and transitions across the platform for accessibility.</p></div>
+        <label class="toggle"><input type="checkbox" id="togMotion" onchange="toggleMotion(this)"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><h4>Autoplay Videos</h4><p>Automatically play project preview videos when browsing the portfolio gallery.</p></div>
+        <label class="toggle"><input type="checkbox" checked><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+      </div>
+      <div style="margin-top:20px"><button class="btn-save" onclick="CindaToast('Appearance settings saved!')">Save Appearance</button></div>
+    </div>
+
+  </main>
+</div>
+
+<script src="cinda-app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var u = window.CindaAuth && window.CindaAuth.getUser();
+  if (!u) { window.location.href='authentication.html'; return; }
+  if(document.getElementById('accName')) document.getElementById('accName').value = u.name||'';
+  if(document.getElementById('accEmail')) document.getElementById('accEmail').value = u.email||'';
+  if(document.getElementById('accBio')) document.getElementById('accBio').value = u.bio||'';
+  if(document.getElementById('accType')) document.getElementById('accType').value = u.userType||'filmmaker';
+  if(document.getElementById('accHandle')) document.getElementById('accHandle').value = '@'+(u.name||'filmmaker').toLowerCase().replace(/\s+/g,'');
+});
+
+function showSection(id, el) {
+  document.querySelectorAll('.settings-card').forEach(function(c){ c.classList.remove('active'); });
+  document.querySelectorAll('.sidebar-nav-item').forEach(function(i){ i.classList.remove('active'); });
+  var s = document.getElementById('section-'+id);
+  if(s) s.classList.add('active');
+  if(el) el.classList.add('active');
+}
+
+function saveAccount() {
+  var u = window.CindaAuth.getUser()||{};
+  u.name = document.getElementById('accName').value||u.name;
+  u.email = document.getElementById('accEmail').value||u.email;
+  u.bio = document.getElementById('accBio').value;
+  u.userType = document.getElementById('accType').value;
+  window.CindaAuth.setUser(u);
+  CindaToast('Account settings saved!');
+}
+
+function savePassword() {
+  var np=document.getElementById('newPass').value, cp=document.getElementById('confPass').value;
+  if(!np){ CindaToast('Enter a new password','error'); return; }
+  if(np!==cp){ CindaToast('Passwords do not match','error'); return; }
+  if(np.length<8){ CindaToast('Password must be at least 8 characters','error'); return; }
+  CindaToast('Password updated successfully!');
+  document.getElementById('newPass').value=''; document.getElementById('confPass').value='';
+}
+
+function deleteAccount() {
+  if(confirm('Permanently delete your account? This cannot be undone.')) {
+    window.CindaAuth.logout();
+  }
+}
+
+function toggleMotion(el) {
+  document.documentElement.style.setProperty('--transition-speed', el.checked ? '0s' : '');
+  CindaToast(el.checked ? 'Reduce motion enabled' : 'Animations restored', 'info');
+}
+</script>
 </body>
 </html>

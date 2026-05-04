@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="cinda-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolios - Ci-NDA</title>
@@ -542,31 +546,109 @@
     </div>
 
   <script>
-const api={
-  getPortfolios:async()=>{
-    const res=await fetch('api/portfolios.php');
-    if(!res.ok) throw new Error('Network');
-    return res.json();
-  }
-};
-async function loadPortfolios(){try{renderPortfolios(await api.getPortfolios());}catch(e){console.error(e);}}
 function renderPortfolios(list){
-  document.querySelector('.portfolios-grid').innerHTML=list.map(p=>`
-    <div class="portfolio-card" onclick="location='portfolio-detail.html?id=${p._id}'">
-      <div class="portfolio-thumbnail" style="background-image:url('${p.thumbnail}')"><div class="play-icon">▶</div></div>
-      <div class="portfolio-content">
-        <div class="filmmaker-info">
-          <div class="filmmaker-avatar" style="background-image:url('${p.avatar}')"></div>
-          <div><div class="filmmaker-name">${p.owner}</div><div class="filmmaker-role">Filmmaker</div></div>
-        </div>
-        <h3 class="portfolio-title">${p.title}</h3>
-        <p class="portfolio-description">${p.description}</p>
-        <div class="portfolio-tags">${p.tags.split(',').map(t=>`<span class="tag">${t}</span>`).join('')}</div>
-        <div class="portfolio-stats"><span class="stat">${p.views} views</span><span class="stat">${p.likes} likes</span></div>
-      </div>
-    </div>`).join('');
+  var grid = document.querySelector('.portfolios-grid');
+  if(!grid) return;
+  if(!list||!list.length){grid.innerHTML='<div style="text-align:center;color:#666;padding:60px;grid-column:1/-1">No portfolios found.</div>';return;}
+  grid.innerHTML=list.map(function(p){
+    var creatorName = (p.creator&&p.creator.name) ? p.creator.name : (p.owner||'Filmmaker');
+    var pid = p._id||p.id||'p1';
+    var initials = creatorName.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+    var tags = Array.isArray(p.tags) ? p.tags : (p.tags||'').split(',');
+    var hasYT = p.videoType==='youtube' && p.youtubeId;
+    var thumbHtml = hasYT
+      ? '<div class="portfolio-thumbnail" style="position:relative;overflow:hidden"><img src="'+p.thumbnail+'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:.5"><div class="play-icon" style="position:relative;z-index:2">▶</div><div style="position:absolute;top:10px;right:10px;background:#e50914;color:#fff;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;font-family:JetBrains Mono,monospace;z-index:2">Video</div></div>'
+      : '<div class="portfolio-thumbnail" style="background-image:url(\''+p.thumbnail+'\')"><div class="play-icon">▶</div></div>';
+    return '<div class="portfolio-card" onclick="location=\'project-detail.html?id='+p._id+'\'" style="cursor:pointer">'
+      + thumbHtml
+      + '<div class="portfolio-content">'
+      + '<div class="filmmaker-info"><div class="filmmaker-avatar" style="background:linear-gradient(135deg,#e50914,#8b0000);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#fff">'+initials+'</div>'
+      + '<div><div class="filmmaker-name">'+creatorName+'</div><div class="filmmaker-role">'+((p.type)||'Filmmaker')+'</div></div></div>'
+      + '<h3 class="portfolio-title">'+p.title+'</h3>'
+      + '<p class="portfolio-description">'+p.description+'</p>'
+      + '<div class="portfolio-tags">'+tags.map(function(t){return '<span class="tag">'+t.trim()+'</span>';}).join('')+'</div>'
+      + '<div class="portfolio-stats"><span class="stat">👁 '+(p.views||0)+' views</span><span class="stat">❤ '+(p.likes||0)+' likes</span><span class="stat">'+p.year+'</span></div>'
+      + '</div></div>';
+  }).join('');
 }
-document.addEventListener('DOMContentLoaded',loadPortfolios);
+
+// Anime trailers section injected below the grid
+function injectAnimeSection(){
+  var main = document.querySelector('.main-content')||document.querySelector('main')||document.body;
+  var existing = document.getElementById('cinAnimeSec');
+  if(existing) return;
+  var sec = document.createElement('section');
+  sec.id = 'cinAnimeSec';
+  sec.style.cssText='background:#0d0d15;border-top:1px solid rgba(229,9,20,.12);padding:64px 48px;margin-top:0';
+  sec.innerHTML='<div style="max-width:1200px;margin:0 auto">'
+    +'<div style="margin-bottom:32px"><div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#e50914;font-family:JetBrains Mono,monospace;margin-bottom:8px">Cinematic Reference</div>'
+    +'<h2 style="font-family:Bebas Neue,Arial Black,sans-serif;font-size:clamp(1.8rem,4vw,3rem);letter-spacing:2px;color:#fff">Anime That Inspires Filmmakers</h2></div>'
+    +'<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px">'
+    +[
+      {id:'VQGCKyvzIM4',title:'Demon Slayer — Infinity Castle Arc',studio:'ufotable · 2024'},
+      {id:'4A_X-Dvl0ws',title:'Jujutsu Kaisen — Season 2',studio:'MAPPA · 2023'},
+      {id:'MGRm4IzK1SQ',title:'Attack on Titan — Final Season',studio:'MAPPA · 2023'},
+      {id:'EM2oFVnZh3E',title:'Vinland Saga — Season 2 Trailer',studio:'MAPPA · 2023'},
+      {id:'QczyDg46zKY',title:'Blue Lock — Episode Nagi',studio:'8bit · 2024'},
+      {id:'3Tl2TFZs-9I',title:'Frieren: Beyond Journey\'s End',studio:'Madhouse · 2023'}
+    ].map(function(v){
+      return '<div style="border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,.07);background:#15151d;transition:all .3s;cursor:pointer" onmouseover="this.style.transform=\'translateY(-5px)\';this.style.borderColor=\'rgba(229,9,20,.4)\'" onmouseout="this.style.transform=\'\';this.style.borderColor=\'rgba(255,255,255,.07)\'">'
+        +'<div style="position:relative;padding-bottom:56.25%;height:0"><iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:0" src="https://www.youtube.com/embed/'+v.id+'?rel=0&modestbranding=1" title="'+v.title+'" allowfullscreen loading="lazy"></iframe></div>'
+        +'<div style="padding:12px 14px 14px;background:#15151d"><div style="font-size:13px;font-weight:600;color:#f0f0f5;margin-bottom:3px">'+v.title+'</div><div style="font-size:10px;color:#666680;font-family:JetBrains Mono,monospace;letter-spacing:.5px">'+v.studio+'</div></div>'
+        +'</div>';
+    }).join('')
+    +'</div></div>';
+  // Insert before footer
+  var footer = document.querySelector('footer,.footer');
+  if(footer) footer.parentNode.insertBefore(sec, footer);
+  else main.appendChild(sec);
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  var list = (window.CindaData||{}).portfolios||[];
+  renderPortfolios(list);
+  // Also respond to fetch from cinda-app.js
+  setTimeout(injectAnimeSection, 200);
+});
+</script>
+<script src="cinda-app.js"></script>
+
+<script id="portfolio-anime-inject">
+document.addEventListener('DOMContentLoaded', function(){
+  // After portfolios render, add proper click-to-detail on every item
+  function addPortfolioClicks(){
+    document.querySelectorAll('.portfolio-item,.portfolio-card').forEach(function(card, i){
+      if(!card.dataset.navSet){
+        card.dataset.navSet='1';
+        card.style.cursor='pointer';
+        var P = (window.CindaData||{}).portfolios||[];
+        var proj = P[i] || P[0];
+        if(proj){
+          card.setAttribute('data-id', proj._id);
+          card.addEventListener('click', function(){
+            window.location.href='project-detail.html?id='+proj._id;
+          });
+        }
+      }
+    });
+  }
+  setTimeout(addPortfolioClicks, 800);
+  setInterval(addPortfolioClicks, 2500);
+
+  // Add "Upload Your Work" CTA if user is logged in
+  var u = window.CindaAuth && window.CindaAuth.getUser();
+  if(u){
+    var header = document.querySelector('.page-header,.portfolios-header');
+    if(header && !document.getElementById('upload-cta-btn')){
+      var btn = document.createElement('a');
+      btn.id = 'upload-cta-btn';
+      btn.href = 'create-portfolio.html';
+      btn.textContent = '+ Upload Your Work';
+      btn.style.cssText = 'display:inline-block;background:#e50914;color:#fff;padding:11px 24px;border-radius:4px;font-size:13px;font-weight:600;text-decoration:none;margin-top:16px;transition:all .25s';
+      header.appendChild(btn);
+    }
+  }
+});
 </script>
 </body>
 </html>

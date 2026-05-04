@@ -1,22 +1,209 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Edit Profile</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;touch-action:manipulation}
-body{background:#141414;color:#fff;font-family:'Helvetica Neue',Arial,sans-serif;padding:30px;-webkit-font-smoothing:antialiased;min-height:100vh}
-h1{font-size:32px;margin-bottom:15px;color:#e50914}
-p{color:#b3b3b3;line-height:1.6;font-size:16px}
-@media(max-width:768px){body{padding:20px}h1{font-size:28px}p{font-size:15px}}
-@media(max-width:480px){body{padding:15px}h1{font-size:24px}p{font-size:14px}}
-@media(max-width:375px){body{padding:12px}h1{font-size:22px}}
-</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="cinda-theme.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Profile — Ci-NDA</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#0a0a10;color:#f0f0f5;font-family:'DM Sans','Helvetica Neue',sans-serif;min-height:100vh}
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(10,10,16,.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(229,9,20,.2)}
+    .logo{font-size:32px;font-weight:900;color:#e50914;text-decoration:none;letter-spacing:3px;font-family:'Bebas Neue','Arial Black',sans-serif}
+    .nav-right{display:flex;align-items:center;gap:20px}
+    .btn-back{background:transparent;border:1px solid rgba(255,255,255,.15);color:rgba(240,240,245,.8);padding:9px 20px;border-radius:4px;font-size:13px;cursor:pointer;text-decoration:none;transition:all .25s}
+    .btn-back:hover{border-color:rgba(255,255,255,.35);color:#fff}
+    .page-wrap{max-width:900px;margin:0 auto;padding:100px 48px 60px}
+    .page-header{margin-bottom:40px}
+    .page-eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#e50914;font-family:'JetBrains Mono',monospace;margin-bottom:8px}
+    .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,5vw,3.5rem);letter-spacing:2px;color:#fff}
+    .section-card{background:#15151d;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:32px;margin-bottom:24px}
+    .section-card h3{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1.5px;color:#fff;margin-bottom:22px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .avatar-section{display:flex;align-items:center;gap:28px;margin-bottom:22px}
+    .avatar-circle{width:90px;height:90px;border-radius:50%;background:#e50914;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:32px;color:#fff;flex-shrink:0;border:3px solid rgba(229,9,20,.4);background-size:cover;background-position:center;cursor:pointer;position:relative;overflow:hidden;transition:all .3s}
+    .avatar-circle:hover::after{content:'📷';position:absolute;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;font-size:24px}
+    .avatar-actions p{font-size:13px;color:#666680;margin-bottom:10px;line-height:1.5}
+    .avatar-btn{padding:9px 20px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(240,240,245,.8);transition:all .25s;letter-spacing:.3px;margin-right:8px}
+    .avatar-btn:hover{border-color:rgba(255,255,255,.35);color:#fff}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .form-group{display:flex;flex-direction:column;gap:7px}
+    .form-group.full{grid-column:span 2}
+    .form-label{font-size:12px;font-weight:500;color:rgba(240,240,245,.6);letter-spacing:.3px;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+    .form-input{padding:13px 15px;background:#1a1a24;border:1.5px solid rgba(255,255,255,.09);border-radius:6px;color:#f0f0f5;font-size:14px;font-family:'DM Sans',sans-serif;transition:all .2s;-webkit-appearance:none}
+    .form-input:focus{outline:none;border-color:#e50914;background:#1e1e2a;box-shadow:0 0 0 3px rgba(229,9,20,.08)}
+    textarea.form-input{min-height:110px;resize:vertical;line-height:1.6}
+    select.form-input{cursor:pointer}
+    .skills-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+    .skill-chip{background:rgba(229,9,20,.1);border:1px solid rgba(229,9,20,.25);color:rgba(240,240,245,.85);font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:6px 12px;border-radius:3px;display:flex;align-items:center;gap:7px;font-family:'JetBrains Mono',monospace}
+    .skill-remove{cursor:pointer;color:rgba(229,9,20,.7);font-size:14px;line-height:1;transition:color .2s}
+    .skill-remove:hover{color:#e50914}
+    .skill-add{display:flex;gap:8px;margin-top:8px}
+    .skill-add input{flex:1;padding:10px 14px;background:#1a1a24;border:1.5px solid rgba(255,255,255,.09);border-radius:6px;color:#f0f0f5;font-size:13px;font-family:'DM Sans',sans-serif}
+    .skill-add input:focus{outline:none;border-color:#e50914}
+    .skill-add button{padding:10px 16px;background:#e50914;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s;white-space:nowrap}
+    .skill-add button:hover{background:#ff1a24}
+    .form-actions{display:flex;gap:12px;justify-content:flex-end;padding-top:8px}
+    .btn-save{background:#e50914;color:#fff;border:none;padding:13px 32px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;transition:all .25s;letter-spacing:.3px}
+    .btn-save:hover{background:#ff1a24;box-shadow:0 5px 20px rgba(229,9,20,.4);transform:translateY(-1px)}
+    .btn-cancel{background:transparent;border:1px solid rgba(255,255,255,.12);color:rgba(240,240,245,.75);padding:13px 24px;border-radius:6px;font-size:14px;cursor:pointer;transition:all .25s;text-decoration:none;display:inline-flex;align-items:center}
+    .btn-cancel:hover{border-color:rgba(255,255,255,.3);color:#fff}
+    .save-indicator{font-size:12px;color:#46d369;display:none;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace}
+    @media(max-width:768px){.navbar{padding:14px 20px}.page-wrap{padding:80px 20px 48px}.form-grid{grid-template-columns:1fr}.form-group.full{grid-column:1}.avatar-section{flex-direction:column;align-items:flex-start}.section-card{padding:22px}}
+  </style>
 </head>
 <body>
-<h1>Edit Profile</h1>
-<p>Profile edit stub. Implement form to update profile details here.</p>
+<nav class="navbar">
+  <a href="index.html" class="logo">Ci-NDA</a>
+  <div class="nav-right">
+    <a href="profile.html" class="btn-back">← Back to Profile</a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="page-eyebrow">My Account</div>
+    <h1 class="page-title">Edit Profile</h1>
+  </div>
+
+  <!-- AVATAR -->
+  <div class="section-card">
+    <h3>Profile Photo</h3>
+    <div class="avatar-section">
+      <div class="avatar-circle" id="avatarCircle" onclick="changeAvatar()">N</div>
+      <div class="avatar-actions">
+        <p>Your photo is visible to mentors, collaborators, and sponsors across the platform.</p>
+        <button class="avatar-btn" onclick="changeAvatar()">Upload Photo</button>
+        <button class="avatar-btn" onclick="removeAvatar()">Remove</button>
+        <input type="file" id="avatarFile" accept="image/*" style="display:none" onchange="previewAvatar(this)">
+      </div>
+    </div>
+  </div>
+
+  <!-- BASIC INFO -->
+  <div class="section-card">
+    <h3>Basic Information</h3>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">First Name</label><input class="form-input" id="firstName" type="text" placeholder="First name"></div>
+      <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" id="lastName" type="text" placeholder="Last name"></div>
+      <div class="form-group full"><label class="form-label">Professional Bio</label><textarea class="form-input" id="bio" placeholder="Tell the industry who you are — your craft, your vision, your story..."></textarea></div>
+      <div class="form-group">
+        <label class="form-label">User Type</label>
+        <select class="form-input" id="userType">
+          <option value="filmmaker">Filmmaker</option>
+          <option value="mentor">Mentor</option>
+          <option value="sponsor">Sponsor / Investor</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Location</label><input class="form-input" id="location" type="text" placeholder="e.g. Kigali, Rwanda"></div>
+      <div class="form-group"><label class="form-label">Website / Portfolio URL</label><input class="form-input" id="website" type="url" placeholder="https://yoursite.com"></div>
+      <div class="form-group"><label class="form-label">Phone (Optional)</label><input class="form-input" id="phone" type="tel" placeholder="+250 700 000 000"></div>
+    </div>
+    <div class="form-actions">
+      <a href="profile.html" class="btn-cancel">Cancel</a>
+      <button class="btn-save" onclick="saveBasicInfo()">Save Changes</button>
+    </div>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="section-card">
+    <h3>Skills &amp; Expertise</h3>
+    <div class="skills-wrap" id="skillsWrap"></div>
+    <div class="skill-add">
+      <input type="text" id="newSkill" placeholder="Add a skill (e.g. Color Grading)" onkeydown="if(event.key==='Enter')addSkill()">
+      <button onclick="addSkill()">+ Add Skill</button>
+    </div>
+    <div class="form-actions" style="margin-top:20px">
+      <button class="btn-save" onclick="saveSkills()">Save Skills</button>
+    </div>
+  </div>
+
+  <!-- SOCIAL LINKS -->
+  <div class="section-card">
+    <h3>Social &amp; Professional Links</h3>
+    <div class="form-grid">
+      <div class="form-group"><label class="form-label">Instagram</label><input class="form-input" id="instagram" type="text" placeholder="@yourhandle"></div>
+      <div class="form-group"><label class="form-label">LinkedIn</label><input class="form-input" id="linkedin" type="url" placeholder="https://linkedin.com/in/you"></div>
+      <div class="form-group"><label class="form-label">Vimeo</label><input class="form-input" id="vimeo" type="url" placeholder="https://vimeo.com/yourname"></div>
+      <div class="form-group"><label class="form-label">YouTube / Channel</label><input class="form-input" id="youtube" type="url" placeholder="https://youtube.com/@yourchannel"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-save" onclick="saveSocial()">Save Links</button>
+    </div>
+  </div>
+</div>
+
+<script src="cinda-app.js"></script>
+<script>
+var skills = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+  var u = window.CindaAuth && window.CindaAuth.getUser();
+  if (!u) { window.location.href = 'authentication.html'; return; }
+
+  var names = (u.name||'').split(' ');
+  document.getElementById('firstName').value = names[0]||'';
+  document.getElementById('lastName').value = names.slice(1).join(' ')||'';
+  document.getElementById('bio').value = u.bio||'';
+  document.getElementById('location').value = u.location||'';
+  document.getElementById('website').value = u.website||'';
+  if(document.getElementById('userType')) document.getElementById('userType').value = u.userType||'filmmaker';
+
+  if(u.avatar){ var a=document.getElementById('avatarCircle'); a.style.backgroundImage='url('+u.avatar+')'; a.textContent=''; }
+  else { document.getElementById('avatarCircle').textContent=(u.name||'U').charAt(0).toUpperCase(); }
+
+  skills = (u.skills||['Cinematography','Directing','Lighting Design']).slice();
+  renderSkills();
+
+  // Social
+  var social = u.social||{};
+  ['instagram','linkedin','vimeo','youtube'].forEach(function(k){ if(document.getElementById(k)) document.getElementById(k).value=social[k]||''; });
+});
+
+function renderSkills() {
+  var w = document.getElementById('skillsWrap');
+  w.innerHTML = skills.map(function(s,i){
+    return '<div class="skill-chip">'+s+'<span class="skill-remove" onclick="removeSkill('+i+')">×</span></div>';
+  }).join('');
+}
+function removeSkill(i){ skills.splice(i,1); renderSkills(); }
+function addSkill(){
+  var inp=document.getElementById('newSkill');
+  var v=inp.value.trim();
+  if(v&&!skills.includes(v)){ skills.push(v); renderSkills(); inp.value=''; }
+}
+function changeAvatar(){ document.getElementById('avatarFile').click(); }
+function previewAvatar(input){
+  if(!input.files[0]) return;
+  var reader=new FileReader();
+  reader.onload=function(e){ var a=document.getElementById('avatarCircle'); a.style.backgroundImage='url('+e.target.result+')'; a.textContent=''; };
+  reader.readAsDataURL(input.files[0]);
+}
+function removeAvatar(){ var a=document.getElementById('avatarCircle'); a.style.backgroundImage=''; a.textContent=(window.CindaAuth.getUser()||{name:'U'}).name.charAt(0).toUpperCase(); }
+
+function saveBasicInfo(){
+  var u=window.CindaAuth.getUser()||{};
+  u.name=(document.getElementById('firstName').value+' '+document.getElementById('lastName').value).trim()||u.name;
+  u.bio=document.getElementById('bio').value;
+  u.location=document.getElementById('location').value;
+  u.website=document.getElementById('website').value;
+  u.userType=document.getElementById('userType').value;
+  window.CindaAuth.setUser(u);
+  CindaToast('Profile updated successfully!');
+}
+function saveSkills(){
+  var u=window.CindaAuth.getUser()||{};
+  u.skills=skills;
+  window.CindaAuth.setUser(u);
+  CindaToast('Skills saved!');
+}
+function saveSocial(){
+  var u=window.CindaAuth.getUser()||{};
+  u.social={ instagram:document.getElementById('instagram').value, linkedin:document.getElementById('linkedin').value, vimeo:document.getElementById('vimeo').value, youtube:document.getElementById('youtube').value };
+  window.CindaAuth.setUser(u);
+  CindaToast('Social links saved!');
+}
+</script>
 </body>
 </html>

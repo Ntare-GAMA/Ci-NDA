@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="cinda-theme.css">
+
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1.0,user-scalable=no" />
   <title>Mentor Profile — Ci-NDA</title>
@@ -255,5 +259,24 @@
     if(!id && !mentorNameParam){ document.getElementById('name').textContent = 'No mentor selected'; }
     else load();
   </script>
+<script src="cinda-app.js"></script>
+
+<script id="cinda-public-live">
+document.addEventListener('DOMContentLoaded', function(){
+  var id = new URLSearchParams(location.search).get('userId') || 'u1';
+  var mockUsers = {
+    u1:{name:'Ntare GAMA Allan',bio:'Cinematographer & entrepreneur based in Kigali, Rwanda. Founder of KCAMEL Productions.',location:'Kigali, Rwanda',userType:'Filmmaker',avatar:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80',skills:['Cinematography','Directing','Lighting Design','Screenwriting']},
+    u2:{name:'Sarah Mitchell',bio:'Award-winning cinematographer with 15 years on feature films.',location:'Los Angeles, CA',userType:'Mentor',avatar:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80',skills:['Cinematography','Lighting','Color Grading']}
+  };
+  var u = mockUsers[id] || mockUsers['u1'];
+  var nameEl = document.querySelector('.profile-name,h1.name,.user-name');
+  if(nameEl) nameEl.textContent = u.name;
+  var bioEl = document.querySelector('.profile-bio,.bio,.about-text');
+  if(bioEl) bioEl.textContent = u.bio;
+  var locEl = document.querySelector('.profile-location,.location');
+  if(locEl) locEl.textContent = u.location;
+  document.title = u.name + ' — Ci-NDA';
+});
+</script>
 </body>
 </html>

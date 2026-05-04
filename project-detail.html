@@ -1,27 +1,228 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Project Detail</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;touch-action:manipulation}
-body{background:#141414;color:#fff;font-family:'Helvetica Neue',Arial,sans-serif;padding:30px;-webkit-font-smoothing:antialiased;min-height:100vh}
-h1{font-size:32px;margin-bottom:15px;color:#e50914}
-p{color:#b3b3b3;line-height:1.6;font-size:16px}
-@media(max-width:768px){body{padding:20px}h1{font-size:28px}p{font-size:15px}}
-@media(max-width:480px){body{padding:15px}h1{font-size:24px}p{font-size:14px}}
-@media(max-width:375px){body{padding:12px}h1{font-size:22px}}
-</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="cinda-theme.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Detail — Ci-NDA</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#0a0a10;color:#f0f0f5;font-family:'DM Sans','Helvetica Neue',sans-serif;min-height:100vh}
+    .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;background:rgba(10,10,16,.95);backdrop-filter:blur(14px);border-bottom:1px solid rgba(229,9,20,.2)}
+    .logo{font-size:32px;font-weight:900;color:#e50914;text-decoration:none;letter-spacing:3px;font-family:'Bebas Neue','Arial Black',sans-serif;text-shadow:0 0 20px rgba(229,9,20,.4)}
+    .nav-links{display:flex;gap:32px;list-style:none}
+    .nav-links a{color:rgba(255,255,255,.75);text-decoration:none;font-size:13px;transition:color .2s}
+    .nav-links a:hover{color:#e50914}
+    .nav-right{display:flex;align-items:center;gap:20px}
+    .btn-signin{background:#e50914;color:#fff;padding:9px 22px;border-radius:4px;font-size:13px;font-weight:600;text-decoration:none;transition:all .25s}
+    .btn-signin:hover{background:#ff1a24;box-shadow:0 4px 16px rgba(229,9,20,.4)}
+    .project-hero{margin-top:65px;position:relative;height:72vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end}
+    .hero-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,10,16,.3) 0%,rgba(10,10,16,0) 30%,rgba(10,10,16,.75) 70%,rgba(10,10,16,1) 100%)}
+    .hero-content{position:relative;z-index:2;padding:0 60px 48px;width:100%}
+    .type-badge{display:inline-block;background:#e50914;color:#fff;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:3px;margin-bottom:14px}
+    .proj-title{font-family:'Bebas Neue','Arial Black',sans-serif;font-size:clamp(2.4rem,7vw,5.5rem);line-height:1;letter-spacing:2px;color:#fff;margin-bottom:14px;text-shadow:0 4px 24px rgba(0,0,0,.7)}
+    .meta-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap;font-size:13px;color:rgba(240,240,245,.7)}
+    .meta-sep{color:rgba(255,255,255,.2)}
+    .video-section{background:#000}
+    .video-wrapper{position:relative;padding-bottom:56.25%;height:0;overflow:hidden}
+    .video-wrapper iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+    .vid-placeholder{width:100%;aspect-ratio:16/9;background:#0d0d15;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden}
+    .vid-placeholder img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45}
+    .play-btn{position:relative;z-index:2;width:84px;height:84px;border-radius:50%;background:rgba(229,9,20,.92);display:flex;align-items:center;justify-content:center;font-size:34px;transition:all .3s;box-shadow:0 0 40px rgba(229,9,20,.5)}
+    .play-btn:hover{transform:scale(1.1);box-shadow:0 0 70px rgba(229,9,20,.7)}
+    .play-label{position:relative;z-index:2;margin-top:16px;font-size:12px;color:rgba(255,255,255,.6);letter-spacing:2px;text-transform:uppercase}
+    .body-wrap{max-width:1100px;margin:0 auto;padding:56px 48px;display:grid;grid-template-columns:1fr 320px;gap:56px}
+    .sec-label{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:#fff;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.08);margin-top:36px}
+    .sec-label:first-child{margin-top:0}
+    .proj-desc{font-size:16px;line-height:1.85;color:rgba(240,240,245,.75);font-weight:300}
+    .tags{display:flex;flex-wrap:wrap;gap:8px}
+    .tag{background:rgba(229,9,20,.12);border:1px solid rgba(229,9,20,.25);color:rgba(240,240,245,.8);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:6px 14px;border-radius:3px}
+    .crew-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .crew-item{background:#15151d;border:1px solid rgba(255,255,255,.07);border-radius:6px;padding:14px 16px}
+    .crew-role{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#e50914;margin-bottom:4px;font-family:'JetBrains Mono',monospace}
+    .crew-name{font-size:14px;color:#f0f0f5;font-weight:500}
+    .anime-strip{background:#0d0d15;border-top:1px solid rgba(229,9,20,.12);border-bottom:1px solid rgba(229,9,20,.12);padding:48px;margin:36px -48px}
+    .anime-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#e50914;font-family:'JetBrains Mono',monospace;margin-bottom:6px}
+    .anime-heading{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,4vw,3rem);letter-spacing:2px;color:#fff;margin-bottom:28px}
+    .anime-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .anime-card{border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.07);transition:all .3s;cursor:pointer}
+    .anime-card:hover{transform:translateY(-5px);border-color:rgba(229,9,20,.4);box-shadow:0 14px 36px rgba(0,0,0,.6)}
+    .anime-card iframe{width:100%;aspect-ratio:16/9;display:block;border:0}
+    .anime-card-info{padding:10px 12px 12px;background:#15151d}
+    .anime-card-title{font-size:12px;font-weight:600;color:#f0f0f5;margin-bottom:2px}
+    .anime-card-sub{font-size:10px;color:#666680;font-family:'JetBrains Mono',monospace;letter-spacing:.5px}
+    .related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+    .rel-card{background:#15151d;border:1px solid rgba(255,255,255,.07);border-radius:6px;overflow:hidden;cursor:pointer;transition:all .3s}
+    .rel-card:hover{transform:translateY(-5px);border-color:rgba(229,9,20,.3);box-shadow:0 12px 28px rgba(0,0,0,.5)}
+    .rel-thumb{height:140px;background-size:cover;background-position:center}
+    .rel-info{padding:12px 14px}
+    .rel-title{font-size:13px;font-weight:600;color:#f0f0f5;margin-bottom:3px}
+    .rel-meta{font-size:10px;color:#666680;font-family:'JetBrains Mono',monospace}
+    .sidebar-card{background:#15151d;border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:22px;margin-bottom:18px}
+    .sidebar-card h4{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;color:#fff;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .stat-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+    .stat-row:last-child{border-bottom:none}
+    .stat-k{font-size:11px;color:#666680}
+    .stat-v{font-size:13px;color:#f0f0f5;font-weight:500}
+    .act-btn{width:100%;padding:12px;border-radius:5px;border:none;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px;transition:all .25s;letter-spacing:.3px}
+    .act-btn:last-child{margin-bottom:0}
+    .act-red{background:#e50914;color:#fff}
+    .act-red:hover{background:#ff1a24;box-shadow:0 5px 18px rgba(229,9,20,.4);transform:translateY(-1px)}
+    .act-ghost{background:transparent;border:1px solid rgba(255,255,255,.12);color:rgba(240,240,245,.75)}
+    .act-ghost:hover{border-color:rgba(255,255,255,.3);color:#fff}
+    @media(max-width:1024px){.body-wrap{grid-template-columns:1fr}}
+    @media(max-width:768px){.navbar{padding:14px 20px}.nav-links{display:none}.hero-content{padding:0 24px 32px}.proj-title{font-size:2rem}.body-wrap{padding:32px 20px}.anime-strip{padding:32px 20px;margin:32px -20px}.anime-grid{grid-template-columns:1fr}.crew-grid{grid-template-columns:1fr}}
+  </style>
 </head>
 <body>
-<h1>Project Detail</h1>
-<p id="info">Loading...</p>
+<nav class="navbar">
+  <a href="index.html" class="logo">Ci-NDA</a>
+  <ul class="nav-links">
+    <li><a href="courses.html">Courses</a></li>
+    <li><a href="opportunities.html">Opportunities</a></li>
+    <li><a href="mentorship.html">Mentorship</a></li>
+    <li><a href="portfolios.html">Portfolios</a></li>
+  </ul>
+  <div class="nav-right"><a href="authentication.html" class="btn-signin">Sign In</a></div>
+</nav>
+
+<section class="project-hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="type-badge" id="pType">Short Film</div>
+    <h1 class="proj-title" id="pTitle">Loading...</h1>
+    <div class="meta-row">
+      <span id="pCreator">—</span>
+      <span class="meta-sep">•</span>
+      <span id="pYear">—</span>
+      <span class="meta-sep">•</span>
+      <span id="pViews">—</span>
+    </div>
+  </div>
+</section>
+
+<section class="video-section" id="videoSection"></section>
+
+<div class="body-wrap">
+  <div>
+    <h3 class="sec-label">About This Project</h3>
+    <p class="proj-desc" id="pDesc"></p>
+
+    <h3 class="sec-label">Tags</h3>
+    <div class="tags" id="pTags"></div>
+
+    <h3 class="sec-label">Crew</h3>
+    <div class="crew-grid" id="crewGrid"></div>
+
+    <div class="anime-strip">
+      <div class="anime-eyebrow">Cinematic Reference · Inspiration</div>
+      <div class="anime-heading">Anime Trailers That Shaped This Work</div>
+      <div class="anime-grid">
+        <div class="anime-card">
+          <iframe src="https://www.youtube.com/embed/VQGCKyvzIM4?rel=0&modestbranding=1" title="Demon Slayer" allowfullscreen loading="lazy"></iframe>
+          <div class="anime-card-info">
+            <div class="anime-card-title">Demon Slayer — Infinity Castle Arc</div>
+            <div class="anime-card-sub">ufotable · 2024</div>
+          </div>
+        </div>
+        <div class="anime-card">
+          <iframe src="https://www.youtube.com/embed/4A_X-Dvl0ws?rel=0&modestbranding=1" title="Jujutsu Kaisen" allowfullscreen loading="lazy"></iframe>
+          <div class="anime-card-info">
+            <div class="anime-card-title">Jujutsu Kaisen Season 2</div>
+            <div class="anime-card-sub">MAPPA · 2023</div>
+          </div>
+        </div>
+        <div class="anime-card">
+          <iframe src="https://www.youtube.com/embed/MGRm4IzK1SQ?rel=0&modestbranding=1" title="Attack on Titan" allowfullscreen loading="lazy"></iframe>
+          <div class="anime-card-info">
+            <div class="anime-card-title">Attack on Titan — Final Season</div>
+            <div class="anime-card-sub">MAPPA · 2023</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="sec-label">Related Projects</h3>
+    <div class="related-grid" id="relGrid"></div>
+  </div>
+
+  <aside>
+    <div class="sidebar-card">
+      <h4>Project Info</h4>
+      <div class="stat-row"><span class="stat-k">Type</span><span class="stat-v" id="sType">—</span></div>
+      <div class="stat-row"><span class="stat-k">Year</span><span class="stat-v" id="sYear">—</span></div>
+      <div class="stat-row"><span class="stat-k">Views</span><span class="stat-v" id="sViews">—</span></div>
+      <div class="stat-row"><span class="stat-k">Likes</span><span class="stat-v" id="sLikes">—</span></div>
+    </div>
+    <div class="sidebar-card">
+      <h4>Actions</h4>
+      <button class="act-btn act-red" onclick="doLike(this)">❤ Like This Project</button>
+      <button class="act-btn act-ghost" onclick="doShare()">↗ Share Project</button>
+      <button class="act-btn act-ghost" onclick="location.href='portfolios.html'">← All Portfolios</button>
+    </div>
+    <div class="sidebar-card">
+      <h4>Creator</h4>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+        <div id="cAvatar" style="width:50px;height:50px;border-radius:50%;background:#e50914;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;color:#fff">KC</div>
+        <div><div id="cName" style="font-size:14px;font-weight:600;color:#f0f0f5;margin-bottom:2px">—</div><div style="font-size:11px;color:#666680">Filmmaker</div></div>
+      </div>
+      <button class="act-btn act-ghost" onclick="location.href='mentorship.html'">Connect with Mentors</button>
+    </div>
+  </aside>
+</div>
+
+<script src="cinda-app.js"></script>
 <script>
-const id=new URLSearchParams(location.search).get('id');
-if(!id) document.getElementById('info').innerText='No project id provided';
-else document.getElementById('info').innerText='Project ID: '+id+' (page stub)';
+document.addEventListener('DOMContentLoaded', function() {
+  var id = new URLSearchParams(location.search).get('id') || 'p1';
+  var P = (window.CindaData||{}).portfolios || [];
+  var proj = P.find(function(x){return x._id===id;}) || P[0] || {title:'Urban Dreams',type:'Short Film',year:2024,views:'1.2K',likes:87,thumbnail:'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1200&q=80',description:'A cinematic exploration of Kigali\'s urban transformation.',tags:['Short Film','Drama'],creator:{name:'Ntare GAMA Allan'}};
+
+  document.title = proj.title + ' — Ci-NDA';
+  document.getElementById('heroBg').style.cssText='position:absolute;inset:0;background-size:cover;background-position:center;background-image:url('+proj.thumbnail+')';
+  document.getElementById('pType').textContent = proj.type||'Film';
+  document.getElementById('pTitle').textContent = proj.title;
+  document.getElementById('pCreator').textContent = (proj.creator||{}).name||'KCAMEL';
+  document.getElementById('pYear').textContent = proj.year||2024;
+  document.getElementById('pViews').textContent = (proj.views||'0')+' views';
+  document.getElementById('pDesc').textContent = proj.description||'';
+  document.getElementById('sType').textContent = proj.type||'Film';
+  document.getElementById('sYear').textContent = proj.year||2024;
+  document.getElementById('sViews').textContent = proj.views||'0';
+  document.getElementById('sLikes').textContent = proj.likes||0;
+  var cname = (proj.creator||{}).name||'KCAMEL';
+  document.getElementById('cName').textContent = cname;
+  document.getElementById('cAvatar').textContent = cname.split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase();
+
+  // Video
+  var vs = document.getElementById('videoSection');
+  if (proj.videoType==='youtube'&&proj.youtubeId) {
+    vs.innerHTML='<div class="video-wrapper"><iframe src="https://www.youtube.com/embed/'+proj.youtubeId+'?rel=0&modestbranding=1" allowfullscreen title="'+proj.title+'"></iframe></div>';
+  } else {
+    vs.innerHTML='<div class="vid-placeholder" onclick="CindaToast(\'Full video — connect with the creator\',\'info\')"><img src="'+proj.thumbnail+'" alt="'+proj.title+'"><div class="play-btn">▶</div><div class="play-label">Preview</div></div>';
+  }
+
+  // Tags
+  var tEl=document.getElementById('pTags');
+  (proj.tags||['Film','Cinematography']).forEach(function(t){tEl.innerHTML+='<span class="tag">'+t+'</span>';});
+
+  // Crew
+  var crew=[['Director','Ntare GAMA Allan'],['Cinematographer','Ntare GAMA Allan'],['Producer','KCAMEL Productions'],['Editor','James Chen'],['Sound','David Thompson'],['Color Grade','Sarah Mitchell']];
+  var cEl=document.getElementById('crewGrid');
+  crew.forEach(function(c){cEl.innerHTML+='<div class="crew-item"><div class="crew-role">'+c[0]+'</div><div class="crew-name">'+c[1]+'</div></div>';});
+
+  // Related
+  var rel=P.filter(function(x){return x._id!==proj._id;}).slice(0,3);
+  var rEl=document.getElementById('relGrid');
+  rel.forEach(function(p){rEl.innerHTML+='<div class="rel-card" onclick="location.href=\'project-detail.html?id='+p._id+'\'"><div class="rel-thumb" style="background-image:url('+p.thumbnail+')"></div><div class="rel-info"><div class="rel-title">'+p.title+'</div><div class="rel-meta">'+p.type+' · '+p.year+'</div></div></div>';});
+});
+
+function doLike(btn){btn.textContent='❤ Liked!';btn.style.background='#46d369';btn.disabled=true;CindaToast('Added to favourites!');}
+function doShare(){if(navigator.share)navigator.share({title:document.title,url:location.href});else{navigator.clipboard&&navigator.clipboard.writeText(location.href);CindaToast('Link copied!');}}
 </script>
 </body>
 </html>

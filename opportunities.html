@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="cinda-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Opportunities - Ci-NDA</title>
@@ -207,6 +211,29 @@ function daysLeft(d){
   return days>0?`${days} day${days>1?'s':''} left`:'Ends today';
 }
 document.addEventListener('DOMContentLoaded',loadOpportunities);
+</script>
+<script src="cinda-app.js"></script>
+
+<script id="opp-click-fix">
+document.addEventListener('DOMContentLoaded', function(){
+  function addOppClicks(){
+    document.querySelectorAll('.opportunity-card').forEach(function(card, i){
+      if(!card.dataset.navSet){
+        card.dataset.navSet='1';
+        card.style.cursor='pointer';
+        card.addEventListener('click', function(e){
+          if(e.target.tagName==='BUTTON'||e.target.tagName==='A') return;
+          var opps = (window.CindaData||{}).opportunities||[];
+          var opp = opps[i] || opps[0];
+          var id = card.dataset.id || (opp ? opp._id : 'o1');
+          window.location.href='apply-opportunity.html?id='+id;
+        });
+      }
+    });
+  }
+  setTimeout(addOppClicks, 500);
+  setInterval(addOppClicks, 2000);
+});
 </script>
 </body>
 </html>

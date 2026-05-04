@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="cinda-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apply to Opportunity - Ci-NDA</title>
@@ -591,5 +595,41 @@
             }
         }
     </script>
+<script src="cinda-app.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function(){
+  var id = new URLSearchParams(location.search).get('id');
+  if(!id) return;
+  var opps = (window.CindaData||{}).opportunities||[];
+  var opp = opps.find(function(o){return o._id===id;}) || opps[0];
+  if(!opp) return;
+  var h1 = document.querySelector('h1,.page-title,.opportunity-title');
+  if(h1) h1.textContent = opp.title;
+  var desc = document.querySelector('.opportunity-description,.opp-desc,p.description');
+  if(desc) desc.textContent = opp.description;
+  var company = document.querySelector('.opportunity-company,.company-name');
+  if(company) company.textContent = opp.company;
+  document.title = 'Apply — '+opp.title+' | Ci-NDA';
+});
+</script>
+
+<script id="submitOppApp">
+document.addEventListener('DOMContentLoaded', function(){
+  var form = document.querySelector('form');
+  if(form && !form.dataset.oapp){
+    form.dataset.oapp = '1';
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      fetch('api/opportunity-applications.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({opportunityId:new URLSearchParams(location.search).get('id')||'o1'})})
+        .then(function(r){return r.json();})
+        .then(function(){
+          CindaToast('Application submitted successfully!');
+          setTimeout(function(){ window.location.href='opportunities.html'; }, 1800);
+        });
+    });
+  }
+});
+</script>
 </body>
 </html>

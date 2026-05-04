@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="cinda-theme.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Request Mentorship - Ci-NDA</title>
@@ -666,5 +670,30 @@
             }
         }
     </script>
+<script src="cinda-app.js"></script>
+
+<script id="submitMentorshipReq">
+document.addEventListener('DOMContentLoaded', function(){
+  var p = new URLSearchParams(location.search);
+  var mentorId = p.get('mentorId') || 'm1';
+  var mentorName = decodeURIComponent(p.get('mentorName') || 'your mentor');
+  // Pre-fill mentor name wherever shown
+  document.querySelectorAll('.mentor-name,.selected-mentor,.mentor-heading').forEach(function(el){ el.textContent = mentorName; });
+  // Handle form
+  var form = document.querySelector('form');
+  if(form && !form.dataset.sreq){
+    form.dataset.sreq = '1';
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      fetch('api/mentorship-requests.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mentorId:mentorId,mentorName:mentorName})})
+        .then(function(r){return r.json();})
+        .then(function(){
+          CindaToast('Mentorship request sent to '+mentorName+'!');
+          setTimeout(function(){ window.location.href='mentorship.html'; }, 1800);
+        });
+    });
+  }
+});
+</script>
 </body>
 </html>
